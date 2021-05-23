@@ -2,13 +2,102 @@
  * CSS for global layouts & global fonts.
  */
 
-@import url("https://fonts.googleapis.com/css?family=PT+Sans+Caption&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Varela+Round:400,500,600&display=swap");
+
+:root {
+  --font: "Varela Round";
+  --primary: rgb(0, 102, 255);
+}
 
 html,
 body {
-  font-family: "PT Sans Caption", sans-serif;
+  font-family: "Varela Round", sans-serif;
 }
 
 /*
-  * General Container Layouts & responsiveness
-  */
+ * General Color & Font Styling.
+ */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  color: #040405;
+}
+
+p {
+  font-weight: 400;
+  color: rgba(4, 4, 5, 0.5);
+  line-height: 30px;
+}
+
+input {
+  padding: 15px;
+  border-radius: 30px;
+  outline: none;
+  border: 1px solid rgba(4, 4, 5, 0.1);
+  width: 100%;
+  font-family: var(--font);
+  margin-top: 20px;
+}
+
+.primary-button {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  outline: none;
+  color: white;
+  font-weight: 600;
+  padding: 15px;
+  font-family: var(--font);
+  border-radius: 30px;
+  width: 300px;
+}
+
+/*
+ * Global Padding & Margins
+ */
+.pt-40 {
+  padding-top: 40px;
+}
+
+.mt-40 {
+  margin-top: 40px;
+}
+
+.pt-20 {
+  padding-top: 20px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.pt-10 {
+  padding-top: 10px;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+/*
+ * General Container Layouts & responsiveness.
+ */
+@media only screen and (min-width: 1400px) {
+  body {
+    width: 70vw;
+    margin-left: 15vw;
+  }
+  .container-sm {
+    width: 40%;
+  }
+}
+
+@media only screen and (max-width: 1399px) {
+  body {
+    width: 90vw;
+    margin-left: 5vw;
+  }
+}

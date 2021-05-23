@@ -1,0 +1,16 @@
+.form-label {
+  padding-bottom: 40px;
+}
+
+.form-helper {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.create-merchant-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
