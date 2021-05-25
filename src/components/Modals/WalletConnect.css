@@ -1,0 +1,74 @@
+/* Wallet Connect Modal */
+.modal-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.modal-container h3 {
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.modal-container p {
+  font-size: 15px;
+  color: var(--grey);
+}
+
+.connect-container {
+  margin-top: 2rem;
+}
+
+.walletconnect-qrcode__image {
+  height: 250px;
+  width: 250px;
+}
+
+.walletconnect-modal__base {
+  max-width: 400px !important;
+}
+
+.connect-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 30px;
+  width: 330px;
+  padding: 0.5rem 1rem;
+  transition: all 0.5s;
+  margin-bottom: 2rem;
+  outline: none;
+}
+
+.connect-item h1 {
+  font-size: 20px;
+  padding-top: 0.5rem;
+  font-weight: 400 !important;
+  font-size: 18px !important;
+}
+
+.connect-item img {
+  width: 30px;
+  height: 30px;
+}
+
+.connect-item:hover {
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+}
+
+.ant-spin-dot-item {
+  background-color: var(--green) !important;
+}

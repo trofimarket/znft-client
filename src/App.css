@@ -11,7 +11,7 @@
 
 html,
 body {
-  font-family: "Varela Round", sans-serif;
+  font-family: "Varela Round", sans-serif !important;
 }
 
 /*
@@ -40,19 +40,24 @@ input {
   border: 1px solid rgba(4, 4, 5, 0.1);
   width: 100%;
   font-family: var(--font);
-  margin-top: 20px;
+  margin-top: 20px !important;
 }
 
 .primary-button {
   background-color: var(--primary);
   border-color: var(--primary);
   outline: none;
-  color: white;
+  color: white !important;
   font-weight: 600;
   padding: 15px;
   font-family: var(--font);
   border-radius: 30px;
   width: 300px;
+}
+
+.primary-button:hover {
+  border: 1px solid var(--primary) !important;
+  color: var(--primary) !important;
 }
 
 /*

@@ -1,0 +1,160 @@
+/* Navbar CSS */
+
+.navbar-wrapper {
+  display: flex;
+  align-items: center;
+  width: 60vw;
+  height: 70px;
+  margin-left: 15vw;
+  border-bottom: 1px solid rgba(4, 4, 5, 0.1);
+}
+
+.navbar-wrapper svg {
+  color: #fff;
+  font-size: 20px;
+  display: none;
+}
+
+.navbar-container {
+  display: grid;
+  grid-template-columns: 30% 70%;
+  align-items: center;
+  width: 100%;
+}
+
+.secondary-div {
+  display: grid;
+  grid-template-columns: 80% 20%;
+  align-items: center;
+}
+
+.connect-button {
+  background-color: var(--primary);
+  border-radius: 30px;
+  color: white !important;
+}
+
+.connect-button:hover {
+  border: 1px solid var(--primary);
+  color: var(--primary) !important;
+}
+
+.navbar-logo h1 {
+  font-size: 22px;
+  margin: 0;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.navbar-elements {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.navbar-elements {
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-elements li {
+  list-style: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+button {
+  border: 1px solid var(--green);
+  background-color: var(--black);
+  color: var(--green) !important;
+  padding: 0.5rem 2rem;
+  margin-top: 1.3rem;
+  border-radius: 3px;
+  font-weight: 600;
+  outline: none;
+  transition: all 0.5s;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: var(--green);
+  color: var(--white) !important;
+}
+
+.burger {
+  border: none;
+  margin: 0 0 0 2rem;
+  padding: 0;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.burger:hover {
+  background-color: transparent;
+}
+
+.disconnect-wallet {
+  border: 1px solid var(--green) !important;
+  background-color: var(--green) !important;
+  color: var(--white) !important;
+  padding: 0.5rem 2rem;
+  margin-top: 1.3rem;
+  border-radius: 3px;
+  font-weight: 600;
+  outline: none;
+  transition: all 0.5s;
+}
+
+/* Sidebar CSS */
+
+.sidebar .ant-drawer-content {
+  background-color: var(--black);
+}
+
+.sidebar .ant-drawer-close svg {
+  font-size: 40px;
+  color: var(--green);
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.sidebar .ant-drawer-close:hover {
+  background-color: transparent;
+  color: var(--green) !important;
+}
+
+.sidebar .navbar-elements {
+  margin-top: 3rem;
+  flex-direction: column;
+  align-items: flex-start;
+  color: var(--white);
+  font-size: 1.25rem;
+}
+
+.sidebar .navbar-elements li {
+  margin-right: 0;
+}
+
+.sidebar .navbar-elements li:not(:nth-last-child(1)) {
+  margin-bottom: 1rem;
+}
+
+/* Media queries */
+
+@media only screen and (min-width: 1081px) {
+  .sidebar {
+    display: none;
+  }
+}
+
+/* @media only screen and (max-width: 1080px) {
+  .navbar-wrapper svg {
+    display: block;
+  }
+
+  .navbar-container > div:nth-child(2) > div:nth-child(1) {
+    display: none;
+  }
+} */
