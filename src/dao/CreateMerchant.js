@@ -1,22 +1,59 @@
 import React, { Component } from "react";
 import "./styles/CreateMerchant.css";
+import { upload, create } from "../utils/merchant-creation";
 
 export default class CreateMerchant extends Component {
   constructor(props) {
     super(props);
     this.state = {
       nameOfCompany: "",
+      website: "",
+      twitter: "",
+      linkedIn: "",
+      listingFee: "",
+      platformTax: "",
+      hash: "",
     };
   }
 
   handleChange(e) {
-    console.log(e);
     e.preventDefault();
     this.setState({ [e.target.name]: e.target.value });
   }
 
+  async submit() {
+    const data = JSON.stringify({
+      "Company Name": this.state.nameOfCompany,
+      "Company Website": this.state.website,
+      "Twitter Handle": this.state.twitter,
+      "LinkedIn Handle": this.state.linkedIn,
+      "Listing Fee": this.state.listingFee,
+      "Platform Tax": this.state.platformTax,
+      Address: this.props.address,
+    });
+    const result = await upload(data);
+    if (result) {
+      this.createMerchant(result);
+    }
+  }
+
+  async createMerchant(hash) {
+    const tx = await create(hash, this.props.signer);
+    console.log(tx);
+    if (tx) {
+      alert("Merchant Created");
+    }
+  }
+
   render() {
-    const { nameOfCompany } = this.state;
+    const {
+      nameOfCompany,
+      website,
+      twitter,
+      linkedIn,
+      listingFee,
+      platformTax,
+    } = this.state;
     return (
       <div className="create-merchant-wrapper">
         <div className="container-sm pt-20">
@@ -35,21 +72,46 @@ export default class CreateMerchant extends Component {
                 onChange={(e) => this.handleChange(e)}
                 value={nameOfCompany}
               />
-              <input placeholder="Website" />
+              <input
+                name="website"
+                placeholder="Website"
+                onChange={(e) => this.handleChange(e)}
+                value={website}
+              />
             </div>
             <div className="pt-40">
               <span className="form-label">Social Info</span>
-              <input placeholder="Twitter Handle" />
-              <input placeholder="LinkedIn Page" />
+              <input
+                name="twitter"
+                placeholder="Twitter Handle"
+                onChange={(e) => this.handleChange(e)}
+                value={twitter}
+              />
+              <input
+                name="linkedIn"
+                placeholder="LinkedIn Page"
+                onChange={(e) => this.handleChange(e)}
+                value={linkedIn}
+              />
             </div>
             <div className="pt-40">
               <span className="form-label">Platform Info</span>
-              <input placeholder="Listing Fee" />
+              <input
+                name="listingFee"
+                placeholder="Listing Fee"
+                onChange={(e) => this.handleChange(e)}
+                value={listingFee}
+              />
               <p className="form-helper">
                 {" "}
                 Listing Fee: The fee to be paid whenever you create a new NFT.
               </p>
-              <input placeholder="Platform Tax" />
+              <input
+                name="platformTax"
+                placeholder="Platform Tax"
+                onChange={(e) => this.handleChange(e)}
+                value={platformTax}
+              />
               <p className="form-helper">
                 {" "}
                 Platform Fee: % of final cost to be paid to the platform.
@@ -57,7 +119,14 @@ export default class CreateMerchant extends Component {
             </div>
           </div>
           <div className="pt-40">
-            <button className="primary-button">Create Now</button>
+            <button
+              onClick={() => {
+                this.submit();
+              }}
+              className="primary-button"
+            >
+              Create Now
+            </button>
           </div>
         </div>
       </div>

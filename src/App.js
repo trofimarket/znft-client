@@ -165,7 +165,12 @@ export default class App extends React.Component {
         />
         <BrowserRouter>
           <Switch>
-            <Route path="/" render={() => <CreateMerchant signer={signer} />} />
+            <Route
+              path="/"
+              render={() => (
+                <CreateMerchant signer={signer} address={address} />
+              )}
+            />
           </Switch>
         </BrowserRouter>
       </div>
