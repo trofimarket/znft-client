@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+import { Button } from "antd";
 import "./styles/CreateMerchant.css";
-import { upload, create } from "../utils/merchant-creation";
+import { upload, create } from "../utils/dao-functions";
 
 export default class CreateMerchant extends Component {
   constructor(props) {
@@ -13,6 +14,7 @@ export default class CreateMerchant extends Component {
       listingFee: "",
       platformTax: "",
       hash: "",
+      loading: false,
     };
   }
 
@@ -22,6 +24,7 @@ export default class CreateMerchant extends Component {
   }
 
   async submit() {
+    this.setState({ loading: true });
     const data = JSON.stringify({
       "Company Name": this.state.nameOfCompany,
       "Company Website": this.state.website,
@@ -39,9 +42,8 @@ export default class CreateMerchant extends Component {
 
   async createMerchant(hash) {
     const tx = await create(hash, this.props.signer);
-    console.log(tx);
     if (tx) {
-      alert("Merchant Created");
+      this.setState({ loading: false });
     }
   }
 
@@ -53,7 +55,9 @@ export default class CreateMerchant extends Component {
       linkedIn,
       listingFee,
       platformTax,
+      loading,
     } = this.state;
+    const { open } = this.props;
     return (
       <div className="create-merchant-wrapper">
         <div className="container-sm pt-20">
@@ -119,14 +123,26 @@ export default class CreateMerchant extends Component {
             </div>
           </div>
           <div className="pt-40">
-            <button
-              onClick={() => {
-                this.submit();
-              }}
-              className="primary-button"
-            >
-              Create Now
-            </button>
+            {this.props.connected ? (
+              <Button
+                loading={loading}
+                onClick={() => {
+                  this.submit();
+                }}
+                className="primary-button"
+              >
+                Create Now
+              </Button>
+            ) : (
+              <Button
+                onClick={() => {
+                  open();
+                }}
+                className="primary-button"
+              >
+                Connect Wallet
+              </Button>
+            )}
           </div>
         </div>
       </div>

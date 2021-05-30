@@ -1,10 +1,11 @@
 import { Drawer } from "antd";
 import React from "react";
-import { Burger } from "../assets/Burger";
-import { Close } from "../assets/Close";
+import { withRouter } from "react-router-dom";
+import { Burger } from "../../assets/Burger";
+import { Close } from "../../assets/Close";
 import "./Navbar.css";
 
-export default class Navbar extends React.PureComponent {
+class Navbar extends React.PureComponent {
   constructor() {
     super();
     this.state = {
@@ -33,8 +34,20 @@ export default class Navbar extends React.PureComponent {
             <div>
               <ul className="navbar-elements">
                 <li>NFT Marketplace</li>
-                <li>List My Company</li>
-                <li>Developers</li>
+                <li
+                  onClick={() => {
+                    this.props.history.push("/");
+                  }}
+                >
+                  List My Company
+                </li>
+                <li
+                  onClick={() => {
+                    this.props.history.push("/proposals");
+                  }}
+                >
+                  Governance
+                </li>
                 <li>About Us</li>
                 <li>Docs</li>
               </ul>
@@ -87,3 +100,5 @@ export default class Navbar extends React.PureComponent {
     );
   }
 }
+
+export default withRouter(Navbar);

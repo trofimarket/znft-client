@@ -1,10 +1,12 @@
 import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/Navbar/Navbar";
+import Footer from "./components/Footer/Footer";
 import ConnectModal from "./components/Modals/WalletConnect";
 import WalletLink from "walletlink";
 import CreateMerchant from "./dao/CreateMerchant";
+import Proposals from "./dao/Proposals";
 import "../src/App.css";
 import "antd/dist/antd.css";
 
@@ -153,7 +155,7 @@ export default class App extends React.Component {
   render() {
     const { modal, signer, connecting, connected, address } = this.state;
     return (
-      <div>
+      <div className="container">
         <Navbar open={this.open} connected={connected} address={address} />
         <ConnectModal
           modal={modal}
@@ -163,16 +165,33 @@ export default class App extends React.Component {
           connected={connected}
           disconnect={this.disconnect}
         />
-        <BrowserRouter>
-          <Switch>
-            <Route
-              path="/"
-              render={() => (
-                <CreateMerchant signer={signer} address={address} />
-              )}
-            />
-          </Switch>
-        </BrowserRouter>
+        <Switch>
+          <Route
+            exact
+            path="/"
+            render={() => (
+              <CreateMerchant
+                signer={signer}
+                address={address}
+                open={this.open}
+                connected={connected}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/proposals"
+            render={() => (
+              <Proposals
+                signer={signer}
+                address={address}
+                connected={connected}
+                open={this.open}
+              />
+            )}
+          />
+        </Switch>
+        <Footer />
       </div>
     );
   }
