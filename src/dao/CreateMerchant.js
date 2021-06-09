@@ -18,7 +18,7 @@ export default class CreateMerchant extends Component {
     };
   }
 
-  handleChange(e) {
+  async handleChange(e) {
     e.preventDefault();
     this.setState({ [e.target.name]: e.target.value });
   }

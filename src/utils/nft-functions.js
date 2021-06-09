@@ -1,0 +1,73 @@
+import { notify } from "./general-functions";
+
+const ethers = require("ethers");
+const abi = require("./abi/NFT.json");
+const contractAddress = process.env.REACT_APP_ZNFT;
+const provider = new ethers.providers.JsonRpcProvider(
+  process.env.REACT_APP_RPC_URL
+);
+
+export const create = async (hash, signer) => {
+  console.log(signer);
+  try {
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+    let supply = await contract.totalSupply();
+    supply = ethers.utils.formatUnits(supply, 0);
+    supply += 1;
+    const tx = await contract.mint(supply, hash);
+    console.log(tx);
+    await tx.wait(2);
+    notify(
+      "success",
+      `NFT Created Successfully with ID #${supply}`,
+      "Now you can add your NFT for sale",
+      tx.hash
+    );
+    return {
+      tx: tx.hash,
+      error: false,
+    };
+  } catch (e) {
+    console.log(e);
+    return {
+      error: true,
+    };
+  }
+};
+
+export const uri = async (tokenId) => {
+  Promise(async (resolve, reject) => {
+    try {
+      const contract = new ethers.Contract(contractAddress, abi, provider);
+      const uri = await contract.tokenURI(tokenId);
+      console.log(uri, "URI");
+      resolve({
+        uri: uri,
+        error: false,
+      });
+    } catch (e) {
+      console.log(e);
+      reject({
+        error: true,
+      });
+    }
+  });
+};
+
+export const totalSupply = async () => {
+  Promise(async (resolve, reject) => {
+    try {
+      const contract = new ethers.Contract(contractAddress, abi, provider);
+      let supply = await contract.totalSupply();
+      supply = ethers.utils.formatUnits(supply, 0);
+      resolve({
+        supply: supply,
+        error: false,
+      });
+    } catch (e) {
+      reject({
+        error: true,
+      });
+    }
+  });
+};

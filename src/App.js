@@ -7,6 +7,7 @@ import ConnectModal from "./components/Modals/WalletConnect";
 import WalletLink from "walletlink";
 import CreateMerchant from "./dao/CreateMerchant";
 import Proposals from "./dao/Proposals";
+import CreateItem from "./minting/createItem";
 import "../src/App.css";
 import "antd/dist/antd.css";
 
@@ -183,6 +184,18 @@ export default class App extends React.Component {
             path="/proposals"
             render={() => (
               <Proposals
+                signer={signer}
+                address={address}
+                connected={connected}
+                open={this.open}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/mint"
+            render={() => (
+              <CreateItem
                 signer={signer}
                 address={address}
                 connected={connected}

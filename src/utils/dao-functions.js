@@ -124,3 +124,21 @@ export const vote = async (id, signer, address) => {
   }
   return true;
 };
+
+export const merchantStatus = async (address) => {
+  console.log("Checking Merchant Status");
+  try {
+    const contract = new ethers.Contract(
+      process.env.REACT_APP_DAO,
+      abi,
+      provider
+    );
+    const status = await contract.isMerchant(address);
+    return {
+      error: false,
+      status: status,
+    };
+  } catch (e) {
+    return { error: true };
+  }
+};
