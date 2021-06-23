@@ -47,7 +47,7 @@ export const Link = (hash) => (
     style={{ color: "var(--primary)", textDecoration: "underline" }}
     target="_blank"
     rel="noreferrer noopener"
-    href={`https://testnet.bscscan.com/tx/${hash}`}
+    href={`https://kovan.etherscan.io/tx/${hash}`}
   >
     View Transaction
   </a>

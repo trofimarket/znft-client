@@ -24,3 +24,24 @@ export const list = async (tokenId, price, ends, signer) => {
     };
   }
 };
+
+export const bid = async (ticker, amount, auctionId, signer) => {
+  try {
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+    const tx = await contract.bidAuctionWithToken(auctionId, ticker, amount);
+    await tx.wait(2);
+    notify(
+      "success",
+      "Bidded On Auction Successfully",
+      "You've to wait till end for your bid",
+      tx.hash
+    );
+    return {
+      error: false,
+    };
+  } catch (e) {
+    return {
+      error: true,
+    };
+  }
+};

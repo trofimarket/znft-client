@@ -33,7 +33,13 @@ class Navbar extends React.PureComponent {
           <div className="secondary-div">
             <div>
               <ul className="navbar-elements">
-                <li>NFT Marketplace</li>
+                <li
+                  onClick={() => {
+                    this.props.history.push("/marketplace");
+                  }}
+                >
+                  NFT Marketplace
+                </li>
                 <li
                   onClick={() => {
                     this.props.history.push("/");
@@ -48,7 +54,13 @@ class Navbar extends React.PureComponent {
                 >
                   Governance
                 </li>
-                <li>About Us</li>
+                <li
+                  onClick={() => {
+                    this.props.history.push("/mint");
+                  }}
+                >
+                  Create NFT
+                </li>
                 <li>Docs</li>
               </ul>
             </div>

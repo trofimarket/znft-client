@@ -1,0 +1,10 @@
+.auction-card {
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+}
+
+.auction-card:hover {
+  cursor: pointer;
+  box-shadow: 40px 40px 40px 40px rgba(0, 0, 0, 0.05);
+}

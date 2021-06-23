@@ -8,6 +8,8 @@ import WalletLink from "walletlink";
 import CreateMerchant from "./dao/CreateMerchant";
 import Proposals from "./dao/Proposals";
 import Index from "./minting/index";
+import Marketplace from "./marketplace/list";
+import AuctionInfo from "./marketplace/auction";
 import "../src/App.css";
 
 const ethers = require("ethers");
@@ -195,6 +197,30 @@ export default class App extends React.Component {
             path="/mint"
             render={() => (
               <Index
+                signer={signer}
+                address={address}
+                connected={connected}
+                open={this.open}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/marketplace"
+            render={() => (
+              <Marketplace
+                signer={signer}
+                address={address}
+                connected={connected}
+                open={this.open}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/auction/:auctionId"
+            render={() => (
+              <AuctionInfo
                 signer={signer}
                 address={address}
                 connected={connected}
