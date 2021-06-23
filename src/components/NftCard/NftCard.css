@@ -1,0 +1,7 @@
+.nft-card {
+  box-shadow: var(--box-shadow);
+  padding: 1rem 1rem;
+  background-color: white;
+  border: 2px solid rgba(4, 4, 5, 0.1);
+  border-radius: 30px;
+}

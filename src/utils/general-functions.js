@@ -1,10 +1,23 @@
 import { notification } from "antd";
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 import React from "react";
 const ethers = require("ethers");
 const znftSharesAbi = require("./abi/ZNFT.SHARES.json");
-const provider = new ethers.providers.JsonRpcProvider(
-  "https://data-seed-prebsc-1-s1.binance.org:8545/"
-);
+
+export const provider =
+  process.env.REACT_APP_NETWORK === "ETH"
+    ? new ethers.providers.InfuraProvider(
+        "kovan",
+        process.env.REACT_APP_INFURA_KEY
+      )
+    : new ethers.providers.JsonRpcProvider(
+        "https://data-seed-prebsc-1-s1.binance.org:8545/"
+      );
+
+export const apolloClient = new ApolloClient({
+  uri: process.env.REACT_APP_GRAPH_URL,
+  cache: new InMemoryCache(),
+});
 
 export const sharesBalance = async (address) => {
   const contract = new ethers.Contract(

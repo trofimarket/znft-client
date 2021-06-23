@@ -1,11 +1,8 @@
-import { notify } from "./general-functions";
+import { notify, provider } from "./general-functions";
 
 const ethers = require("ethers");
 const abi = require("./abi/NFT.json");
 const contractAddress = process.env.REACT_APP_ZNFT;
-const provider = new ethers.providers.JsonRpcProvider(
-  process.env.REACT_APP_RPC_URL
-);
 
 export const create = async (hash, signer) => {
   console.log(signer);
@@ -13,9 +10,8 @@ export const create = async (hash, signer) => {
     const contract = new ethers.Contract(contractAddress, abi, signer);
     let supply = await contract.totalSupply();
     supply = ethers.utils.formatUnits(supply, 0);
-    supply += 1;
+    supply = parseInt(supply) + 1;
     const tx = await contract.mint(supply, hash);
-    console.log(tx);
     await tx.wait(2);
     notify(
       "success",
@@ -70,4 +66,50 @@ export const totalSupply = async () => {
       });
     }
   });
+};
+
+export const approve = async (signer) => {
+  try {
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+    const tx = await contract.setApprovalForAll(
+      process.env.REACT_APP_AUCTION,
+      true
+    );
+    await tx.wait(2);
+    notify(
+      "success",
+      "Approved auction smart contract for using tokens",
+      "Now you can list your tokens for auctions",
+      tx.hash
+    );
+    return {
+      error: false,
+    };
+  } catch (e) {
+    return {
+      error: true,
+      message: e,
+    };
+  }
+};
+
+export const checkApproval = async (address) => {
+  console.log(address);
+  try {
+    const contract = new ethers.Contract(contractAddress, abi, provider);
+    const status = await contract.isApprovedForAll(
+      address,
+      process.env.REACT_APP_AUCTION
+    );
+    console.log(status);
+    return {
+      error: false,
+      status: status,
+    };
+  } catch (e) {
+    console.log(e);
+    return {
+      error: true,
+    };
+  }
 };

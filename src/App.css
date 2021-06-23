@@ -3,10 +3,12 @@
  */
 
 @import url("https://fonts.googleapis.com/css?family=Varela+Round:400,500,600&display=swap");
+@import "antd/dist/antd.css";
 
 :root {
   --font: "Varela Round";
   --primary: rgb(0, 102, 255);
+  --box-shadow: 330px 30px 30px rgb(0 0 0 / 10%);
 }
 
 html,

@@ -12,6 +12,12 @@ export const get = async (hash) => {
   return bufferData;
 };
 
+export const getFromLink = async (link) => {
+  const data = await fetch(link);
+  const json = await data.json();
+  return json;
+};
+
 export const uploadImage = async (buffer) => {
   try {
     const result = await ipfs.files.add(buffer);

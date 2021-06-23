@@ -7,9 +7,8 @@ import ConnectModal from "./components/Modals/WalletConnect";
 import WalletLink from "walletlink";
 import CreateMerchant from "./dao/CreateMerchant";
 import Proposals from "./dao/Proposals";
-import CreateItem from "./minting/createItem";
+import Index from "./minting/index";
 import "../src/App.css";
-import "antd/dist/antd.css";
 
 const ethers = require("ethers");
 
@@ -195,7 +194,7 @@ export default class App extends React.Component {
             exact
             path="/mint"
             render={() => (
-              <CreateItem
+              <Index
                 signer={signer}
                 address={address}
                 connected={connected}

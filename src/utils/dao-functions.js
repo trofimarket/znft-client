@@ -1,10 +1,7 @@
-import { notify, sharesBalance } from "./general-functions";
+import { notify, provider, sharesBalance } from "./general-functions";
 import ipfs, { get } from "./ipfs";
 
 const ethers = require("ethers");
-const provider = new ethers.providers.JsonRpcProvider(
-  "https://data-seed-prebsc-1-s1.binance.org:8545/"
-);
 const abi = require("./abi/DAO.json");
 
 export const upload = async (data) => {
@@ -17,10 +14,10 @@ export const upload = async (data) => {
   }
 };
 
-export const create = async (hash, signer) => {
+export const create = async (hash, listingFee, platformTax, signer) => {
   const contract = new ethers.Contract(process.env.REACT_APP_DAO, abi, signer);
   try {
-    const tx = await contract.createMerchant(hash);
+    const tx = await contract.createMerchant(hash, listingFee, platformTax);
     await tx.wait(2);
     notify(
       "success",
@@ -29,9 +26,10 @@ export const create = async (hash, signer) => {
       tx.hash
     );
   } catch (e) {
+    console.log(e);
     notify(
       "error",
-      "Error Casting Vote",
+      "Error Creating Merchant",
       e.message || "Please try after some time."
     );
   }

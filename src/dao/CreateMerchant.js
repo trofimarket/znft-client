@@ -36,12 +36,16 @@ export default class CreateMerchant extends Component {
     });
     const result = await upload(data);
     if (result) {
-      this.createMerchant(result);
+      this.createMerchant(
+        result,
+        this.state.listingFee,
+        this.state.platformTax
+      );
     }
   }
 
-  async createMerchant(hash) {
-    const tx = await create(hash, this.props.signer);
+  async createMerchant(hash, listingFee, platformTax) {
+    const tx = await create(hash, listingFee, platformTax, this.props.signer);
     if (tx) {
       this.setState({ loading: false });
     }
