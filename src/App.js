@@ -10,6 +10,7 @@ import Proposals from "./dao/Proposals";
 import Index from "./minting/index";
 import Marketplace from "./marketplace/list";
 import AuctionInfo from "./marketplace/auction";
+import Profile from "./profile/profile";
 import "../src/App.css";
 
 const ethers = require("ethers");
@@ -221,6 +222,18 @@ export default class App extends React.Component {
             path="/auction/:auctionId"
             render={() => (
               <AuctionInfo
+                signer={signer}
+                address={address}
+                connected={connected}
+                open={this.open}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/profile/"
+            render={() => (
+              <Profile
                 signer={signer}
                 address={address}
                 connected={connected}

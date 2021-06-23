@@ -1,7 +1,9 @@
 import React from "react";
-import { Button, Modal } from "antd";
+import { Button, Modal, Select } from "antd";
 import { approveToken } from "../../utils/payment-functions";
 import { bid } from "../../utils/auction-functions";
+
+const { Option } = Select;
 
 class BidModal extends React.Component {
   constructor(props) {
@@ -42,6 +44,15 @@ class BidModal extends React.Component {
         <h1>Bid Now: {auctionId}</h1>
         <p>Price in USD: {price}</p>
         <p>Asset: {asset}</p>
+        <Select
+          defaultValue="ETH"
+          onChange={(e) => {
+            this.setState({ asset: e });
+          }}
+        >
+          <Option value="ETH">Ethereum</Option>
+          <Option value="BTC">Bitcoin</Option>
+        </Select>
         <input
           name="bidAmount"
           placeholder="Bid Amount in USD"

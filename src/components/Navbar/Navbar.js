@@ -61,7 +61,13 @@ class Navbar extends React.PureComponent {
                 >
                   Create NFT
                 </li>
-                <li>Docs</li>
+                <li
+                  onClick={() => {
+                    this.props.history.push("/profile");
+                  }}
+                >
+                  Profile
+                </li>
               </ul>
             </div>
             <div>

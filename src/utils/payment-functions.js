@@ -10,12 +10,16 @@ const tokens = {
     abi: require("./abi/tokens/WETH.json"),
     decimals: 18,
   },
+  BTC: {
+    ca: "0xa4abdae0c0f861c11b353f7929fe6db48535eab3",
+    abi: require("./abi/tokens/WBTC.json"),
+    decimals: 8,
+  },
 };
 
 export const approveToken = async (ticker, amount, signer) => {
   const token = tokens[ticker];
   const approveAmount = parseUnits(amount, token.decimals);
-  console.log(approveAmount);
   try {
     const contract = new ethers.Contract(token.ca, token.abi, signer);
     const tx = await contract.approve(auctionAddress, approveAmount);
