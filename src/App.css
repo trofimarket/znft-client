@@ -294,3 +294,12 @@ hr {
     grid-template-columns: 100%;
   }
 }
+
+.coin-icon {
+  width: 20px;
+}
+
+.ant-select {
+  width: 100% !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+}

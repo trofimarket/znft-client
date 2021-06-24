@@ -77,7 +77,7 @@ class ListItem extends React.Component {
   listToken() {
     this.setState({ buttonLoading: true }, async () => {
       const { price, ends, tokenId } = this.state;
-      const tx = await list(tokenId, price * 10 ** 8, ends, this.props.signer);
+      const tx = await list(tokenId, price, ends, this.props.signer);
       if (tx) {
         this.setState({ buttonLoading: false });
       }

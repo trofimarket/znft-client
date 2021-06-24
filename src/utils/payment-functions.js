@@ -1,5 +1,5 @@
 import { parseUnits } from "@ethersproject/units";
-import { notify } from "./general-functions";
+import { notify, provider } from "./general-functions";
 
 const ethers = require("ethers");
 const auctionAddress = process.env.REACT_APP_AUCTION;
@@ -19,11 +19,11 @@ const tokens = {
 
 export const approveToken = async (ticker, amount, signer) => {
   const token = tokens[ticker];
-  const approveAmount = parseUnits(amount, token.decimals);
+  const approveAmount = parseUnits(String(amount), token.decimals);
   try {
     const contract = new ethers.Contract(token.ca, token.abi, signer);
     const tx = await contract.approve(auctionAddress, approveAmount);
-    await tx.wait(2);
+    await tx.wait();
     notify(
       "success",
       `Approved ${amount} of ${ticker}`,
@@ -32,6 +32,25 @@ export const approveToken = async (ticker, amount, signer) => {
     );
     return {
       error: false,
+    };
+  } catch (e) {
+    console.log(e);
+    return {
+      error: true,
+    };
+  }
+};
+
+export const allowanceToken = async (ticker, address) => {
+  console.log(address);
+  const token = tokens[ticker];
+  try {
+    const contract = new ethers.Contract(token.ca, token.abi, provider);
+    let approval = await contract.allowance(address, auctionAddress);
+    approval = ethers.utils.formatUnits(approval, token.decimals);
+    return {
+      error: false,
+      approval: approval,
     };
   } catch (e) {
     console.log(e);

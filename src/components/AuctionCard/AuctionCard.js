@@ -12,8 +12,8 @@ const renderer = ({ hours, minutes, seconds, completed }) => {
   } else {
     // Render a countdown
     return (
-      <span>
-        {hours}:{minutes}:{seconds}
+      <span style={{ color: "#28cd88", fontSize: "1rem" }}>
+        {hours} Hours {minutes} Mins {seconds} Seconds
       </span>
     );
   }
@@ -25,7 +25,6 @@ class AuctionCard extends React.Component {
     return (
       <div className="auction-card">
         <h1># TOKEN ID {data.tokenId}</h1>
-        <Countdown date={new Date(data.ends * 1000)} renderer={renderer} />
         <div>
           <p>
             Listing Price <br />
@@ -40,6 +39,11 @@ class AuctionCard extends React.Component {
             </span>
           </p>
         </div>
+        <Countdown
+          className="mt-40"
+          date={new Date(data.ends * 1000)}
+          renderer={renderer}
+        />
         <div
           style={{
             display: "flex",
@@ -47,7 +51,7 @@ class AuctionCard extends React.Component {
             alignItems: "center",
             justifyContent: "space-evenly",
           }}
-          className="mt-40"
+          className="mt-20"
         >
           <div
             style={{

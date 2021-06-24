@@ -1,37 +1,93 @@
 import React from "react";
 import { Button, Modal, Select } from "antd";
-import { approveToken } from "../../utils/payment-functions";
+import { allowanceToken, approveToken } from "../../utils/payment-functions";
 import { bid } from "../../utils/auction-functions";
+import { coinPrice } from "../../utils/general-functions";
 
 const { Option } = Select;
+
+const Logos = {
+  ETH: {
+    url: "https://dynamic-assets.coinbase.com/dbb4b4983bde81309ddab83eb598358eb44375b930b94687ebe38bc22e52c3b2125258ffb8477a5ef22e33d6bd72e32a506c391caa13af64c00e46613c3e5806/asset_icons/4113b082d21cc5fab17fc8f2d19fb996165bcce635e6900f7fc2d57c4ef33ae9.png",
+  },
+  BTC: {
+    url: "https://dynamic-assets.coinbase.com/e785e0181f1a23a30d9476038d9be91e9f6c63959b538eabbc51a1abc8898940383291eede695c3b8dfaa1829a9b57f5a2d0a16b0523580346c6b8fab67af14b/asset_icons/b57ac673f06a4b0338a596817eb0a50ce16e2059f327dc117744449a47915cb2.png",
+  },
+};
 
 class BidModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       asset: "ETH",
-      amount: "0.01",
       bidAmount: "",
+      approved: false,
+      approveLoading: false,
+      estimate: "",
+      estimated: false,
+      estimating: false,
+      biddingLoading: false,
     };
   }
 
   approve() {
-    const { asset, amount } = this.state;
-    const tx = approveToken(asset, amount, this.props.signer);
-    console.log(tx);
+    this.setState({ approveLoading: true }, async () => {
+      const { asset, estimate } = this.state;
+      const tx = await approveToken(asset, estimate, this.props.signer);
+      if (tx.error) {
+        this.setState({ approveLoading: false });
+      } else {
+        this.setState({ approveLoading: false, approved: true });
+      }
+    });
   }
 
   bid() {
-    const { auctionId } = this.props;
-    const { asset, bidAmount } = this.state;
+    this.setState({ biddingLoading: true }, async () => {
+      const { auctionId } = this.props;
+      const { asset, bidAmount } = this.state;
+      const result = await bid(asset, bidAmount, auctionId, this.props.signer);
+      if (result.error) {
+        this.setState({ biddingLoading: false });
+      } else {
+        this.setState({ biddingLoading: false });
+        this.props.toggleModal();
+      }
+    });
+  }
 
-    const tx = bid(asset, bidAmount * 10 ** 8, auctionId, this.props.signer);
-    console.log(tx);
+  async amountChange(e) {
+    this.setState({
+      bidAmount: e.target.value,
+      estimated: false,
+      estimating: true,
+    });
+    const price = await coinPrice(this.state.asset);
+    const approval = await allowanceToken(this.state.asset, this.props.address);
+    console.log(approval);
+    if (!price.error && !approval.error) {
+      const estimate = parseFloat(e.target.value) / parseFloat(price.price);
+      this.setState({ estimate });
+      if (parseFloat(approval.approval) > parseFloat(estimate)) {
+        this.setState({ approved: true, estimated: true, estimating: false });
+      } else {
+        this.setState({ approved: false, estimated: true, estimating: false });
+      }
+    }
   }
 
   render() {
     const { visible, toggleModal, auctionId, price } = this.props;
-    const { asset, bidAmount } = this.state;
+    const {
+      asset,
+      bidAmount,
+      approved,
+      approveLoading,
+      estimate,
+      estimated,
+      estimating,
+      biddingLoading,
+    } = this.state;
     return (
       <Modal
         visible={visible}
@@ -42,39 +98,71 @@ class BidModal extends React.Component {
         footer={false}
       >
         <h1>Bid Now: {auctionId}</h1>
-        <p>Price in USD: {price}</p>
-        <p>Asset: {asset}</p>
-        <Select
-          defaultValue="ETH"
-          onChange={(e) => {
-            this.setState({ asset: e });
-          }}
-        >
-          <Option value="ETH">Ethereum</Option>
-          <Option value="BTC">Bitcoin</Option>
-        </Select>
-        <input
-          name="bidAmount"
-          placeholder="Bid Amount in USD"
-          onChange={(e) => this.setState({ bidAmount: e.target.value })}
-          value={bidAmount}
-        />
-        <br />
-        <br />
-        <Button
-          onClick={() => {
-            this.approve();
-          }}
-        >
-          Approve Tokens
-        </Button>
-        <Button
-          onClick={() => {
-            this.bid();
-          }}
-        >
-          Bid Now
-        </Button>
+        <div>
+          <p>
+            Listing Price <br />
+            <span className="special-text">USD {price / 10 ** 8}</span>
+          </p>
+          <p>
+            Pay With <br />
+            <span className="special-text">
+              <img className="coin-icon" src={Logos[asset].url} alt={asset} />{" "}
+              {asset}
+            </span>
+          </p>
+        </div>
+        <span className="form-label">Bid Info</span>
+        <div className="mt-20 ">
+          <Select
+            defaultValue="ETH"
+            onChange={(e) => {
+              this.setState({ asset: e });
+            }}
+          >
+            <Option value="ETH">Ethereum</Option>
+            <Option value="BTC">Bitcoin</Option>
+          </Select>
+          <input
+            name="bidAmount"
+            placeholder="Bid Amount in USD"
+            onChange={(e) => this.amountChange(e)}
+            value={bidAmount}
+          />
+        </div>
+        <div className="mt-20 ">
+          <span className="form-label">Estimate </span>
+          <br />
+          <p>
+            {estimate ? parseFloat(estimate).toFixed(8) : 0.0} {asset}
+          </p>
+        </div>
+        <div className="mt-20">
+          {!estimated ? (
+            <Button loading={estimating} className="primary-button" disabled>
+              Enter Input Values
+            </Button>
+          ) : !approved ? (
+            <Button
+              className="primary-button"
+              onClick={() => {
+                this.approve();
+              }}
+              loading={approveLoading}
+            >
+              Approve Tokens
+            </Button>
+          ) : (
+            <Button
+              className="primary-button"
+              onClick={() => {
+                this.bid();
+              }}
+              loading={biddingLoading}
+            >
+              Bid Now
+            </Button>
+          )}
+        </div>
       </Modal>
     );
   }

@@ -4,6 +4,15 @@ import React from "react";
 const ethers = require("ethers");
 const znftSharesAbi = require("./abi/ZNFT.SHARES.json");
 
+const names = {
+  ETH: {
+    name: "ethereum",
+  },
+  BTC: {
+    name: "bitcoin",
+  },
+};
+
 export const provider =
   process.env.REACT_APP_NETWORK === "ETH"
     ? new ethers.providers.InfuraProvider(
@@ -52,3 +61,20 @@ export const Link = (hash) => (
     View Transaction
   </a>
 );
+
+export const coinPrice = async (ticker) => {
+  try {
+    let price = await fetch(
+      `https://api.coingecko.com/api/v3/simple/price?ids=${names[ticker].name}&vs_currencies=usd`
+    );
+    price = await price.json();
+    return {
+      error: false,
+      price: price[names[ticker].name].usd,
+    };
+  } catch (e) {
+    return {
+      error: true,
+    };
+  }
+};

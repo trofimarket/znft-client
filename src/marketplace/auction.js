@@ -4,8 +4,9 @@ import { withRouter } from "react-router";
 import BidModal from "../components/Modals/BidModal";
 import NftSimpleCard from "../components/NftCard/NftSimpleCard";
 import { auctionInfo, bids } from "../utils/queries/auction.query";
-import { FiExternalLink, FiUser } from "react-icons/fi";
+import { FiExternalLink, FiUser, FiDollarSign } from "react-icons/fi";
 import Countdown from "react-countdown";
+import { notify } from "../utils/general-functions";
 
 const renderer = ({ hours, minutes, seconds, completed }) => {
   if (completed) {
@@ -114,6 +115,32 @@ class Auction extends React.Component {
                   alignItems: "center",
                 }}
               >
+                <p>Bid Now</p>
+                <FiDollarSign
+                  className="external-link"
+                  onClick={() => {
+                    info.ends * 1000 > Date.now()
+                      ? this.props.connected
+                        ? this.toggleModal()
+                        : this.props.open()
+                      : notify(
+                          "warning",
+                          "Sale Ended",
+                          "The auction has already been closed",
+                          null
+                        );
+                  }}
+                  size={30}
+                />
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 <p>Creator</p>
                 <FiUser
                   className="external-link"
@@ -137,30 +164,28 @@ class Auction extends React.Component {
                 <FiExternalLink
                   className="external-link"
                   onClick={() => {
-                    window.open(
-                      `https://kovan.etherscan.io/tx/${info.settlementHash}`
-                    );
+                    info.isSettled
+                      ? window.open(
+                          `https://kovan.etherscan.io/tx/${info.settlementHash}`
+                        )
+                      : notify(
+                          "warning",
+                          "Not Yet Settled",
+                          "You can settle bids in your profile page",
+                          null
+                        );
                   }}
                   size={30}
                 />
               </div>
             </div>
           </div>
-          {/* <div>
-            <Button
-              onClick={() => {
-                this.toggleModal();
-              }}
-            >
-              Bid Now
-            </Button>
-          </div> */}
           <div>
             <NftSimpleCard data={info} />
           </div>
         </div>
         <div>
-          {/* <table>
+          <table>
             <thead>
               <tr>
                 <td>Bidder</td>
@@ -197,7 +222,7 @@ class Auction extends React.Component {
                   ))
                 : null}
             </tbody>
-          </table> */}
+          </table>
         </div>
         <BidModal
           visible={visible}
