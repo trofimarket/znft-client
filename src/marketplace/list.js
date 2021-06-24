@@ -22,9 +22,12 @@ class List extends React.Component {
     const { data } = this.state;
     return data === null ? null : (
       <div>
-        {data.map((data, index) => (
-          <AuctionCard data={data} key={index} />
-        ))}
+        <h1>LIVE AUCTIONS</h1>
+        <div className="marketplace-grid mt-40">
+          {data.map((data, index) => (
+            <AuctionCard data={data} key={index} />
+          ))}
+        </div>
       </div>
     );
   }

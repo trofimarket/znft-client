@@ -16,7 +16,7 @@ class ListItem extends React.Component {
       loading: true,
       buttonLoading: false,
       list: false,
-      tokenId: null,
+      tokenId: "",
       price: "",
       ends: "",
     };
@@ -77,7 +77,7 @@ class ListItem extends React.Component {
   listToken() {
     this.setState({ buttonLoading: true }, async () => {
       const { price, ends, tokenId } = this.state;
-      const tx = await list(tokenId, price, ends, this.props.signer);
+      const tx = await list(tokenId, price * 10 ** 8, ends, this.props.signer);
       if (tx) {
         this.setState({ buttonLoading: false });
       }
@@ -98,7 +98,26 @@ class ListItem extends React.Component {
     const { connected } = this.props;
     return (
       <div>
-        <h1 className="mt-20">Your NFTs</h1>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <h1 className="mt-20">{list ? "List NFT for Sale" : "Your NFTs"}</h1>
+          {list ? (
+            <span
+              className="mt-10 cancel-button"
+              onClick={() => {
+                this.setState({ list: false });
+              }}
+            >
+              Cancel
+            </span>
+          ) : null}
+        </div>
         {connected ? (
           loading ? (
             <div className="spinner-container">
@@ -108,8 +127,13 @@ class ListItem extends React.Component {
             <Approve {...this.props} approve={this.approve} />
           ) : list ? (
             <div>
-              <span className="form-label">Listing Info</span>
-              <p>{tokenId}</p>
+              <h1>
+                # {parseInt(tokenId)}
+                <span style={{ fontSize: "1.2rem", marginLeft: "1rem" }}>
+                  Token Id
+                </span>
+              </h1>
+              <span className="form-label">Auction Info</span>
               <input
                 name="price"
                 placeholder="Price of Item (In USD)"
@@ -122,24 +146,14 @@ class ListItem extends React.Component {
                 onChange={(e) => this.handleChange(e)}
                 value={ends}
               />
-              <br />
-              <br />
               <Button
+                className="primary-button mt-40"
                 onClick={() => {
                   this.listToken();
                 }}
                 loading={buttonLoading}
               >
                 List For Sale
-              </Button>
-              <br />
-              <br />
-              <Button
-                onClick={() => {
-                  this.setState({ list: false });
-                }}
-              >
-                Cancel
               </Button>
             </div>
           ) : (

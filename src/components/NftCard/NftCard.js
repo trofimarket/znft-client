@@ -18,6 +18,7 @@ class NftCard extends React.Component {
 
   render() {
     const { info } = this.state;
+    console.log(info);
     return info === null ? (
       <Skeleton.Button
         active
@@ -26,26 +27,31 @@ class NftCard extends React.Component {
       />
     ) : (
       <div className="nft-card">
-        <h1>{info.title}</h1>
+        <h1># {parseInt(this.props.data.id)}</h1>
+        <h3>{info.title}</h3>
         <p>{info.description}</p>
+        <br />
+        <h4>Properties</h4>
         <p>{info.properties}</p>
-        <p>Creator: {info.Address}</p>
-        <p>Supporting Files: </p>
+        <br />
+        <h4>Files</h4>
         {info.files.map((data, index) => {
           return (
-            <a
-              href={`https://ipfs.io/ipfs/${data}`}
+            <div
+              className="supporting-file"
               key={index}
-              target="_blank"
-              rel="noreferrer"
+              onClick={() => window.open(`https://ipfs.io/ipfs/${data}`)}
             >
-              File {index + 1}
-            </a>
+              {String(data).substring(0, 10) +
+                "**********" +
+                String(data).substring(data.length - 10, data.length)}
+            </div>
           );
         })}
         <br />
         <br />
         <Button
+          className="primary-button"
           onClick={() => {
             this.props.propsCall(this.props.data.id);
           }}

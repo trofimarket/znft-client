@@ -1,8 +1,10 @@
 .nft-card {
   padding: 1rem 1rem;
   background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
   border-radius: 30px;
+  box-shadow: var(--box-shadow);
+  margin-bottom: 3rem;
 }
 
 .balances-grid {
@@ -14,4 +16,30 @@
 
 .nft-card img {
   max-width: 100%;
+}
+
+.supporting-file {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  border-radius: 30px;
+  margin-top: 1rem;
+  transition: all 0.5s;
+}
+
+.supporting-file:hover {
+  cursor: pointer;
+  box-shadow: var(--box-shadow);
+}
+
+.error-msg {
+  color: #ff0000;
+}
+
+.cancel-button:hover {
+  cursor: pointer;
+  transition: all 0.5s;
+}
+
+.cancel-button:hover {
+  font-weight: 800;
 }

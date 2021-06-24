@@ -83,6 +83,12 @@ input {
   background: var(--primary);
 }
 
+.marketplace-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 23%);
+  grid-column-gap: 2%;
+}
+
 /*
  * Global Padding & Margins
  */

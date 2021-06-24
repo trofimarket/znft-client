@@ -14,6 +14,9 @@ class CreateItem extends Component {
       files: [],
       loading: false,
       buffer: null,
+      uploading: false,
+      error: false,
+      errorMsg: "",
     };
     this.captureFile = this.captureFile.bind(this);
   }
@@ -33,40 +36,70 @@ class CreateItem extends Component {
     e.preventDefault();
     this.setState({
       [e.target.name]: e.target.value,
+      error: false,
     });
   }
 
   upload = async () => {
+    this.setState({ uploading: true });
     const { buffer } = this.state;
     const result = await uploadImage(buffer);
     if (result) {
       const files = this.state.files;
       files[files.length] = result;
-      console.log(files);
       this.setState({ files });
+      this.setState({ uploading: false });
     }
   };
 
   mintNFT = async () => {
-    this.setState({ loading: true });
-    const data = JSON.stringify({
-      title: this.state.name,
-      description: this.state.description,
-      properties: this.state.properties,
-      files: this.state.files,
-      Address: this.props.address,
-    });
-    const result = await upload(data);
-    if (result) {
-      const tx = await create(result, this.props.signer);
-      if (tx) {
-        this.setState({ loading: false });
+    const { name, description, files } = this.state;
+    if (!name) {
+      this.setState({ error: true, errorMsg: "Title cannot be empty" });
+    } else if (!description) {
+      this.setState({ error: true, errorMsg: "Description cannot be empty" });
+    } else if (files.length < 1) {
+      this.setState({
+        error: true,
+        errorMsg: "Upload files to represent the NFT",
+      });
+    } else {
+      this.setState({ loading: true });
+      const data = JSON.stringify({
+        title: this.state.name,
+        description: this.state.description,
+        properties: this.state.properties,
+        files: this.state.files,
+        Address: this.props.address,
+      });
+      const result = await upload(data);
+      if (result) {
+        const tx = await create(result, this.props.signer);
+        if (tx) {
+          this.setState({
+            loading: false,
+            files: [],
+            name: "",
+            description: "",
+            properties: "",
+            image: "",
+          });
+        }
       }
     }
   };
 
   render() {
-    const { name, description, properties, files, loading } = this.state;
+    const {
+      name,
+      description,
+      properties,
+      files,
+      loading,
+      uploading,
+      error,
+      errorMsg,
+    } = this.state;
     const { open } = this.props;
     return (
       <div>
@@ -103,33 +136,40 @@ class CreateItem extends Component {
               accept=".png,.jpeg,.jpg"
               id="fileupload"
             />
-            {files.map((data, index) => {
-              return (
-                <>
-                  <a
-                    href={`https://ipfs.io/ipfs/${data}`}
-                    key={index}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {data}
-                  </a>
-                  <br />
-                </>
-              );
-            })}
+            {files.length > 0 ? (
+              <div className="pt-40">
+                <span className="form-label" style={{ marginTop: "30px" }}>
+                  NFT Info
+                </span>
+                {files.map((data, index) => {
+                  return (
+                    <div
+                      className="supporting-file"
+                      key={index}
+                      onClick={() =>
+                        window.open(`https://ipfs.io/ipfs/${data}`)
+                      }
+                    >
+                      {String(data).substring(0, 10) +
+                        "**********" +
+                        String(data).substring(data.length - 10, data.length)}
+                    </div>
+                  );
+                })}
+              </div>
+            ) : null}
           </div>
         </div>
         <div className="pt-40">
           {this.props.connected ? (
             <Button
-              loading={loading}
+              loading={loading || uploading}
               onClick={() => {
                 this.mintNFT();
               }}
               className="primary-button"
             >
-              Create Now
+              {uploading ? "Uploading Image" : "Create Now"}
             </Button>
           ) : (
             <Button
@@ -141,6 +181,9 @@ class CreateItem extends Component {
               Connect Wallet
             </Button>
           )}
+        </div>
+        <div className="pt-20">
+          {error ? <p className="error-msg">{errorMsg}</p> : null}
         </div>
       </div>
     );
