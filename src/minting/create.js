@@ -67,11 +67,11 @@ class CreateItem extends Component {
 
   render() {
     const { name, description, properties, files, loading } = this.state;
+    const { open } = this.props;
     return (
       <div>
-        <h1>Create Item</h1>
-        <p>Only approved merchants can create NFTs in the platform.</p>
-        <div className="pt-20">
+        <h1 className="mt-20">Create Item</h1>
+        <div>
           <div>
             <span className="form-label">General Info</span>
             <input
@@ -97,7 +97,7 @@ class CreateItem extends Component {
             />
             <input
               name="image"
-              placeholder="Supporting Files (.png, .jpeg, .zip, .pdf)"
+              placeholder="Supporting Files (.png, .jpeg)"
               type="file"
               onChange={this.captureFile}
               accept=".png,.jpeg,.jpg"

@@ -19,6 +19,7 @@ class AuctionCard extends React.Component {
         <p>Listing Price: {data.listingPrice}</p>
         <p>Token Id: {data.tokenId}</p>
         <p>Creator: {data.creator}</p>
+        <p>Settled: {data.isSettled.toString()}</p>
       </div>
     );
   }

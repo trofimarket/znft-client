@@ -27,10 +27,10 @@ class NftCard extends React.Component {
     ) : (
       <div className="nft-card">
         <h1>{info.title}</h1>
-        <p>Description: {info.description}</p>
-        <p>Properties: {info.properties}</p>
-        <p>Created By: {info.Address}</p>
-        <p>Files: </p>
+        <p>{info.description}</p>
+        <p>{info.properties}</p>
+        <p>Creator: {info.Address}</p>
+        <p>Supporting Files: </p>
         {info.files.map((data, index) => {
           return (
             <a
@@ -39,7 +39,7 @@ class NftCard extends React.Component {
               target="_blank"
               rel="noreferrer"
             >
-              {data}
+              File {index + 1}
             </a>
           );
         })}

@@ -2,13 +2,17 @@
  * CSS for global layouts & global fonts.
  */
 
-@import url("https://fonts.googleapis.com/css?family=Varela+Round:400,500,600&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Bebas+Neue:400&display=swap");
 @import "antd/dist/antd.css";
 
 :root {
-  --font: "Varela Round";
-  --primary: rgb(0, 102, 255);
-  --box-shadow: 330px 30px 30px rgb(0 0 0 / 10%);
+  --font: "Poppins";
+  --heading: "Bebas Neue";
+  --primary: #050505;
+  --grey: rgba(0, 0, 0, 0.5);
+  --white: rgba(255, 255, 255);
+  --box-shadow: 30px 30px 30px rgb(0 0 0 / 10%);
 }
 
 html,
@@ -27,6 +31,11 @@ h5,
 h6 {
   font-weight: 600;
   color: #040405;
+}
+
+h1,
+h2 {
+  font-family: var(--heading);
 }
 
 p {
@@ -66,6 +75,14 @@ input {
   opacity: 0.5 !important;
 }
 
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--primary);
+}
+
+.ant-tabs-ink-bar {
+  background: var(--primary);
+}
+
 /*
  * Global Padding & Margins
  */
@@ -99,4 +116,22 @@ input {
 .container {
   width: 60vw;
   margin-left: 20vw;
+}
+
+.page-div {
+  min-height: 80vh;
+}
+
+@media only screen and (max-width: 2200px) {
+  .container {
+    width: 80vw;
+    margin-left: 10vw;
+  }
+}
+
+@media only screen and (max-width: 1800px) {
+  .container {
+    width: 90vw;
+    margin-left: 5vw;
+  }
 }

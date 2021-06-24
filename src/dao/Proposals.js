@@ -48,7 +48,10 @@ class Proposals extends React.Component {
       <div className="proposal">
         <div>
           <h1>Proposals. </h1>
-          <p>Approve (or) Deny companies willing to list.</p>
+          <p>
+            Approve (or) Deny companies willing to list. You should own znft
+            shares for voting.
+          </p>
           {loading ? (
             <div className="proposals-list">
               <Skeleton.Button
@@ -84,7 +87,7 @@ class Proposals extends React.Component {
           )}
         </div>
         <div className="pagination">
-          <h3>Search. </h3>
+          <h2>Search. </h2>
           <p>
             Every proposal is asigned with an ID. You can search for the company
             using your proposal ID.

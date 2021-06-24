@@ -3,7 +3,6 @@
 .navbar-wrapper {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid rgba(4, 4, 5, 0.1);
   margin-bottom: 3rem;
   height: 75px;
 }
@@ -39,10 +38,13 @@
 }
 
 .navbar-logo h1 {
-  font-size: 22px;
+  font-size: 35px;
   margin: 0;
-  font-weight: 600;
-  color: var(--white);
+  font-family: var(--heading);
+}
+
+.navbar-logo:hover {
+  cursor: pointer;
 }
 
 .navbar-elements {
@@ -95,15 +97,12 @@ button:hover {
 }
 
 .disconnect-wallet {
-  border: 1px solid var(--green) !important;
-  background-color: var(--green) !important;
+  border: 1px solid var(--primary) !important;
+  background-color: var(--primary) !important;
   color: var(--white) !important;
   padding: 0.5rem 2rem;
   margin-top: 1.3rem;
   border-radius: 3px;
-  font-weight: 600;
-  outline: none;
-  transition: all 0.5s;
 }
 
 /* Sidebar CSS */

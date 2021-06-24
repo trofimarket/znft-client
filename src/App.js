@@ -11,7 +11,9 @@ import Index from "./minting/index";
 import Marketplace from "./marketplace/list";
 import AuctionInfo from "./marketplace/auction";
 import Profile from "./profile/profile";
+import Home from "./static/Home";
 import "../src/App.css";
+import { notify } from "./utils/general-functions";
 
 const ethers = require("ethers");
 
@@ -83,14 +85,25 @@ export default class App extends React.Component {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         await window.ethereum.enable();
         const address = await provider.listAccounts();
-        //  let network = await provider.getNetwork();
-        const signer = await provider.getSigner();
-        this.setState({
-          address: address[0],
-          signer: signer,
-          connected: true,
-          modal: false,
-        });
+        const network = await provider.getNetwork();
+        if (network.chainId !== 42) {
+          notify(
+            "error",
+            "Wrong Network Detected",
+            "Please connect with kovan testnet",
+            null
+          );
+          this.setState({ connecting: false });
+        } else {
+          const signer = await provider.getSigner();
+          this.setState({
+            address: address[0],
+            signer: signer,
+            connected: true,
+            modal: false,
+            connecting: false,
+          });
+        }
       }
     } catch (e) {
       // Error Logs
@@ -100,7 +113,7 @@ export default class App extends React.Component {
   walletconnect = async () => {
     try {
       const web3Provider = new WalletConnectProvider({
-        rpc: "https://data-seed-prebsc-1-s1.binance.org:8545/",
+        rpc: process.env.REACT_APP_CONNECTION_RPC,
       });
       await web3Provider.enable().catch((e) => {
         // Connection Error Handler
@@ -127,8 +140,8 @@ export default class App extends React.Component {
   coinbase = async () => {
     try {
       const web3Provider = walletLink.makeWeb3Provider(
-        "https://data-seed-prebsc-1-s1.binance.org:8545/",
-        97
+        process.env.REACT_APP_CONNECTION_RPC,
+        42
       );
       await web3Provider.enable().catch((e) => {
         // Connection Error Handler
@@ -166,82 +179,97 @@ export default class App extends React.Component {
           connect={this.connect}
           connecting={connecting}
           connected={connected}
+          address={address}
           disconnect={this.disconnect}
         />
-        <Switch>
-          <Route
-            exact
-            path="/"
-            render={() => (
-              <CreateMerchant
-                signer={signer}
-                address={address}
-                open={this.open}
-                connected={connected}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/proposals"
-            render={() => (
-              <Proposals
-                signer={signer}
-                address={address}
-                connected={connected}
-                open={this.open}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/mint"
-            render={() => (
-              <Index
-                signer={signer}
-                address={address}
-                connected={connected}
-                open={this.open}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/marketplace"
-            render={() => (
-              <Marketplace
-                signer={signer}
-                address={address}
-                connected={connected}
-                open={this.open}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/auction/:auctionId"
-            render={() => (
-              <AuctionInfo
-                signer={signer}
-                address={address}
-                connected={connected}
-                open={this.open}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/profile/"
-            render={() => (
-              <Profile
-                signer={signer}
-                address={address}
-                connected={connected}
-                open={this.open}
-              />
-            )}
-          />
-        </Switch>
+        <div className="page-div">
+          <Switch>
+            <Route
+              exact
+              path="/"
+              render={() => (
+                <Home
+                  signer={signer}
+                  address={address}
+                  open={this.open}
+                  connected={connected}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/create"
+              render={() => (
+                <CreateMerchant
+                  signer={signer}
+                  address={address}
+                  open={this.open}
+                  connected={connected}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/proposals"
+              render={() => (
+                <Proposals
+                  signer={signer}
+                  address={address}
+                  connected={connected}
+                  open={this.open}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/mint"
+              render={() => (
+                <Index
+                  signer={signer}
+                  address={address}
+                  connected={connected}
+                  open={this.open}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/marketplace"
+              render={() => (
+                <Marketplace
+                  signer={signer}
+                  address={address}
+                  connected={connected}
+                  open={this.open}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/auction/:auctionId"
+              render={() => (
+                <AuctionInfo
+                  signer={signer}
+                  address={address}
+                  connected={connected}
+                  open={this.open}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/profile/"
+              render={() => (
+                <Profile
+                  signer={signer}
+                  address={address}
+                  connected={connected}
+                  open={this.open}
+                />
+              )}
+            />
+          </Switch>
+        </div>
         <Footer />
       </div>
     );

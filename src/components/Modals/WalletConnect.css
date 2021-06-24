@@ -7,14 +7,19 @@
   margin-top: 2rem;
 }
 
-.modal-container h3 {
+.modal-container {
   font-size: 22px;
   font-weight: 500;
 }
 
 .modal-container p {
-  font-size: 15px;
+  font-size: 17px;
   color: var(--grey);
+}
+
+.warning-text {
+  font-size: 13px !important;
+  color: var(--grey) !important;
 }
 
 .connect-container {
@@ -70,5 +75,9 @@
 }
 
 .ant-spin-dot-item {
-  background-color: var(--green) !important;
+  background-color: var(--primary) !important;
+}
+
+.ant-modal-close-x {
+  color: var(--primary) !important;
 }

@@ -1,5 +1,6 @@
 .form-label {
   padding-bottom: 40px;
+  font-weight: 700;
 }
 
 .form-helper {
@@ -8,11 +9,22 @@
 }
 
 .create-merchant-wrapper {
-  min-height: 80vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 60%;
-  margin-left: 20%;
+  width: 50%;
+  margin-left: 25%;
+}
+
+.create-merchant-wrapper h1 {
+  font-size: 42px;
+}
+
+.ant-pagination-item-active a {
+  color: var(--primary) !important;
+}
+
+.ant-tabs-tab a:hover {
+  color: var(--primary) !important;
+}
+
+.ant-pagination-item-active {
+  border-color: var(--primary) !important;
 }

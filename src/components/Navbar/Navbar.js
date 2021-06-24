@@ -27,7 +27,12 @@ class Navbar extends React.PureComponent {
     return (
       <div className="navbar-wrapper">
         <div className="navbar-container">
-          <div className="navbar-logo">
+          <div
+            className="navbar-logo"
+            onClick={() => {
+              this.props.history.push("/");
+            }}
+          >
             <h1>ZNFT</h1>
           </div>
           <div className="secondary-div">
@@ -38,35 +43,35 @@ class Navbar extends React.PureComponent {
                     this.props.history.push("/marketplace");
                   }}
                 >
-                  NFT Marketplace
+                  Marketplace
                 </li>
                 <li
                   onClick={() => {
-                    this.props.history.push("/");
+                    this.props.history.push("/create");
                   }}
                 >
-                  List My Company
+                  For Companies
                 </li>
                 <li
                   onClick={() => {
                     this.props.history.push("/proposals");
                   }}
                 >
-                  Governance
+                  For Share Holders
                 </li>
                 <li
                   onClick={() => {
                     this.props.history.push("/mint");
                   }}
                 >
-                  Create NFT
+                  Tokenize Assets
                 </li>
                 <li
                   onClick={() => {
                     this.props.history.push("/profile");
                   }}
                 >
-                  Profile
+                  My Profile
                 </li>
               </ul>
             </div>

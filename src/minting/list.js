@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "antd";
+import { Button, Spin } from "antd";
 import NftCard from "../components/NftCard/NftCard";
 import { approve, checkApproval } from "../utils/nft-functions";
 import { balances } from "../utils/queries/nft.query";
@@ -89,10 +89,11 @@ class ListItem extends React.Component {
     } = this.state;
     return (
       <div>
-        <h1>List Item</h1>
-        <p>Below is the list of NFTs that your account owns</p>
+        <h1 className="mt-20">Your NFTs</h1>
         {loading ? (
-          <p>Fetching Approval Status</p>
+          <div className="spinner-container">
+            <Spin size="large" />
+          </div>
         ) : !status ? (
           <Button loading={buttonLoading} onClick={() => this.approve()}>
             Approve Now
@@ -134,7 +135,7 @@ class ListItem extends React.Component {
             </Button>
           </div>
         ) : (
-          <div>
+          <div className="balances-grid">
             {balance === null
               ? null
               : balance.map((data, index) => {

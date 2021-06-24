@@ -1,7 +1,17 @@
 .nft-card {
-  box-shadow: var(--box-shadow);
   padding: 1rem 1rem;
   background-color: white;
-  border: 2px solid rgba(4, 4, 5, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 30px;
+}
+
+.balances-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 45%);
+  grid-column-gap: 2.5%;
+  padding: 0.5rem;
+}
+
+.nft-card img {
+  max-width: 100%;
 }

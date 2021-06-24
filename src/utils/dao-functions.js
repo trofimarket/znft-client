@@ -17,14 +17,19 @@ export const upload = async (data) => {
 export const create = async (hash, listingFee, platformTax, signer) => {
   const contract = new ethers.Contract(process.env.REACT_APP_DAO, abi, signer);
   try {
-    const tx = await contract.createMerchant(hash, listingFee, platformTax);
+    const tx = await contract.createMerchant(
+      hash,
+      ethers.utils.parseEther(listingFee),
+      platformTax
+    );
     await tx.wait(2);
     notify(
       "success",
-      "Vote Completed Successfully",
-      "Please refresh the page to see your vote",
+      "Now ZNFT share holders can vote.",
+      "Only approved merchants are able to sell NFTs in our marketplace.",
       tx.hash
     );
+    return true;
   } catch (e) {
     console.log(e);
     notify(
@@ -32,8 +37,8 @@ export const create = async (hash, listingFee, platformTax, signer) => {
       "Error Creating Merchant",
       e.message || "Please try after some time."
     );
+    return false;
   }
-  return true;
 };
 
 export const list = async (start, end) => {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Spin } from "antd";
+import { Modal, Spin, Button } from "antd";
 import Metamask from "../../assets/icn-metamask.svg";
 import WalletConnect from "../../assets/icn-wallet-connect.svg";
 import CoinbaseWallet from "../../assets/icn-coinbase-wallet.svg";
@@ -8,8 +8,15 @@ import "./WalletConnect.css";
 
 export default class ConnectModal extends React.PureComponent {
   render() {
-    const { modal, cancel, connecting, connect, connected, disconnect } =
-      this.props;
+    const {
+      modal,
+      cancel,
+      connecting,
+      connect,
+      connected,
+      disconnect,
+      address,
+    } = this.props;
     return (
       <Modal
         visible={modal}
@@ -21,21 +28,32 @@ export default class ConnectModal extends React.PureComponent {
       >
         {connected ? (
           <div className="modal-container">
-            <h3>Wallet Connected</h3>
-            <p>You can switch wallet anytime</p>
-            <button
-              type="secondary"
+            <h2>Wallet Connected</h2>
+            <div className="connected-container">
+              <p>
+                {String(address).substring(0, 10) +
+                  "............." +
+                  String(address).substring(
+                    address.length - 10,
+                    address.length
+                  )}
+              </p>{" "}
+              {/* <a href={`https://kovan.etherscan.io/address/${address}`}>
+                View on Explorer
+              </a> */}
+            </div>
+            <Button
               className="disconnect-wallet"
               onClick={() => {
                 disconnect();
               }}
             >
               Disconnect Wallet
-            </button>
+            </Button>
           </div>
         ) : !connecting ? (
           <div className="modal-container">
-            <h3>Connect Wallet</h3>
+            <h2>Connect Wallet</h2>
             <p>To start using ZNFT Marketplace</p>
             <div className="connect-container">
               <div
@@ -84,16 +102,17 @@ export default class ConnectModal extends React.PureComponent {
                 <img src={Arrow} alt="right-arrow" />
               </div>
             </div>
-            <p>By continuing, I accept the terms of use</p>
+            <p className="warning-text">
+              By continuing, I accept the terms of use
+            </p>
           </div>
         ) : (
           <div className="modal-container">
-            <h3>Unlock Wallet</h3>
-            <p>You may need to click the extension.</p>
+            <h2>Unlock Wallet</h2>
             <div className="spinner-container">
               <Spin size="large" />
             </div>
-            <p>By continuing, I accept the terms of use</p>
+            <p className="warning-text">Click on your wallet to connect</p>
           </div>
         )}
       </Modal>
