@@ -1,7 +1,7 @@
 import { Drawer } from "antd";
 import React from "react";
 import { withRouter } from "react-router-dom";
-import { Burger } from "../../assets/Burger";
+import Burger from "../../assets/icn-burger.svg";
 import { Close } from "../../assets/Close";
 import "./Navbar.css";
 
@@ -36,7 +36,7 @@ class Navbar extends React.PureComponent {
             <h1>ZNFT</h1>
           </div>
           <div className="secondary-div">
-            <div>
+            <div className="mobile">
               <ul className="navbar-elements">
                 <li
                   onClick={() => {
@@ -75,7 +75,13 @@ class Navbar extends React.PureComponent {
                 </li>
               </ul>
             </div>
-            <div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                alignItems: "center",
+              }}
+            >
               {connected ? (
                 <button
                   type="button"
@@ -97,10 +103,14 @@ class Navbar extends React.PureComponent {
                   Connect Wallet
                 </button>
               )}
+              <button
+                type="button"
+                className="burger"
+                onClick={this.toggleSidebar}
+              >
+                <img src={Burger} alt="menu" />
+              </button>
             </div>
-            <button className="burger" onClick={this.toggleSidebar}>
-              <Burger />
-            </button>
           </div>
         </div>
         <Drawer
@@ -112,11 +122,41 @@ class Navbar extends React.PureComponent {
           className="sidebar"
         >
           <ul className="navbar-elements">
-            <li>Markets</li>
-            <li>Governance</li>
-            <li>Developers</li>
-            <li>Prices</li>
-            <li>Docs</li>
+            <li
+              onClick={() => {
+                this.props.history.push("/marketplace");
+              }}
+            >
+              Marketplace
+            </li>
+            <li
+              onClick={() => {
+                this.props.history.push("/create");
+              }}
+            >
+              For Companies
+            </li>
+            <li
+              onClick={() => {
+                this.props.history.push("/proposals");
+              }}
+            >
+              For Share Holders
+            </li>
+            <li
+              onClick={() => {
+                this.props.history.push("/mint");
+              }}
+            >
+              Tokenize Assets
+            </li>
+            <li
+              onClick={() => {
+                this.props.history.push("/profile");
+              }}
+            >
+              My Profile
+            </li>
           </ul>
         </Drawer>
       </div>

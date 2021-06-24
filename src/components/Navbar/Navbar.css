@@ -71,7 +71,6 @@ button {
   background-color: var(--black);
   color: var(--green) !important;
   padding: 0.5rem 2rem;
-  margin-top: 1.3rem;
   border-radius: 3px;
   font-weight: 600;
   outline: none;
@@ -90,6 +89,7 @@ button:hover {
   padding: 0;
   box-shadow: none;
   cursor: pointer;
+  display: none;
 }
 
 .burger:hover {
@@ -124,11 +124,12 @@ button:hover {
 }
 
 .sidebar .navbar-elements {
-  margin-top: 3rem;
+  margin-top: 7rem;
   flex-direction: column;
   align-items: flex-start;
-  color: var(--white);
-  font-size: 1.25rem;
+  color: var(--primary);
+  font-family: var(--heading);
+  font-size: 2rem;
 }
 
 .sidebar .navbar-elements li {
@@ -139,20 +140,6 @@ button:hover {
   margin-bottom: 1rem;
 }
 
-/* Media queries */
-
-@media only screen and (min-width: 1081px) {
-  .sidebar {
-    display: none;
-  }
+.ant-drawer-body {
+  background: white !important;
 }
-
-/* @media only screen and (max-width: 1080px) {
-  .navbar-wrapper svg {
-    display: block;
-  }
-
-  .navbar-container > div:nth-child(2) > div:nth-child(1) {
-    display: none;
-  }
-} */

@@ -1,9 +1,11 @@
 import React from "react";
 import { Button, Spin } from "antd";
 import NftCard from "../components/NftCard/NftCard";
-import { approve, checkApproval } from "../utils/nft-functions";
+import { checkApproval } from "../utils/nft-functions";
 import { balances } from "../utils/queries/nft.query";
 import { list } from "../utils/auction-functions";
+import NotConnected from "../components/States/NotConnected";
+import Approve from "./approve";
 
 class ListItem extends React.Component {
   constructor(props) {
@@ -19,12 +21,26 @@ class ListItem extends React.Component {
       ends: "",
     };
     this.propsCall = this.propsCall.bind(this);
+    this.approve = this.approve.bind(this);
   }
 
   async componentDidMount() {
-    if (this.props.address) {
+    if (this.props.connected) {
       const approval = await checkApproval(this.props.address);
       console.log(approval);
+      if (!approval.error) {
+        this.setState({
+          status: approval.status,
+          loading: false,
+        });
+        this.fetchBalance();
+      }
+    }
+  }
+
+  async componentDidUpdate() {
+    if (this.props.address && this.state.loading) {
+      const approval = await checkApproval(this.props.address);
       if (!approval.error) {
         this.setState({
           status: approval.status,
@@ -41,15 +57,7 @@ class ListItem extends React.Component {
   }
 
   approve() {
-    this.setState({ buttonLoading: true }, async () => {
-      const tx = await approve(this.props.signer);
-      console.log(tx);
-      if (!tx.error) {
-        this.setState({ status: true, buttonLoading: false });
-      } else {
-        this.setState({ buttonLoading: false });
-      }
-    });
+    this.setState({ status: true });
   }
 
   propsCall(id) {
@@ -87,67 +95,70 @@ class ListItem extends React.Component {
       price,
       ends,
     } = this.state;
+    const { connected } = this.props;
     return (
       <div>
         <h1 className="mt-20">Your NFTs</h1>
-        {loading ? (
-          <div className="spinner-container">
-            <Spin size="large" />
-          </div>
-        ) : !status ? (
-          <Button loading={buttonLoading} onClick={() => this.approve()}>
-            Approve Now
-          </Button>
-        ) : list ? (
-          <div>
-            <span className="form-label">Listing Info</span>
-            <p>{tokenId}</p>
-            <input
-              name="price"
-              placeholder="Price of Item (In USD)"
-              onChange={(e) => this.handleChange(e)}
-              value={price}
-            />
-            <input
-              name="ends"
-              placeholder="Ending Time in Unix TimeStamp"
-              onChange={(e) => this.handleChange(e)}
-              value={ends}
-            />
-            <br />
-            <br />
-            <Button
-              onClick={() => {
-                this.listToken();
-              }}
-              loading={buttonLoading}
-            >
-              List For Sale
-            </Button>
-            <br />
-            <br />
-            <Button
-              onClick={() => {
-                this.setState({ list: false });
-              }}
-            >
-              Cancel
-            </Button>
-          </div>
+        {connected ? (
+          loading ? (
+            <div className="spinner-container">
+              <Spin size="large" />
+            </div>
+          ) : !status ? (
+            <Approve {...this.props} approve={this.approve} />
+          ) : list ? (
+            <div>
+              <span className="form-label">Listing Info</span>
+              <p>{tokenId}</p>
+              <input
+                name="price"
+                placeholder="Price of Item (In USD)"
+                onChange={(e) => this.handleChange(e)}
+                value={price}
+              />
+              <input
+                name="ends"
+                placeholder="Ending Time in Unix TimeStamp"
+                onChange={(e) => this.handleChange(e)}
+                value={ends}
+              />
+              <br />
+              <br />
+              <Button
+                onClick={() => {
+                  this.listToken();
+                }}
+                loading={buttonLoading}
+              >
+                List For Sale
+              </Button>
+              <br />
+              <br />
+              <Button
+                onClick={() => {
+                  this.setState({ list: false });
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+          ) : (
+            <div className="balances-grid">
+              {balance === null
+                ? null
+                : balance.map((data, index) => {
+                    return (
+                      <NftCard
+                        data={data}
+                        key={index}
+                        propsCall={this.propsCall}
+                      />
+                    );
+                  })}
+            </div>
+          )
         ) : (
-          <div className="balances-grid">
-            {balance === null
-              ? null
-              : balance.map((data, index) => {
-                  return (
-                    <NftCard
-                      data={data}
-                      key={index}
-                      propsCall={this.propsCall}
-                    />
-                  );
-                })}
-          </div>
+          <NotConnected {...this.props} />
         )}
       </div>
     );

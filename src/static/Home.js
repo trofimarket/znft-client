@@ -21,9 +21,8 @@ class Home extends React.PureComponent {
             </button>
           </div>
           <p>
-            Bring anything you see around your to the Blockchain.
-            <br />
-            Showcase, List, Buy & do more with your assets.
+            Bring anything you see around your to the Blockchain. Showcase,
+            List, Buy & do more with your assets.
           </p>
         </div>
         <div className="section-1">
@@ -88,7 +87,7 @@ class Home extends React.PureComponent {
                 decentralization and security.
               </p>
             </div>
-            <div className="inner-section-div">
+            <div className="inner-section-div reverse">
               <div>
                 <h3>Open To All</h3>
                 <p>

@@ -24,10 +24,7 @@
 }
 
 .jumbotron span {
-  color: var(--green) !important;
-  background-image: linear-gradient(92deg, #28cd88, #28cd88);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #28cd88 !important;
 }
 
 .button-container {
