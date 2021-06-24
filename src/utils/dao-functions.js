@@ -96,7 +96,8 @@ export const proposals = async () => {
 };
 
 export const vote = async (id, signer, address) => {
-  if ((await sharesBalance(address)) > 0) {
+  const shareBalance = await sharesBalance(address);
+  if (shareBalance > 0) {
     const contract = new ethers.Contract(
       process.env.REACT_APP_DAO,
       abi,
@@ -111,12 +112,17 @@ export const vote = async (id, signer, address) => {
         "Please refresh the page to see your vote",
         tx.hash
       );
+      return {
+        success: false,
+        votes: shareBalance,
+      };
     } catch (e) {
       notify(
         "error",
         "Error Casting Vote",
         e.message || "Please try after some time."
       );
+      return false;
     }
   } else {
     notify(
@@ -124,8 +130,8 @@ export const vote = async (id, signer, address) => {
       "You should own ZNFT Shares to cast your vote.",
       "Buy ZNFT shares on secondary markets now."
     );
+    return false;
   }
-  return true;
 };
 
 export const merchantStatus = async (address) => {

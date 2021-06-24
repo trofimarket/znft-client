@@ -15,8 +15,20 @@ class Home extends React.PureComponent {
             <span> For REAL-WORLD assets.</span>
           </h1>
           <div className="button-container">
-            <button className="primary-button">Join As Merchant.</button>
-            <button className="secondary-button">
+            <button
+              className="primary-button"
+              onClick={() => {
+                this.props.history.push("/create");
+              }}
+            >
+              Join As Merchant.
+            </button>
+            <button
+              className="secondary-button"
+              onClick={() => {
+                this.props.history.push("/marketplace");
+              }}
+            >
               Take me to Marketplace.
             </button>
           </div>

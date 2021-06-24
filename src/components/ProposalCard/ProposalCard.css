@@ -22,13 +22,19 @@
 }
 
 .proposal-card {
-  border: 1px solid rgba(4, 4, 5, 0.1);
   padding: 20px;
   border-radius: 15px;
   display: grid;
   grid-template-columns: 10% 45% 30%;
   grid-column-gap: 3rem;
   margin-bottom: 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.5s;
+}
+
+.proposal-card:hover {
+  box-shadow: var(--box-shadow);
+  cursor: pointer;
 }
 
 .proposals-list {

@@ -1,8 +1,7 @@
 .auction-card {
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(4, 4, 5, 0.1);
   border-radius: 30px;
-  padding: 1rem;
+  padding: 2rem;
   margin-bottom: 3rem;
   transition: all 0.5s;
 }
@@ -10,4 +9,9 @@
 .auction-card:hover {
   cursor: pointer;
   box-shadow: none;
+  box-shadow: var(--box-shadow);
+}
+
+.external-link:hover {
+  color: #28cd88;
 }

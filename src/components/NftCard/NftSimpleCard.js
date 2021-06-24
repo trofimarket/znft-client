@@ -1,10 +1,11 @@
 import React from "react";
 import { getFromLink } from "../../utils/ipfs";
-import { Button, Skeleton } from "antd";
+import { Skeleton } from "antd";
 import "./NftCard.css";
 import { withRouter } from "react-router";
+import { uri } from "../../utils/nft-functions";
 
-class NftCard extends React.Component {
+class NftSimpleCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = { info: null };
@@ -12,7 +13,8 @@ class NftCard extends React.Component {
 
   async componentDidMount() {
     const { data } = this.props;
-    const info = await getFromLink(data.hash);
+    const hash = await uri(data.id);
+    const info = await getFromLink(hash.uri);
     this.setState({ info });
   }
 
@@ -47,19 +49,9 @@ class NftCard extends React.Component {
             </div>
           );
         })}
-        <br />
-        <br />
-        <Button
-          className="primary-button"
-          onClick={() => {
-            this.props.propsCall(this.props.data.id);
-          }}
-        >
-          List for sale
-        </Button>
       </div>
     );
   }
 }
 
-export default withRouter(NftCard);
+export default withRouter(NftSimpleCard);

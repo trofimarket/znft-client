@@ -1,7 +1,8 @@
-import { Button } from "antd";
+// import { Button } from "antd";
 import React from "react";
 import { withRouter } from "react-router";
 import BidModal from "../components/Modals/BidModal";
+import NftSimpleCard from "../components/NftCard/NftSimpleCard";
 import { auctionInfo, bids } from "../utils/queries/auction.query";
 
 class Auction extends React.Component {
@@ -42,24 +43,39 @@ class Auction extends React.Component {
 
   render() {
     const { info, visible, bids } = this.state;
-    console.log(info);
     return info !== null ? (
       <div>
-        <h1>Auction Id : {info.id}</h1>
-        <p>created At: {new Date(info.createdAt * 1000).toLocaleString()}</p>
-        <p>ends At: {new Date(info.ends * 1000).toLocaleString()}</p>
-        <p>Token Id: {info.tokenId}</p>
-        <p>Creator: {info.creator}</p>
-        <p>Listing Price: {info.listingPrice}</p>
-        <p>Creation Hash: {info.creationHash}</p>
-        <div>
-          <Button
-            onClick={() => {
-              this.toggleModal();
-            }}
-          >
-            Bid Now
-          </Button>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div>
+            <h1>Auction Id : {info.id}</h1>
+            <p>
+              created At: {new Date(info.createdAt * 1000).toLocaleString()}
+            </p>
+            <p>ends At: {new Date(info.ends * 1000).toLocaleString()}</p>
+            <p>Token Id: {info.tokenId}</p>
+            <p>Creator: {info.creator}</p>
+            <p>Listing Price: {info.listingPrice}</p>
+            <p>Creation Hash: {info.creationHash}</p>
+          </div>
+          {/* <div>
+            <Button
+              onClick={() => {
+                this.toggleModal();
+              }}
+            >
+              Bid Now
+            </Button>
+          </div> */}
+          <div>
+            <NftSimpleCard data={info} />
+          </div>
         </div>
         <div>
           {bids !== null

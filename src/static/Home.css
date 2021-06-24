@@ -67,6 +67,7 @@
 .secondary-button:hover {
   cursor: pointer;
   border-color: var(--black);
+  color: var(--black) !important;
 }
 
 .ant-modal {

@@ -89,6 +89,16 @@ input {
   grid-column-gap: 2%;
 }
 
+hr {
+  color: #f2f5f7 !important;
+}
+
+.special-text {
+  font-family: var(--heading);
+  font-size: 1.5rem;
+  color: var(--primary);
+}
+
 /*
  * Global Padding & Margins
  */
@@ -146,6 +156,10 @@ input {
   .inner-section-div img {
     height: 400px;
   }
+  .create-merchant-wrapper {
+    width: 60%;
+    margin-left: 20%;
+  }
 }
 
 @media only screen and (max-width: 1024px) {
@@ -173,6 +187,13 @@ input {
   .navbar-container {
     grid-template-columns: 70% 40% !important;
   }
+  .create-merchant-wrapper {
+    width: 90%;
+    margin-left: 5%;
+  }
+  .marketplace-grid {
+    grid-template-columns: repeat(3, 33%);
+  }
 }
 
 @media only screen and (max-width: 768px) {
@@ -191,6 +212,19 @@ input {
   .reverse {
     display: flex;
     flex-direction: column-reverse !important;
+  }
+  .create-merchant-wrapper {
+    width: 100%;
+  }
+  .balances-grid {
+    grid-template-columns: repeat(2, 50%);
+    margin-right: 2rem;
+  }
+  .balances-grid .primary-button {
+    width: 100% !important;
+  }
+  .marketplace-grid {
+    grid-template-columns: repeat(2, 50%);
   }
 }
 
@@ -236,9 +270,24 @@ input {
   }
   .create-merchant-wrapper {
     width: 90%;
-    margin-left: 5%;
   }
   .create-merchant-wrapper h1 {
     font-size: 32px;
+  }
+  .create-merchant-wrapper {
+    width: 100%;
+  }
+  .balances-grid {
+    grid-template-columns: 100%;
+  }
+  .marketplace-grid {
+    grid-template-columns: 100%;
+  }
+  .proposal-card {
+    grid-template-columns: 100%;
+  }
+  .proposal-card div {
+    text-align: center;
+    margin-top: 2rem;
   }
 }

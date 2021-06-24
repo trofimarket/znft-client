@@ -45,7 +45,7 @@ class Proposals extends React.Component {
   render() {
     const { proposals, loading, total, current } = this.state;
     return (
-      <div className="proposal">
+      <div className="create-merchant-wrapper">
         <div>
           <h1>Proposals. </h1>
           <p>
@@ -85,13 +85,6 @@ class Proposals extends React.Component {
               />
             </div>
           )}
-        </div>
-        <div className="pagination">
-          <h2>Search. </h2>
-          <p>
-            Every proposal is asigned with an ID. You can search for the company
-            using your proposal ID.
-          </p>
         </div>
       </div>
     );

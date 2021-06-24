@@ -32,22 +32,20 @@ export const create = async (hash, signer) => {
 };
 
 export const uri = async (tokenId) => {
-  Promise(async (resolve, reject) => {
-    try {
-      const contract = new ethers.Contract(contractAddress, abi, provider);
-      const uri = await contract.tokenURI(tokenId);
-      console.log(uri, "URI");
-      resolve({
-        uri: uri,
-        error: false,
-      });
-    } catch (e) {
-      console.log(e);
-      reject({
-        error: true,
-      });
-    }
-  });
+  try {
+    const contract = new ethers.Contract(contractAddress, abi, provider);
+    const uri = await contract.tokenURI(tokenId);
+    console.log(uri, "URI");
+    return {
+      uri: uri,
+      error: false,
+    };
+  } catch (e) {
+    console.log(e);
+    return {
+      error: true,
+    };
+  }
 };
 
 export const totalSupply = async () => {
