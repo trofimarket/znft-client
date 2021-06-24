@@ -15,3 +15,41 @@
 .external-link:hover {
   color: #28cd88;
 }
+
+.auction-info {
+  padding: 2rem 2rem;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 30px;
+  box-shadow: var(--box-shadow);
+  margin-bottom: 3rem;
+  width: 100%;
+}
+
+.auction-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 48%);
+  grid-column-gap: 4%;
+  grid-auto-rows: 1fr;
+}
+
+table {
+  box-shadow: var(--box-shadow);
+  width: 100%;
+  font-size: 1rem;
+  border-radius: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+td {
+  padding: 25px;
+}
+
+thead {
+  font-family: var(--heading) !important;
+  border-bottom: 1px solid rgba(4, 4, 5, 0.1);
+}
+
+tr {
+  border-bottom: 1px solid rgba(4, 4, 5, 0.05);
+}

@@ -4,6 +4,22 @@ import { withRouter } from "react-router";
 import BidModal from "../components/Modals/BidModal";
 import NftSimpleCard from "../components/NftCard/NftSimpleCard";
 import { auctionInfo, bids } from "../utils/queries/auction.query";
+import { FiExternalLink, FiUser } from "react-icons/fi";
+import Countdown from "react-countdown";
+
+const renderer = ({ hours, minutes, seconds, completed }) => {
+  if (completed) {
+    // Render a completed state
+    return <h1 style={{ color: "#28cd88" }}>SALE ENDED</h1>;
+  } else {
+    // Render a countdown
+    return (
+      <span>
+        {hours}:{minutes}:{seconds}
+      </span>
+    );
+  }
+};
 
 class Auction extends React.Component {
   constructor(props) {
@@ -43,26 +59,92 @@ class Auction extends React.Component {
 
   render() {
     const { info, visible, bids } = this.state;
+    console.log(bids);
     return info !== null ? (
       <div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div>
+        <div className="auction-grid">
+          <div className="auction-info">
             <h1>Auction Id : {info.id}</h1>
+            <Countdown date={new Date(info.ends * 1000)} renderer={renderer} />
             <p>
-              created At: {new Date(info.createdAt * 1000).toLocaleString()}
+              Listing Price <br />
+              <span className="special-text">
+                USD {info.listingPrice / 10 ** 8}
+              </span>
             </p>
-            <p>ends At: {new Date(info.ends * 1000).toLocaleString()}</p>
-            <p>Token Id: {info.tokenId}</p>
-            <p>Creator: {info.creator}</p>
-            <p>Listing Price: {info.listingPrice}</p>
-            <p>Creation Hash: {info.creationHash}</p>
+            <p>
+              Highest Bid <br />
+              <span className="special-text">
+                USD {info.highestBid / 10 ** 8}
+              </span>
+            </p>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-evenly",
+              }}
+              className="mt-40"
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <p>Creation</p>
+                <FiExternalLink
+                  className="external-link"
+                  onClick={() => {
+                    window.open(
+                      `https://kovan.etherscan.io/tx/${info.creationHash}`
+                    );
+                  }}
+                  size={30}
+                />
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <p>Creator</p>
+                <FiUser
+                  className="external-link"
+                  onClick={() => {
+                    window.open(
+                      `https://kovan.etherscan.io/address/${info.creator}`
+                    );
+                  }}
+                  size={30}
+                />
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <p>Settlement</p>
+                <FiExternalLink
+                  className="external-link"
+                  onClick={() => {
+                    window.open(
+                      `https://kovan.etherscan.io/tx/${info.settlementHash}`
+                    );
+                  }}
+                  size={30}
+                />
+              </div>
+            </div>
           </div>
           {/* <div>
             <Button
@@ -78,16 +160,44 @@ class Auction extends React.Component {
           </div>
         </div>
         <div>
-          {bids !== null
-            ? bids.map((data, index) => (
-                <div key={index}>
-                  <p>{data.bidder}</p>
-                  <p>{data.currency}</p>
-                  <p>{data.amount}</p>
-                  <p>{data.id}</p>
-                </div>
-              ))
-            : null}
+          {/* <table>
+            <thead>
+              <tr>
+                <td>Bidder</td>
+                <td>Currency</td>
+                <td>Amount</td>
+                <td>Hash</td>
+              </tr>
+            </thead>
+            <tbody>
+              {bids !== null
+                ? bids.map((data, index) => (
+                    <tr key={index}>
+                      <td>
+                        <a
+                          href={`https://kovan.etherscan.io/address/${data.bidder}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {data.bidder}
+                        </a>
+                      </td>
+                      <td>{data.currency}</td>
+                      <td>$ {data.amount / 10 ** 8}</td>
+                      <td>
+                        <a
+                          href={`https://kovan.etherscan.io/tx/${data.id}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {data.id}
+                        </a>
+                      </td>
+                    </tr>
+                  ))
+                : null}
+            </tbody>
+          </table> */}
         </div>
         <BidModal
           visible={visible}

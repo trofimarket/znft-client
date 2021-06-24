@@ -7,27 +7,49 @@ class ClaimCard extends React.Component {
     super(props);
     this.state = {
       buttonLoading: false,
+      claimed: false,
     };
   }
 
   claim = () => {
     this.setState({ buttonLoading: true }, async () => {
       const tx = await claim(this.props.data.id, this.props.signer);
-      console.log(tx);
-      this.setState({ buttonLoading: false });
+      if (!tx.error) {
+        this.setState({ buttonLoading: false, claimed: true });
+      } else {
+        this.setState({ buttonLoading: false });
+      }
     });
   };
 
   render() {
     const { data } = this.props;
-    const { buttonLoading } = this.state;
+    const { buttonLoading, claimed } = this.state;
     return (
-      <div>
-        <h1>Auction Id: {data.id}</h1>
-        <p>Listing Price: {data.listingPrice}</p>
-        <p>Highest Bid: {data.highestBid}</p>
-        {Date.now() / 1000 > data.ends ? (
+      <div className="nft-card">
+        <h1>
+          # {data.id} <span style={{ fontSize: "1.0rem" }}>Auction Id</span>
+        </h1>
+        <div>
+          <p>
+            Listing Price <br />
+            <span className="special-text">
+              USD {data.listingPrice / 10 ** 8}
+            </span>
+          </p>
+          <p>
+            Highest Bid
+            <br />
+            <span className="special-text">
+              USD {data.highestBid / 10 ** 8}
+            </span>
+          </p>
+        </div>
+        {data.isSettled || claimed ? (
+          <h1 style={{ color: "#28cd88" }}>CLAIMED</h1>
+        ) : Date.now() / 1000 > data.ends ? (
           <Button
+            className="primary-button"
             onClick={() => {
               this.claim();
             }}
@@ -35,7 +57,9 @@ class ClaimCard extends React.Component {
           >
             Claim My NFT
           </Button>
-        ) : null}
+        ) : (
+          <h1>AUCTION GOING ON</h1>
+        )}
       </div>
     );
   }

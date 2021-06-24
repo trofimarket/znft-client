@@ -290,4 +290,7 @@ hr {
     text-align: center;
     margin-top: 2rem;
   }
+  .auction-grid {
+    grid-template-columns: 100%;
+  }
 }

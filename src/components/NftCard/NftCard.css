@@ -5,6 +5,7 @@
   border-radius: 30px;
   box-shadow: var(--box-shadow);
   margin-bottom: 3rem;
+  height: 90%;
 }
 
 .balances-grid {

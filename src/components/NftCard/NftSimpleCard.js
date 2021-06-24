@@ -21,11 +21,7 @@ class NftSimpleCard extends React.Component {
   render() {
     const { info } = this.state;
     return info === null ? (
-      <Skeleton.Button
-        active
-        size={180}
-        style={{ width: 600, marginBottom: "2rem" }}
-      />
+      <Skeleton active />
     ) : (
       <div className="nft-card">
         <h1># {parseInt(this.props.data.id)}</h1>
