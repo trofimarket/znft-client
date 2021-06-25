@@ -29,8 +29,11 @@ class Auction extends React.Component {
       info: null,
       bids: null,
       visible: false,
+      fetchingBids: true,
     };
     this.toggleModal = this.toggleModal.bind(this);
+    this.fetchBids = this.fetchBids.bind(this);
+    this.fetchInfo = this.fetchInfo.bind(this);
   }
 
   async componentDidMount() {
@@ -41,7 +44,6 @@ class Auction extends React.Component {
 
   async fetchInfo(auctionId) {
     const info = await auctionInfo(auctionId);
-    console.log(info[0]);
     this.setState({
       info: info[0],
     });
@@ -51,6 +53,7 @@ class Auction extends React.Component {
     const bidInfo = await bids(auctionId);
     this.setState({
       bids: bidInfo,
+      fetchingBids: false,
     });
   }
 
@@ -60,7 +63,6 @@ class Auction extends React.Component {
 
   render() {
     const { info, visible, bids } = this.state;
-    console.log(bids);
     return info !== null ? (
       <div>
         <div className="auction-grid">
@@ -229,6 +231,8 @@ class Auction extends React.Component {
           toggleModal={this.toggleModal}
           auctionId={info.id}
           price={info.highestBid || info.listingPrice}
+          fetchBids={this.fetchBids}
+          fetchInfo={this.fetchInfo}
           {...this.props}
         />
       </div>

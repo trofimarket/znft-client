@@ -23,9 +23,21 @@ export const provider =
         "https://data-seed-prebsc-1-s1.binance.org:8545/"
       );
 
+const defaultOptions = {
+  watchQuery: {
+    fetchPolicy: "no-cache",
+    errorPolicy: "ignore",
+  },
+  query: {
+    fetchPolicy: "no-cache",
+    errorPolicy: "all",
+  },
+};
+
 export const apolloClient = new ApolloClient({
   uri: process.env.REACT_APP_GRAPH_URL,
   cache: new InMemoryCache(),
+  defaultOptions: defaultOptions,
 });
 
 export const sharesBalance = async (address) => {

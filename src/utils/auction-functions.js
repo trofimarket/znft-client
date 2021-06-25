@@ -47,6 +47,7 @@ export const bid = async (ticker, amount, auctionId, signer) => {
     );
     return {
       error: false,
+      hash: tx.hash,
     };
   } catch (e) {
     notify(

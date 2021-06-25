@@ -64,7 +64,9 @@ export const bids = async (auctionId) => {
   try {
     const data = await apolloClient.query({
       query: gql(`{
-            bidInfos(where: {auctionId: "${parseInt(auctionId)}"}) {
+            bidInfos(where: {auctionId: "${parseInt(
+              auctionId
+            )}"}, orderBy: amount, orderDirection: desc) {
               id
               bidder
               auctionId

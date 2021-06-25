@@ -19,11 +19,12 @@ const tokens = {
 
 export const approveToken = async (ticker, amount, signer) => {
   const token = tokens[ticker];
-  const approveAmount = parseUnits(String(amount), token.decimals);
+  const total = parseFloat(amount).toFixed(6) * 2;
+  const approveAmount = parseUnits(String(total), token.decimals);
   try {
     const contract = new ethers.Contract(token.ca, token.abi, signer);
     const tx = await contract.approve(auctionAddress, approveAmount);
-    await tx.wait();
+    await tx.wait(2);
     notify(
       "success",
       `Approved ${amount} of ${ticker}`,
@@ -42,7 +43,6 @@ export const approveToken = async (ticker, amount, signer) => {
 };
 
 export const allowanceToken = async (ticker, address) => {
-  console.log(address);
   const token = tokens[ticker];
   try {
     const contract = new ethers.Contract(token.ca, token.abi, provider);

@@ -2,7 +2,8 @@ import React from "react";
 import { Button, Modal, Select } from "antd";
 import { allowanceToken, approveToken } from "../../utils/payment-functions";
 import { bid } from "../../utils/auction-functions";
-import { coinPrice } from "../../utils/general-functions";
+import { coinPrice, notify } from "../../utils/general-functions";
+import { auctionInfo } from "../../utils/queries/auction.query";
 
 const { Option } = Select;
 
@@ -46,12 +47,31 @@ class BidModal extends React.Component {
     this.setState({ biddingLoading: true }, async () => {
       const { auctionId } = this.props;
       const { asset, bidAmount } = this.state;
-      const result = await bid(asset, bidAmount, auctionId, this.props.signer);
-      if (result.error) {
+      const info = await auctionInfo(auctionId);
+      if (parseFloat(info[0].highestBid) > parseFloat(bidAmount * 10 ** 8)) {
+        notify(
+          "warning",
+          "Bid higher amount",
+          "A bidder placed bid for higher amount than yours",
+          null
+        );
         this.setState({ biddingLoading: false });
+        this.props.fetchInfo(auctionId);
       } else {
-        this.setState({ biddingLoading: false });
-        this.props.toggleModal();
+        const result = await bid(
+          asset,
+          bidAmount,
+          auctionId,
+          this.props.signer
+        );
+        if (result.error) {
+          this.setState({ biddingLoading: false });
+        } else {
+          this.setState({ biddingLoading: false });
+          this.props.toggleModal();
+          this.props.fetchBids(auctionId);
+          this.props.fetchInfo(auctionId);
+        }
       }
     });
   }
@@ -64,11 +84,10 @@ class BidModal extends React.Component {
     });
     const price = await coinPrice(this.state.asset);
     const approval = await allowanceToken(this.state.asset, this.props.address);
-    console.log(approval);
     if (!price.error && !approval.error) {
       const estimate = parseFloat(e.target.value) / parseFloat(price.price);
       this.setState({ estimate });
-      if (parseFloat(approval.approval) > parseFloat(estimate)) {
+      if (parseFloat(approval.approval) >= parseFloat(estimate)) {
         this.setState({ approved: true, estimated: true, estimating: false });
       } else {
         this.setState({ approved: false, estimated: true, estimating: false });
