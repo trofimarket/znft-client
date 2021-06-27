@@ -59,3 +59,21 @@ export const allowanceToken = async (ticker, address) => {
     };
   }
 };
+
+export const balanceToken = async (ticker, address) => {
+  const token = tokens[ticker];
+  try {
+    const contract = new ethers.Contract(token.ca, token.abi, provider);
+    let balance = await contract.balanceOf(address);
+    balance = ethers.utils.formatUnits(balance, token.decimals);
+    return {
+      error: false,
+      balance: balance,
+    };
+  } catch (e) {
+    console.log(e);
+    return {
+      error: true,
+    };
+  }
+};

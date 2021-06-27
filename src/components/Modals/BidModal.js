@@ -1,6 +1,10 @@
 import React from "react";
 import { Button, Modal, Select } from "antd";
-import { allowanceToken, approveToken } from "../../utils/payment-functions";
+import {
+  allowanceToken,
+  approveToken,
+  balanceToken,
+} from "../../utils/payment-functions";
 import { bid } from "../../utils/auction-functions";
 import { coinPrice, notify } from "../../utils/general-functions";
 import { auctionInfo } from "../../utils/queries/auction.query";
@@ -46,8 +50,9 @@ class BidModal extends React.Component {
   bid() {
     this.setState({ biddingLoading: true }, async () => {
       const { auctionId } = this.props;
-      const { asset, bidAmount } = this.state;
+      const { asset, bidAmount, estimate } = this.state;
       const info = await auctionInfo(auctionId);
+      const balance = await balanceToken(this.state.asset, this.props.address);
       if (parseFloat(info[0].highestBid) > parseFloat(bidAmount * 10 ** 8)) {
         notify(
           "warning",
@@ -57,6 +62,14 @@ class BidModal extends React.Component {
         );
         this.setState({ biddingLoading: false });
         this.props.fetchInfo(auctionId);
+      } else if (parseFloat(balance.balance) < parseFloat(estimate)) {
+        notify(
+          "warning",
+          "Insufficient Balance",
+          `Please check whether your wallet has sufficient ${asset} balance `,
+          null
+        );
+        this.setState({ biddingLoading: false });
       } else {
         const result = await bid(
           asset,

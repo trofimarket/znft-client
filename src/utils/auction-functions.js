@@ -1,5 +1,4 @@
 import { notify } from "./general-functions";
-
 const ethers = require("ethers");
 const abi = require("./abi/AUCTION.json");
 const contractAddress = process.env.REACT_APP_AUCTION;
