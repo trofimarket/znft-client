@@ -44,6 +44,7 @@ export const auctionInfo = async (auctionId) => {
                 highestBid
                 highestBidder
                 ends
+                toptime
                 creator
                 creationHash
                 settlementHash
@@ -95,6 +96,8 @@ export const claims = async (address) => {
               createdAt
               highestBid
               highestBidder
+              highestBidAt
+              toptime
               ends
               creator
               creationHash

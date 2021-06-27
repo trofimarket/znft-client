@@ -25,6 +25,7 @@ class ClaimCard extends React.Component {
   render() {
     const { data } = this.props;
     const { buttonLoading, claimed } = this.state;
+    const timeToClaim = data.toptime - (Date.now() / 1000 - data.highestBidAt);
     return (
       <div className="nft-card">
         <h1>
@@ -47,7 +48,7 @@ class ClaimCard extends React.Component {
         </div>
         {data.isSettled || claimed ? (
           <h1 style={{ color: "#28cd88" }}>CLAIMED</h1>
-        ) : Date.now() / 1000 > data.ends ? (
+        ) : Date.now() / 1000 > data.ends || timeToClaim < 0 ? (
           <Button
             className="primary-button"
             onClick={() => {
@@ -58,7 +59,7 @@ class ClaimCard extends React.Component {
             Claim My NFT
           </Button>
         ) : (
-          <h1>AUCTION GOING ON</h1>
+          <h1>CLAIM in {parseInt(timeToClaim)} Secs</h1>
         )}
       </div>
     );

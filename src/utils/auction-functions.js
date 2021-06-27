@@ -4,13 +4,14 @@ const ethers = require("ethers");
 const abi = require("./abi/AUCTION.json");
 const contractAddress = process.env.REACT_APP_AUCTION;
 
-export const list = async (tokenId, price, ends, signer) => {
+export const list = async (tokenId, price, ends, toptime, signer) => {
   try {
     const contract = new ethers.Contract(contractAddress, abi, signer);
     const tx = await contract.createAuction(
       tokenId,
       ends,
-      ethers.utils.parseUnits(price, 8)
+      ethers.utils.parseUnits(price, 8),
+      toptime
     );
     await tx.wait(2);
     notify(

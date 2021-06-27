@@ -81,6 +81,10 @@ class Auction extends React.Component {
                 USD {info.highestBid / 10 ** 8}
               </span>
             </p>
+            <p>
+              Top Time <br />
+              <span className="special-text">{info.toptime} Secs</span>
+            </p>
             <div
               style={{
                 display: "flex",

@@ -19,6 +19,7 @@ class ListItem extends React.Component {
       tokenId: "",
       price: "",
       ends: "",
+      toptime: "",
     };
     this.propsCall = this.propsCall.bind(this);
     this.approve = this.approve.bind(this);
@@ -76,8 +77,8 @@ class ListItem extends React.Component {
 
   listToken() {
     this.setState({ buttonLoading: true }, async () => {
-      const { price, ends, tokenId } = this.state;
-      const tx = await list(tokenId, price, ends, this.props.signer);
+      const { price, ends, tokenId, toptime } = this.state;
+      const tx = await list(tokenId, price, ends, toptime, this.props.signer);
       if (tx) {
         this.setState({ buttonLoading: false });
       }
@@ -94,6 +95,7 @@ class ListItem extends React.Component {
       tokenId,
       price,
       ends,
+      toptime,
     } = this.state;
     const { connected } = this.props;
     return (
@@ -145,6 +147,12 @@ class ListItem extends React.Component {
                 placeholder="Ending Time in Unix TimeStamp"
                 onChange={(e) => this.handleChange(e)}
                 value={ends}
+              />
+              <input
+                name="toptime"
+                placeholder="Top time in seconds"
+                onChange={(e) => this.handleChange(e)}
+                value={toptime}
               />
               <Button
                 className="primary-button mt-40"
