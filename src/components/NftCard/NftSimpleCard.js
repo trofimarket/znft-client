@@ -13,7 +13,7 @@ class NftSimpleCard extends React.Component {
 
   async componentDidMount() {
     const { data } = this.props;
-    const hash = await uri(data.id);
+    const hash = await uri(data.tokenId);
     const info = await getFromLink(hash.uri);
     this.setState({ info });
   }
@@ -24,10 +24,22 @@ class NftSimpleCard extends React.Component {
       <Skeleton active />
     ) : (
       <div className="nft-card">
-        <h1># {parseInt(this.props.data.id)}</h1>
+        <h1># {parseInt(this.props.data.tokenId)}</h1>
+        <h4>Cover Image</h4>
         {info.cover ? (
-          <img src={`https://ipfs.io/ipfs/${info.cover}`} alt={info.cover} />
+          <div
+            className="supporting-file"
+            onClick={() => window.open(`https://ipfs.io/ipfs/${info.cover}`)}
+          >
+            {String(info.cover).substring(0, 10) +
+              "**********" +
+              String(info.cover).substring(
+                info.cover.length - 10,
+                info.cover.length
+              )}
+          </div>
         ) : null}
+        <br />
         <h3>{info.title}</h3>
         <p>{info.description}</p>
         <br />
