@@ -26,6 +26,9 @@ class NftCard extends React.Component {
       />
     ) : (
       <div className="nft-card">
+        {info.cover ? (
+          <img src={`https://ipfs.io/ipfs/${info.cover}`} alt={info.cover} />
+        ) : null}
         <h1># {parseInt(this.props.data.id)}</h1>
         <h3>{info.title}</h3>
         <p>{info.description}</p>

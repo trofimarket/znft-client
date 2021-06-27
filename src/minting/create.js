@@ -14,6 +14,7 @@ class CreateItem extends Component {
       files: [],
       loading: false,
       buffer: null,
+      cover: "",
       uploading: false,
       error: false,
       errorMsg: "",
@@ -21,14 +22,14 @@ class CreateItem extends Component {
     this.captureFile = this.captureFile.bind(this);
   }
 
-  captureFile(event) {
+  captureFile(event, type) {
     event.preventDefault();
     const file = event.target.files[0];
     const reader = new window.FileReader();
     reader.readAsArrayBuffer(file);
     reader.onloadend = () => {
       this.setState({ buffer: Buffer.from(reader.result) });
-      this.upload();
+      this.upload(type);
     };
   }
 
@@ -40,15 +41,22 @@ class CreateItem extends Component {
     });
   }
 
-  upload = async () => {
+  upload = async (type) => {
     this.setState({ uploading: true });
     const { buffer } = this.state;
     const result = await uploadImage(buffer);
     if (result) {
-      const files = this.state.files;
-      files[files.length] = result;
-      this.setState({ files });
-      this.setState({ uploading: false });
+      if (type === "file") {
+        const files = this.state.files;
+        files[files.length] = result;
+        this.setState({ files });
+        this.setState({ uploading: false });
+      } else {
+        this.setState({
+          uploading: false,
+          cover: result,
+        });
+      }
     }
   };
 
@@ -71,6 +79,7 @@ class CreateItem extends Component {
         properties: this.state.properties,
         files: this.state.files,
         Address: this.props.address,
+        cover: this.state.cover,
       });
       const result = await upload(data);
       if (result) {
@@ -83,6 +92,7 @@ class CreateItem extends Component {
             description: "",
             properties: "",
             image: "",
+            cover: "",
           });
         }
       }
@@ -95,6 +105,7 @@ class CreateItem extends Component {
       description,
       properties,
       files,
+      cover,
       loading,
       uploading,
       error,
@@ -121,6 +132,27 @@ class CreateItem extends Component {
             />
           </div>
           <div className="pt-40">
+            <span className="form-label">Cover Image</span>
+            <input
+              name="image"
+              placeholder="Supporting Files (.png, .jpeg)"
+              type="file"
+              onChange={(e) => this.captureFile(e, "cover")}
+              accept=".png,.jpeg,.jpg"
+              id="fileupload"
+            />
+            {cover ? (
+              <div
+                className="supporting-file"
+                onClick={() => window.open(`https://ipfs.io/ipfs/${cover}`)}
+              >
+                {String(cover).substring(0, 10) +
+                  "**********" +
+                  String(cover).substring(cover.length - 10, cover.length)}
+              </div>
+            ) : null}
+          </div>
+          <div className="pt-40">
             <span className="form-label">NFT Info</span>
             <input
               name="properties"
@@ -130,9 +162,9 @@ class CreateItem extends Component {
             />
             <input
               name="image"
-              placeholder="Supporting Files (.png, .jpeg)"
+              placeholder="Supporting Files (.png, .jpeg, .zip, .pdf)"
               type="file"
-              onChange={this.captureFile}
+              onChange={(e) => this.captureFile(e, "file")}
               accept=".png,.jpeg,.jpg"
               id="fileupload"
             />

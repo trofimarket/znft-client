@@ -4,6 +4,8 @@ import "./AuctionCard.css";
 import Countdown from "react-countdown";
 import { FiExternalLink, FiUser } from "react-icons/fi";
 import { Button } from "antd";
+import { uri } from "../../utils/nft-functions";
+import { getFromLink } from "../../utils/ipfs";
 
 const renderer = ({ hours, minutes, seconds, completed }) => {
   if (completed) {
@@ -20,11 +22,28 @@ const renderer = ({ hours, minutes, seconds, completed }) => {
 };
 
 class AuctionCard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { info: null };
+  }
+
+  async componentDidMount() {
+    const { data } = this.props;
+    const hash = await uri(data.tokenId);
+    const info = await getFromLink(hash.uri);
+    this.setState({ info });
+  }
+
   render() {
     const { data } = this.props;
+    const { info } = this.state;
     return (
       <div className="auction-card">
-        <h1># TOKEN ID {data.tokenId}</h1>
+        {info && info.cover ? (
+          <img src={`https://ipfs.io/ipfs/${info.cover}`} alt={info.cover} />
+        ) : (
+          <h1># TOKEN ID {data.tokenId}</h1>
+        )}
         <div>
           <p>
             Listing Price <br />
