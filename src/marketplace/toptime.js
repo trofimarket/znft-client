@@ -118,7 +118,7 @@ class TopTime extends React.Component {
                 <FiDollarSign
                   className="external-link"
                   onClick={() => {
-                    time > 0
+                    time >= 0
                       ? this.props.connected
                         ? this.toggleModal()
                         : this.props.open()
