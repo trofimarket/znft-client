@@ -234,6 +234,7 @@ class Auction extends React.Component {
           price={info.highestBid || info.listingPrice}
           fetchBids={this.fetchBids}
           fetchInfo={this.fetchInfo}
+          type={"auction"}
           {...this.props}
         />
       </div>

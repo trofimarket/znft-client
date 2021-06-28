@@ -9,6 +9,7 @@ import { bidAuction } from "../../utils/auction-functions";
 import { coinPrice, notify } from "../../utils/general-functions";
 import { auctionInfo } from "../../utils/queries/auction.query";
 import { bidTopTime } from "../../utils/toptime-functions";
+import { toptimeInfo } from "../../utils/queries/toptime.query";
 
 const { Option } = Select;
 
@@ -54,10 +55,16 @@ class BidModal extends React.Component {
   }
 
   bid() {
+    console.log(this.props.type);
     this.setState({ biddingLoading: true }, async () => {
       const { auctionId } = this.props;
       const { asset, bidAmount, estimate } = this.state;
-      const info = await auctionInfo(auctionId);
+      let info;
+      if (this.props.type === "auction") {
+        info = await auctionInfo(auctionId);
+      } else {
+        info = await toptimeInfo(auctionId);
+      }
       const balance = await balanceToken(this.state.asset, this.props.address);
       if (parseFloat(info[0].highestBid) > parseFloat(bidAmount * 10 ** 8)) {
         notify(
