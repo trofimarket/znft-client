@@ -5,9 +5,10 @@ import {
   approveToken,
   balanceToken,
 } from "../../utils/payment-functions";
-import { bid } from "../../utils/auction-functions";
+import { bidAuction } from "../../utils/auction-functions";
 import { coinPrice, notify } from "../../utils/general-functions";
 import { auctionInfo } from "../../utils/queries/auction.query";
+import { bidTopTime } from "../../utils/toptime-functions";
 
 const { Option } = Select;
 
@@ -38,7 +39,12 @@ class BidModal extends React.Component {
   approve() {
     this.setState({ approveLoading: true }, async () => {
       const { asset, estimate } = this.state;
-      const tx = await approveToken(asset, estimate, this.props.signer);
+      const tx = await approveToken(
+        asset,
+        estimate,
+        this.props.type,
+        this.props.signer
+      );
       if (tx.error) {
         this.setState({ approveLoading: false });
       } else {
@@ -71,12 +77,23 @@ class BidModal extends React.Component {
         );
         this.setState({ biddingLoading: false });
       } else {
-        const result = await bid(
-          asset,
-          bidAmount,
-          auctionId,
-          this.props.signer
-        );
+        let result;
+        if (this.props.type === "auction") {
+          result = await bidAuction(
+            asset,
+            bidAmount,
+            auctionId,
+            this.props.signer
+          );
+        } else {
+          console.log("topTime");
+          result = await bidTopTime(
+            asset,
+            bidAmount,
+            auctionId,
+            this.props.signer
+          );
+        }
         if (result.error) {
           this.setState({ biddingLoading: false });
         } else {
@@ -96,7 +113,11 @@ class BidModal extends React.Component {
       estimating: true,
     });
     const price = await coinPrice(this.state.asset);
-    const approval = await allowanceToken(this.state.asset, this.props.address);
+    const approval = await allowanceToken(
+      this.state.asset,
+      this.props.address,
+      this.props.type
+    );
     if (!price.error && !approval.error) {
       const estimate = parseFloat(e.target.value) / parseFloat(price.price);
       this.setState({ estimate });

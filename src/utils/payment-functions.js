@@ -3,6 +3,7 @@ import { notify, provider } from "./general-functions";
 
 const ethers = require("ethers");
 const auctionAddress = process.env.REACT_APP_AUCTION;
+const toptimeAddress = process.env.REACT_APP_TOPTIME;
 
 const tokens = {
   ETH: {
@@ -17,13 +18,19 @@ const tokens = {
   },
 };
 
-export const approveToken = async (ticker, amount, signer) => {
+export const approveToken = async (ticker, amount, type, signer) => {
   const token = tokens[ticker];
   const total = parseFloat(amount).toFixed(6) * 2;
   const approveAmount = parseUnits(String(total), token.decimals);
+  let aAddress;
+  if (type === "auction") {
+    aAddress = auctionAddress;
+  } else {
+    aAddress = toptimeAddress;
+  }
   try {
     const contract = new ethers.Contract(token.ca, token.abi, signer);
-    const tx = await contract.approve(auctionAddress, approveAmount);
+    const tx = await contract.approve(aAddress, approveAmount);
     await tx.wait(2);
     notify(
       "success",
@@ -42,11 +49,17 @@ export const approveToken = async (ticker, amount, signer) => {
   }
 };
 
-export const allowanceToken = async (ticker, address) => {
+export const allowanceToken = async (ticker, address, type) => {
   const token = tokens[ticker];
+  let qAddress;
+  if (type === "auction") {
+    qAddress = auctionAddress;
+  } else {
+    qAddress = toptimeAddress;
+  }
   try {
     const contract = new ethers.Contract(token.ca, token.abi, provider);
-    let approval = await contract.allowance(address, auctionAddress);
+    let approval = await contract.allowance(address, qAddress);
     approval = ethers.utils.formatUnits(approval, token.decimals);
     return {
       error: false,

@@ -1,33 +1,62 @@
 import React from "react";
 import { withRouter } from "react-router";
 import AuctionCard from "../components/AuctionCard/AuctionCard";
+import TopTimeCard from "../components/ToptimeCard/TopTimeCard";
 import { auctions } from "../utils/queries/auction.query";
+import { toptimes } from "../utils/queries/toptime.query";
 
 class List extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: null,
+      auction: null,
+      toptime: null,
     };
   }
 
   async componentDidMount() {
-    const data = await auctions();
+    this.fetchAuctions();
+    this.fetchTopTimes();
+  }
+
+  async fetchAuctions() {
+    const auction = await auctions();
     this.setState({
-      data,
+      auction,
+    });
+  }
+
+  async fetchTopTimes() {
+    const toptime = await toptimes();
+    this.setState({
+      toptime,
     });
   }
 
   render() {
-    const { data } = this.state;
-    return data === null ? null : (
+    const { auction, toptime } = this.state;
+    return (
       <div>
-        <h1>LIVE AUCTIONS 🔥</h1>
-        <div className="marketplace-grid mt-40">
-          {data.map((data, index) => (
-            <AuctionCard data={data} key={index} />
-          ))}
-        </div>
+        {auction === null ? null : (
+          <div>
+            <h1>TIME-BASED AUCTIONS 🔥</h1>
+            <div className="marketplace-grid mt-40">
+              {auction.map((data, index) => (
+                <AuctionCard data={data} key={index} />
+              ))}
+            </div>
+          </div>
+        )}
+        {toptime === null ? null : (
+          <div>
+            <h1>TOP-TIME AUCTIONS 🔥</h1>
+            <div className="marketplace-grid mt-40">
+              {toptime.map((data, index) => (
+                <TopTimeCard data={data} key={index} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     );
   }

@@ -1,8 +1,8 @@
 import { Button } from "antd";
 import React from "react";
-import { claim } from "../../utils/auction-functions";
+import { claim } from "../../utils/toptime-functions";
 
-class ClaimCard extends React.Component {
+class TopTimeClaimCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,7 +25,9 @@ class ClaimCard extends React.Component {
   render() {
     const { data } = this.props;
     const { buttonLoading, claimed } = this.state;
-    const timeToClaim = data.toptime - (Date.now() / 1000 - data.highestBidAt);
+    const time =
+      parseFloat(data.toptime) -
+      (Date.now() / 1000 - parseFloat(data.highestBidAt));
     return (
       <div className="nft-card">
         <h1>
@@ -48,7 +50,7 @@ class ClaimCard extends React.Component {
         </div>
         {data.isSettled || claimed ? (
           <h1 style={{ color: "#28cd88" }}>CLAIMED</h1>
-        ) : Date.now() / 1000 > data.ends || timeToClaim < 0 ? (
+        ) : time < 0 ? (
           <Button
             className="primary-button"
             onClick={() => {
@@ -59,11 +61,11 @@ class ClaimCard extends React.Component {
             Claim My NFT
           </Button>
         ) : (
-          <h1>CLAIM in {parseInt(timeToClaim)} Secs</h1>
+          <h1>TOP TIME IN {parseInt(time)} Secs</h1>
         )}
       </div>
     );
   }
 }
 
-export default ClaimCard;
+export default TopTimeClaimCard;

@@ -66,7 +66,7 @@ export const totalSupply = async () => {
   });
 };
 
-export const approve = async (signer) => {
+export const approveAuction = async (signer) => {
   try {
     const contract = new ethers.Contract(contractAddress, abi, signer);
     const tx = await contract.setApprovalForAll(
@@ -91,13 +91,59 @@ export const approve = async (signer) => {
   }
 };
 
-export const checkApproval = async (address) => {
+export const approveToptime = async (signer) => {
+  try {
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+    const tx = await contract.setApprovalForAll(
+      process.env.REACT_APP_TOPTIME,
+      true
+    );
+    await tx.wait(2);
+    notify(
+      "success",
+      "Approved auction smart contract for using tokens",
+      "Now you can list your tokens for auctions",
+      tx.hash
+    );
+    return {
+      error: false,
+    };
+  } catch (e) {
+    return {
+      error: true,
+      message: e,
+    };
+  }
+};
+
+export const checkApprovalAuction = async (address) => {
   console.log(address);
   try {
     const contract = new ethers.Contract(contractAddress, abi, provider);
     const status = await contract.isApprovedForAll(
       address,
       process.env.REACT_APP_AUCTION
+    );
+    console.log(status);
+    return {
+      error: false,
+      status: status,
+    };
+  } catch (e) {
+    console.log(e);
+    return {
+      error: true,
+    };
+  }
+};
+
+export const checkApprovalTopTime = async (address) => {
+  console.log(address);
+  try {
+    const contract = new ethers.Contract(contractAddress, abi, provider);
+    const status = await contract.isApprovedForAll(
+      address,
+      process.env.REACT_APP_TOPTIME
     );
     console.log(status);
     return {

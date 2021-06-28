@@ -1,7 +1,9 @@
 import React from "react";
-import ClaimCard from "../components/ClaimCard/ClaimCard";
+import AuctionClaimCard from "../components/ClaimCard/AuctionClaimCard";
+import TopTimeClaimCard from "../components/ClaimCard/TopTimeClaimCard";
 import NotConnected from "../components/States/NotConnected";
-import { claims } from "../utils/queries/auction.query";
+import { aClaims } from "../utils/queries/auction.query";
+import { tClaims } from "../utils/queries/toptime.query";
 
 class Profile extends React.Component {
   constructor(props) {
@@ -9,37 +11,50 @@ class Profile extends React.Component {
     this.state = {
       info: null,
       loading: true,
+      toptimeclaims: null,
     };
   }
 
   async componentDidMount() {
     if (this.props.connected) {
-      const info = await claims(this.props.address);
-      this.setState({ info, loading: false });
+      const info = await aClaims(this.props.address);
+      const toptimeclaims = await tClaims(this.props.address);
+      this.setState({ info, loading: false, toptimeclaims });
     }
   }
 
   async componentDidUpdate() {
     if (this.props.connected && this.state.loading) {
-      const info = await claims(this.props.address);
-      this.setState({ info, loading: false });
+      const info = await aClaims(this.props.address);
+      const toptimeclaims = await tClaims(this.props.address);
+      this.setState({ info, loading: false, toptimeclaims });
     }
   }
 
   render() {
-    const { info } = this.state;
+    const { info, toptimeclaims } = this.state;
     const { connected } = this.props;
     return (
       <div className="create-merchant-wrapper">
-        <h1>YOUR BIDS</h1>
         {connected ? (
-          info === null ? null : (
-            <div className="balances-grid">
-              {info.map((data, index) => (
-                <ClaimCard data={data} key={index} {...this.props} />
-              ))}
-            </div>
-          )
+          <div>
+            {info === null ? null : <h1>YOUR AUCTION BIDS</h1>}
+            {info === null ? null : (
+              <div className="balances-grid">
+                {info.map((data, index) => (
+                  <AuctionClaimCard data={data} key={index} {...this.props} />
+                ))}
+              </div>
+            )}
+            {toptimeclaims === null ? null : <h1>YOUR TOPTIME BIDS</h1>}
+            {toptimeclaims === null ? null : (
+              <div className="balances-grid">
+                {toptimeclaims.map((data, index) => (
+                  <TopTimeClaimCard data={data} key={index} {...this.props} />
+                ))}
+              </div>
+            )}
+          </div>
         ) : (
           <NotConnected {...this.props} />
         )}

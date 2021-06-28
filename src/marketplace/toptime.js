@@ -3,26 +3,11 @@ import React from "react";
 import { withRouter } from "react-router";
 import BidModal from "../components/Modals/BidModal";
 import NftSimpleCard from "../components/NftCard/NftSimpleCard";
-import { auctionInfo, bids } from "../utils/queries/auction.query";
+import { toptimeInfo, bids } from "../utils/queries/toptime.query";
 import { FiExternalLink, FiUser, FiDollarSign } from "react-icons/fi";
-import Countdown from "react-countdown";
 import { notify } from "../utils/general-functions";
 
-const renderer = ({ hours, minutes, seconds, completed }) => {
-  if (completed) {
-    // Render a completed state
-    return <h1 style={{ color: "#28cd88" }}>SALE ENDED</h1>;
-  } else {
-    // Render a countdown
-    return (
-      <span>
-        {hours}:{minutes}:{seconds}
-      </span>
-    );
-  }
-};
-
-class Auction extends React.Component {
+class TopTime extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -37,20 +22,25 @@ class Auction extends React.Component {
   }
 
   async componentDidMount() {
-    const { auctionId } = this.props.match.params;
-    this.fetchInfo(auctionId);
-    this.fetchBids(auctionId);
+    const { toptimeId } = this.props.match.params;
+    this.fetchInfo(toptimeId);
+    this.fetchBids(toptimeId);
   }
 
-  async fetchInfo(auctionId) {
-    const info = await auctionInfo(auctionId);
+  async fetchInfo(toptimeId) {
+    const info = await toptimeInfo(toptimeId);
+    if (info.highestBidAt) {
+      let time = Date.now() / 1000;
+      time = time - info.highestBidAt;
+      console.log(time);
+    }
     this.setState({
       info: info[0],
     });
   }
 
-  async fetchBids(auctionId) {
-    const bidInfo = await bids(auctionId);
+  async fetchBids(toptimeId) {
+    const bidInfo = await bids(toptimeId);
     this.setState({
       bids: bidInfo,
       fetchingBids: false,
@@ -68,7 +58,6 @@ class Auction extends React.Component {
         <div className="auction-grid">
           <div className="auction-info">
             <h1>Auction Id : {info.id}</h1>
-            <Countdown date={new Date(info.ends * 1000)} renderer={renderer} />
             <p>
               Listing Price <br />
               <span className="special-text">
@@ -81,7 +70,10 @@ class Auction extends React.Component {
                 USD {info.highestBid / 10 ** 8}
               </span>
             </p>
-
+            <p>
+              Top Time <br />
+              <span className="special-text">{info.toptime} Secs</span>
+            </p>
             <div
               style={{
                 display: "flex",
@@ -122,16 +114,9 @@ class Auction extends React.Component {
                 <FiDollarSign
                   className="external-link"
                   onClick={() => {
-                    info.ends * 1000 > Date.now()
-                      ? this.props.connected
-                        ? this.toggleModal()
-                        : this.props.open()
-                      : notify(
-                          "warning",
-                          "Sale Ended",
-                          "The auction has already been closed",
-                          null
-                        );
+                    this.props.connected
+                      ? this.toggleModal()
+                      : this.props.open();
                   }}
                   size={30}
                 />
@@ -241,4 +226,4 @@ class Auction extends React.Component {
   }
 }
 
-export default withRouter(Auction);
+export default withRouter(TopTime);

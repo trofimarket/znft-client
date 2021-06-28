@@ -1,11 +1,11 @@
 import { gql } from "@apollo/client";
 import { apolloClient } from "../general-functions";
 
-export const auctions = async () => {
+export const toptimes = async () => {
   try {
     const data = await apolloClient.query({
       query: gql(`{
-          auctions {
+        topTimes {
             id
             tokenId
             starts
@@ -13,7 +13,7 @@ export const auctions = async () => {
             createdAt
             highestBid
             highestBidder
-            ends
+            toptime
             creator
             creationHash
             settlementHash
@@ -23,19 +23,18 @@ export const auctions = async () => {
           }
         }`),
     });
-    console.log(data);
-    return data.data.auctions;
+    return data.data.topTimes;
   } catch (e) {
     console.log(e);
     return [];
   }
 };
 
-export const auctionInfo = async (auctionId) => {
+export const toptimeInfo = async (auctionId) => {
   try {
     const data = await apolloClient.query({
       query: gql(`{
-              auctions(where: {id: "${auctionId}"}) {
+              topTimes(where: {id: "${auctionId}"}) {
                 id
                 tokenId
                 starts
@@ -43,7 +42,7 @@ export const auctionInfo = async (auctionId) => {
                 createdAt
                 highestBid
                 highestBidder
-                ends
+                toptime
                 creator
                 creationHash
                 settlementHash
@@ -53,7 +52,7 @@ export const auctionInfo = async (auctionId) => {
               }
             }`),
     });
-    return data.data.auctions;
+    return data.data.topTimes;
   } catch (e) {
     console.log(e);
     return null;
@@ -64,7 +63,7 @@ export const bids = async (auctionId) => {
   try {
     const data = await apolloClient.query({
       query: gql(`{
-        aBidInfos(where: {auctionId: "${parseInt(
+        tBidInfos(where: {auctionId: "${parseInt(
           auctionId
         )}"}, orderBy: amount, orderDirection: desc) {
               id
@@ -76,18 +75,18 @@ export const bids = async (auctionId) => {
             }
           }`),
     });
-    return data.data.aBidInfos;
+    return data.data.tBidInfos;
   } catch (e) {
     console.log(e);
     return null;
   }
 };
 
-export const aClaims = async (address) => {
+export const tClaims = async (address) => {
   try {
     const data = await apolloClient.query({
       query: gql(`{
-            auctions(where: {highestBidder: "${address}"}) {
+        topTimes(where: {highestBidder: "${address}"}) {
               id
               tokenId
               starts
@@ -96,7 +95,7 @@ export const aClaims = async (address) => {
               highestBid
               highestBidder
               highestBidAt
-              ends
+              toptime
               creator
               creationHash
               settlementHash
@@ -106,7 +105,7 @@ export const aClaims = async (address) => {
             }
           }`),
     });
-    return data.data.auctions;
+    return data.data.topTimes;
   } catch (e) {
     console.log(e);
     return null;

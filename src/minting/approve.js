@@ -1,30 +1,45 @@
 import { Button } from "antd";
 import React from "react";
 import { withRouter } from "react-router";
-import { approve } from "../utils/nft-functions";
+import { approveAuction, approveToptime } from "../utils/nft-functions";
 
 class Approve extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { buttonLoading: false };
+    this.state = { buttonLoading: false, buttonLoading1: false };
   }
 
-  approve() {
-    this.setState({ buttonLoading: true }, () => {
-      this.setState({ buttonLoading: true }, async () => {
-        const tx = await approve(this.props.signer);
-        if (!tx.error) {
-          this.setState({ buttonLoading: false });
-          this.props.approve();
+  approve(type) {
+    this.setState(
+      {
+        buttonLoading: type === "auction",
+        buttonLoading1: type === "toptime",
+      },
+      async () => {
+        if (type === "auction") {
+          const tx = await approveAuction(this.props.signer);
+          if (!tx.error) {
+            this.setState({ buttonLoading: false });
+            this.props.approve(type);
+          } else {
+            this.setState({ buttonLoading: false });
+          }
         } else {
-          this.setState({ buttonLoading: false });
+          const tx = await approveToptime(this.props.signer);
+          if (!tx.error) {
+            this.setState({ buttonLoading1: false });
+            this.props.approve(type);
+          } else {
+            this.setState({ buttonLoading1: false });
+          }
         }
-      });
-    });
+      }
+    );
   }
 
   render() {
-    const { buttonLoading } = this.state;
+    const { buttonLoading, buttonLoading1 } = this.state;
+    const { status, status1 } = this.props;
     return (
       <div
         style={{
@@ -39,13 +54,28 @@ class Approve extends React.Component {
           can revoke your access anytime later. To Proceed with, please approve
           your NFTs. To approve just click on the button below
         </p>
-        <Button
-          className="primary-button mt-20"
-          loading={buttonLoading}
-          onClick={() => this.approve()}
-        >
-          Approve Now
-        </Button>
+        {status ? (
+          <h1 style={{ color: "#28cd88" }}>AUCTION APPROVED</h1>
+        ) : (
+          <Button
+            className="primary-button mt-20"
+            loading={buttonLoading}
+            onClick={() => this.approve("auction")}
+          >
+            Approve Auction
+          </Button>
+        )}
+        {status1 ? (
+          <h1 style={{ color: "#28cd88" }}>TOPTIME APPROVED</h1>
+        ) : (
+          <Button
+            className="primary-button mt-20"
+            loading={buttonLoading1}
+            onClick={() => this.approve("toptime")}
+          >
+            Approve TopTime
+          </Button>
+        )}
       </div>
     );
   }

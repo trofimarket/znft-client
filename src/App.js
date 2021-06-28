@@ -10,6 +10,7 @@ import Proposals from "./dao/Proposals";
 import Index from "./minting/index";
 import Marketplace from "./marketplace/list";
 import AuctionInfo from "./marketplace/auction";
+import TopTimeInfo from "./marketplace/toptime";
 import Profile from "./profile/profile";
 import Home from "./static/Home";
 import "../src/App.css";
@@ -249,6 +250,18 @@ export default class App extends React.Component {
               path="/auction/:auctionId"
               render={() => (
                 <AuctionInfo
+                  signer={signer}
+                  address={address}
+                  connected={connected}
+                  open={this.open}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/toptime/:toptimeId"
+              render={() => (
+                <TopTimeInfo
                   signer={signer}
                   address={address}
                   connected={connected}

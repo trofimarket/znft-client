@@ -1,9 +1,13 @@
 import React from "react";
-import { Button, Spin } from "antd";
+import { Button, Spin, Radio } from "antd";
 import NftCard from "../components/NftCard/NftCard";
-import { checkApproval } from "../utils/nft-functions";
+import {
+  checkApprovalAuction,
+  checkApprovalTopTime,
+} from "../utils/nft-functions";
 import { balances } from "../utils/queries/nft.query";
-import { list } from "../utils/auction-functions";
+import { createAuction } from "../utils/auction-functions";
+import { createTopTime } from "../utils/toptime-functions";
 import NotConnected from "../components/States/NotConnected";
 import Approve from "./approve";
 
@@ -13,6 +17,7 @@ class ListItem extends React.Component {
     this.state = {
       balance: null,
       status: false,
+      status1: false,
       loading: true,
       buttonLoading: false,
       list: false,
@@ -20,6 +25,7 @@ class ListItem extends React.Component {
       price: "",
       ends: "",
       toptime: "",
+      type: "auction",
     };
     this.propsCall = this.propsCall.bind(this);
     this.approve = this.approve.bind(this);
@@ -27,11 +33,12 @@ class ListItem extends React.Component {
 
   async componentDidMount() {
     if (this.props.connected) {
-      const approval = await checkApproval(this.props.address);
-      console.log(approval);
-      if (!approval.error) {
+      const approval = await checkApprovalAuction(this.props.address);
+      const approval2 = await checkApprovalTopTime(this.props.address);
+      if (!approval.error && !approval2.error) {
         this.setState({
           status: approval.status,
+          status1: approval2.status,
           loading: false,
         });
         this.fetchBalance();
@@ -41,10 +48,12 @@ class ListItem extends React.Component {
 
   async componentDidUpdate() {
     if (this.props.address && this.state.loading) {
-      const approval = await checkApproval(this.props.address);
-      if (!approval.error) {
+      const approval = await checkApprovalAuction(this.props.address);
+      const approval2 = await checkApprovalTopTime(this.props.address);
+      if (!approval.error && !approval2.error) {
         this.setState({
           status: approval.status,
+          status1: approval2.status,
           loading: false,
         });
         this.fetchBalance();
@@ -57,8 +66,12 @@ class ListItem extends React.Component {
     this.setState({ balance });
   }
 
-  approve() {
-    this.setState({ status: true });
+  approve(type) {
+    if (type === "auction") {
+      this.setState({ status: true });
+    } else {
+      this.setState({ status1: true });
+    }
   }
 
   propsCall(id) {
@@ -77,10 +90,23 @@ class ListItem extends React.Component {
 
   listToken() {
     this.setState({ buttonLoading: true }, async () => {
-      const { price, ends, tokenId, toptime } = this.state;
-      const tx = await list(tokenId, price, ends, toptime, this.props.signer);
-      if (tx) {
-        this.setState({ buttonLoading: false });
+      const { price, ends, tokenId, toptime, type } = this.state;
+      if (type === "auction") {
+        console.log("auction");
+        const tx = await createAuction(tokenId, price, ends, this.props.signer);
+        if (tx) {
+          this.setState({ buttonLoading: false });
+        }
+      } else {
+        const tx = await createTopTime(
+          tokenId,
+          price,
+          toptime,
+          this.props.signer
+        );
+        if (tx) {
+          this.setState({ buttonLoading: false });
+        }
       }
     });
   }
@@ -90,12 +116,14 @@ class ListItem extends React.Component {
       balance,
       loading,
       status,
+      status1,
       buttonLoading,
       list,
       tokenId,
       price,
       ends,
       toptime,
+      type,
     } = this.state;
     const { connected } = this.props;
     return (
@@ -125,8 +153,13 @@ class ListItem extends React.Component {
             <div className="spinner-container">
               <Spin size="large" />
             </div>
-          ) : !status ? (
-            <Approve {...this.props} approve={this.approve} />
+          ) : !status || !status1 ? (
+            <Approve
+              {...this.props}
+              approve={this.approve}
+              status={status}
+              status1={status1}
+            />
           ) : list ? (
             <div>
               <h1>
@@ -135,6 +168,20 @@ class ListItem extends React.Component {
                   Token Id
                 </span>
               </h1>
+              <span className="form-label">Auction Type</span> <br />
+              <Radio.Group
+                defaultValue={type}
+                size="large"
+                className="mt-20"
+                onChange={(e) => {
+                  this.setState({ type: e.target.value });
+                }}
+              >
+                <Radio.Button value="auction">Auction</Radio.Button>
+                <Radio.Button value="toptime">TopTime</Radio.Button>
+              </Radio.Group>
+              <br />
+              <br />
               <span className="form-label">Auction Info</span>
               <input
                 name="price"
@@ -142,18 +189,21 @@ class ListItem extends React.Component {
                 onChange={(e) => this.handleChange(e)}
                 value={price}
               />
-              <input
-                name="ends"
-                placeholder="Ending Time in Unix TimeStamp"
-                onChange={(e) => this.handleChange(e)}
-                value={ends}
-              />
-              <input
-                name="toptime"
-                placeholder="Top time in seconds"
-                onChange={(e) => this.handleChange(e)}
-                value={toptime}
-              />
+              {type === "auction" ? (
+                <input
+                  name="ends"
+                  placeholder="Ending Time in Unix TimeStamp"
+                  onChange={(e) => this.handleChange(e)}
+                  value={ends}
+                />
+              ) : (
+                <input
+                  name="toptime"
+                  placeholder="Top time in seconds"
+                  onChange={(e) => this.handleChange(e)}
+                  value={toptime}
+                />
+              )}
               <Button
                 className="primary-button mt-40"
                 onClick={() => {

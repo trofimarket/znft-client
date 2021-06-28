@@ -1,15 +1,14 @@
 import { notify } from "./general-functions";
 const ethers = require("ethers");
-const abi = require("./abi/AUCTION.json");
-const contractAddress = process.env.REACT_APP_AUCTION;
+const abi = require("./abi/TOPTIME.json");
+const contractAddress = process.env.REACT_APP_TOPTIME;
 
-export const createAuction = async (tokenId, price, ends, signer) => {
-  console.log(tokenId, price, ends, signer);
+export const createTopTime = async (tokenId, price, toptime, signer) => {
   try {
     const contract = new ethers.Contract(contractAddress, abi, signer);
     const tx = await contract.createAuction(
       tokenId,
-      ends,
+      toptime,
       ethers.utils.parseUnits(price, 8)
     );
     await tx.wait(2);
@@ -30,7 +29,7 @@ export const createAuction = async (tokenId, price, ends, signer) => {
   }
 };
 
-export const bidAuction = async (ticker, amount, auctionId, signer) => {
+export const bidTopTime = async (ticker, amount, auctionId, signer) => {
   try {
     const contract = new ethers.Contract(contractAddress, abi, signer);
     const tx = await contract.bidAuctionWithToken(

@@ -61,11 +61,16 @@ class CreateItem extends Component {
   };
 
   mintNFT = async () => {
-    const { name, description, files } = this.state;
+    const { name, description, files, cover } = this.state;
     if (!name) {
       this.setState({ error: true, errorMsg: "Title cannot be empty" });
     } else if (!description) {
       this.setState({ error: true, errorMsg: "Description cannot be empty" });
+    } else if (!cover) {
+      this.setState({
+        error: true,
+        errorMsg: "Upload cover image to mint NFT",
+      });
     } else if (files.length < 1) {
       this.setState({
         error: true,
