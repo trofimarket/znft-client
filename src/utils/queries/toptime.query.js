@@ -49,6 +49,7 @@ export const toptimeInfo = async (auctionId) => {
                 isSettled
                 createdAt
                 settledAt
+                highestBidAt
               }
             }`),
     });

@@ -15,6 +15,7 @@ class TopTime extends React.Component {
       bids: null,
       visible: false,
       fetchingBids: true,
+      time: 0,
     };
     this.toggleModal = this.toggleModal.bind(this);
     this.fetchBids = this.fetchBids.bind(this);
@@ -29,10 +30,13 @@ class TopTime extends React.Component {
 
   async fetchInfo(toptimeId) {
     const info = await toptimeInfo(toptimeId);
-    if (info.highestBidAt) {
-      let time = Date.now() / 1000;
-      time = time - info.highestBidAt;
-      console.log(time);
+    if (info[0].highestBidAt) {
+      const time =
+        parseFloat(info[0].toptime) -
+        (Date.now() / 1000 - parseFloat(info[0].highestBidAt));
+      this.setState({
+        time: time,
+      });
     }
     this.setState({
       info: info[0],
@@ -52,7 +56,7 @@ class TopTime extends React.Component {
   };
 
   render() {
-    const { info, visible, bids } = this.state;
+    const { info, visible, bids, time } = this.state;
     return info !== null ? (
       <div>
         <div className="auction-grid">
@@ -114,9 +118,16 @@ class TopTime extends React.Component {
                 <FiDollarSign
                   className="external-link"
                   onClick={() => {
-                    this.props.connected
-                      ? this.toggleModal()
-                      : this.props.open();
+                    time > 0
+                      ? this.props.connected
+                        ? this.toggleModal()
+                        : this.props.open()
+                      : notify(
+                          "warning",
+                          "Top time already reached",
+                          "Only you can place bid before the toptime",
+                          null
+                        );
                   }}
                   size={30}
                 />
