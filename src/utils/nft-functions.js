@@ -35,7 +35,7 @@ export const uri = async (tokenId) => {
   try {
     const contract = new ethers.Contract(contractAddress, abi, provider);
     const uri = await contract.tokenURI(tokenId);
-    console.log(uri, "URI");
+    console.log(uri, "URL");
     return {
       uri: uri,
       error: false,
