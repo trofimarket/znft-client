@@ -63,6 +63,7 @@ class Auction extends React.Component {
 
   render() {
     const { info, visible, bids } = this.state;
+    console.log(info);
     return info !== null ? (
       <div>
         <div className="auction-grid">
@@ -70,18 +71,22 @@ class Auction extends React.Component {
             <h1>Auction Id : {info.id}</h1>
             <Countdown date={new Date(info.ends * 1000)} renderer={renderer} />
             <p>
-              Listing Price <br />
+              Sold By <br />
               <span className="special-text">
-                USD {info.listingPrice / 10 ** 8}
+                {String(info.creator).substring(0, 10) +
+                  "......." +
+                  String(info.creator).substring(
+                    info.creator.length - 10,
+                    info.creator.length
+                  )}
               </span>
             </p>
             <p>
-              Highest Bid <br />
+              Current Price <br />
               <span className="special-text">
-                USD {info.highestBid / 10 ** 8}
+                USD {info.highestBid / 10 ** 8 || info.listingPrice / 10 ** 8}
               </span>
             </p>
-
             <div
               style={{
                 display: "flex",

@@ -46,15 +46,9 @@ class AuctionCard extends React.Component {
         )}
         <div>
           <p>
-            Listing Price <br />
-            <span className="special-text">
-              USD {data.listingPrice / 10 ** 8}
-            </span>
-          </p>
-          <p>
             Current Price <br />
             <span className="special-text">
-              USD {data.highestBid / 10 ** 8}
+              USD {data.highestBid / 10 ** 8 || data.listingPrice / 10 ** 8}
             </span>
           </p>
         </div>

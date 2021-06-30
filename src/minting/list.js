@@ -22,7 +22,7 @@ class ListItem extends React.Component {
       buttonLoading: false,
       list: false,
       tokenId: "",
-      price: "",
+      price: "0",
       ends: "",
       toptime: "",
       type: "auction",
@@ -185,10 +185,16 @@ class ListItem extends React.Component {
               <span className="form-label">Auction Info</span>
               <input
                 name="price"
-                placeholder="Price of Item (In USD)"
+                placeholder="Floor Price of Item (In USD)"
                 onChange={(e) => this.handleChange(e)}
                 value={price}
               />
+              <p className="form-helper">
+                {" "}
+                Optional to add floor price. Bidders cannot bid below this price
+                is specified. Default Value is 0 USD and auction starts at 0
+                USD. <br />
+              </p>
               {type === "auction" ? (
                 <input
                   name="ends"
