@@ -44,7 +44,7 @@ Step by step instructions on setting up the project and running it
    ```
    npm install
    ```
-3. Configure the Environment Variables. Example files are found at [here](./env.development).
+3. Configure the Environment Variables. Example files are found at [here](./.env.development).
 
    > Please note that without .env files the app will crash and will not start in local.
 
