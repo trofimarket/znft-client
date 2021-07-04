@@ -6,6 +6,7 @@ import NftSimpleCard from "../components/NftCard/NftSimpleCard";
 import { toptimeInfo, bids } from "../utils/queries/toptime.query";
 import { FiExternalLink, FiUser, FiDollarSign } from "react-icons/fi";
 import { notify } from "../utils/general-functions";
+import BTC from "../assets/coin-icons/btc.png";
 
 class TopTime extends React.Component {
   constructor(props) {
@@ -61,22 +62,22 @@ class TopTime extends React.Component {
       <div>
         <div className="auction-grid">
           <div className="auction-info">
-            <h1>Auction Id : {info.id}</h1>
+            <h1>TopTime Id : {info.id}</h1>
             <p>
               Listing Price <br />
               <span className="special-text">
-                USD {info.listingPrice / 10 ** 8}
-              </span>
-            </p>
-            <p>
-              Highest Bid <br />
-              <span className="special-text">
-                USD {info.highestBid / 10 ** 8}
+                <img
+                  src={BTC}
+                  style={{ width: "25px", marginRight: "0.3rem" }}
+                />
+                {info.highestBid / 10 ** 8 || info.listingPrice / 10 ** 8}
               </span>
             </p>
             <p>
               Top Time <br />
-              <span className="special-text">{info.toptime} Secs</span>
+              <span className="special-text" style={{ color: "#28cd88" }}>
+                {info.toptime} Secs
+              </span>
             </p>
             <div
               style={{
@@ -207,7 +208,7 @@ class TopTime extends React.Component {
                         </a>
                       </td>
                       <td>{data.currency}</td>
-                      <td>$ {data.amount / 10 ** 8}</td>
+                      <td>{data.amount / 10 ** 8} BTC</td>
                       <td>
                         <a
                           href={`https://kovan.etherscan.io/tx/${data.id}`}

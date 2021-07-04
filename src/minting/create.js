@@ -3,6 +3,7 @@ import { Button } from "antd";
 import { uploadImage } from "../utils/ipfs";
 import { upload } from "../utils/dao-functions";
 import { create } from "../utils/nft-functions";
+import MintSuccess from "../components/States/MintSuccess";
 
 class CreateItem extends Component {
   constructor(props) {
@@ -18,8 +19,10 @@ class CreateItem extends Component {
       uploading: false,
       error: false,
       errorMsg: "",
+      success: false,
     };
     this.captureFile = this.captureFile.bind(this);
+    this.reset = this.reset.bind(this);
   }
 
   captureFile(event, type) {
@@ -92,6 +95,7 @@ class CreateItem extends Component {
         if (tx) {
           this.setState({
             loading: false,
+            success: true,
             files: [],
             name: "",
             description: "",
@@ -102,6 +106,10 @@ class CreateItem extends Component {
         }
       }
     }
+  };
+
+  reset = () => {
+    this.setState({ success: false });
   };
 
   render() {
@@ -115,9 +123,12 @@ class CreateItem extends Component {
       uploading,
       error,
       errorMsg,
+      success,
     } = this.state;
     const { open } = this.props;
-    return (
+    return success ? (
+      <MintSuccess reset={this.reset} />
+    ) : (
       <div>
         <h1 className="mt-20">Create Item</h1>
         <div>

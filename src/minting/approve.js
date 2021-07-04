@@ -66,7 +66,9 @@ class Approve extends React.Component {
           </Button>
         )}
         {status1 ? (
-          <h1 style={{ color: "#28cd88" }}>TOPTIME APPROVED</h1>
+          <h1 style={{ color: "#28cd88" }} className="mt-20">
+            TOPTIME APPROVED
+          </h1>
         ) : (
           <Button
             className="primary-button mt-20"

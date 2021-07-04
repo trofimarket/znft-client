@@ -24,9 +24,9 @@ export const approveToken = async (ticker, amount, type, signer) => {
   const approveAmount = parseUnits(String(total), token.decimals);
   let aAddress;
   if (type === "auction") {
-    aAddress = auctionAddress;
+    aAddress = process.env.REACT_APP_AUCTION;
   } else {
-    aAddress = toptimeAddress;
+    aAddress = process.env.REACT_APP_TOPTIME;
   }
   try {
     const contract = new ethers.Contract(token.ca, token.abi, signer);
@@ -90,3 +90,18 @@ export const balanceToken = async (ticker, address) => {
     };
   }
 };
+
+// export const approveForTest = async (ticker, signer) => {
+//   console.log("called");
+//   const token = tokens[ticker];
+//   try {
+//     const contract = new ethers.Contract(
+//       "0x9CD539Ac8Dca5757efAc30Cd32da20CD955e0f8B",
+//       token.abi,
+//       signer
+//     );
+//     await contract.approve("0xaf8a419C1B85D76487596ca3240a0D53e6022ad7", "10");
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };

@@ -192,8 +192,8 @@ class ListItem extends React.Component {
               <p className="form-helper">
                 {" "}
                 Optional to add floor price. Bidders cannot bid below this price
-                is specified. Default Value is 0 USD and auction starts at 0
-                USD. <br />
+                if specified. Default Value is 0 BTC and auction starts at 0
+                BTC. <br />
               </p>
               {type === "auction" ? (
                 <input

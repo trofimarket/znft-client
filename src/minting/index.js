@@ -19,12 +19,15 @@ class Index extends React.Component {
     return (
       <div className="create-merchant-wrapper">
         <div className="container-sm pt-20">
-          <Tabs defaultActiveKey={current}>
+          <Tabs
+            defaultActiveKey={current}
+            onChange={(e) => this.setState({ current: e })}
+          >
             <TabPane tab="Mint New NFT" key="1">
-              <CreateItem {...this.props} />
+              {current === "1" ? <CreateItem {...this.props} /> : null}
             </TabPane>
             <TabPane tab="List NFT for Sale" key="2">
-              <ListItem {...this.props} />
+              {current === "2" ? <ListItem {...this.props} /> : null}
             </TabPane>
           </Tabs>
         </div>

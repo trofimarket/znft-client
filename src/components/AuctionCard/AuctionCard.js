@@ -6,6 +6,7 @@ import { FiExternalLink, FiUser } from "react-icons/fi";
 import { Button } from "antd";
 import { uri } from "../../utils/nft-functions";
 import { getFromLink } from "../../utils/ipfs";
+import BTC from "../../assets/coin-icons/btc.png";
 
 const renderer = ({ hours, minutes, seconds, completed }) => {
   if (completed) {
@@ -14,7 +15,10 @@ const renderer = ({ hours, minutes, seconds, completed }) => {
   } else {
     // Render a countdown
     return (
-      <span style={{ color: "#28cd88", fontSize: "1rem" }}>
+      <span
+        className="special-text"
+        style={{ color: "#28cd88", fontSize: "2rem" }}
+      >
         {hours} Hours {minutes} Mins {seconds} Seconds
       </span>
     );
@@ -47,8 +51,17 @@ class AuctionCard extends React.Component {
         <div>
           <p>
             Current Price <br />
-            <span className="special-text">
-              USD {data.highestBid / 10 ** 8 || data.listingPrice / 10 ** 8}
+            <span
+              className="special-text"
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                marginTop: "0.3rem",
+              }}
+            >
+              <img src={BTC} style={{ width: "25px", marginRight: "0.3rem" }} />
+              {"  "}
+              {data.highestBid / 10 ** 8 || data.listingPrice / 10 ** 8}
             </span>
           </p>
         </div>
@@ -113,11 +126,6 @@ class AuctionCard extends React.Component {
         >
           More Info
         </Button>
-        {/* <p>Created At: {new Date(data.createdAt * 1000).toLocaleString()}</p>
-        <p>Ends At: {new Date(data.ends * 1000).toLocaleString()}</p>
-        <p>Listing Price: {data.listingPrice}</p>
-        <p>Creator: {data.creator}</p>
-        <p>Settled: {data.isSettled.toString()}</p> */}
       </div>
     );
   }

@@ -32,7 +32,7 @@ export const createTopTime = async (tokenId, price, toptime, signer) => {
 export const bidTopTime = async (ticker, amount, auctionId, signer) => {
   try {
     const contract = new ethers.Contract(contractAddress, abi, signer);
-    const tx = await contract.bidAuctionWithToken(
+    const tx = await contract.bidAuction(
       auctionId,
       ticker,
       ethers.utils.parseUnits(amount, 8)

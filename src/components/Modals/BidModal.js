@@ -5,8 +5,8 @@ import {
   approveToken,
   balanceToken,
 } from "../../utils/payment-functions";
-import { bidAuction } from "../../utils/auction-functions";
-import { coinPrice, notify } from "../../utils/general-functions";
+import { bidAuction, estimate } from "../../utils/auction-functions";
+import { notify } from "../../utils/general-functions";
 import { auctionInfo } from "../../utils/queries/auction.query";
 import { bidTopTime } from "../../utils/toptime-functions";
 import { toptimeInfo } from "../../utils/queries/toptime.query";
@@ -55,7 +55,6 @@ class BidModal extends React.Component {
   }
 
   bid() {
-    console.log(this.props.type);
     this.setState({ biddingLoading: true }, async () => {
       const { auctionId } = this.props;
       const { asset, bidAmount, estimate } = this.state;
@@ -93,7 +92,6 @@ class BidModal extends React.Component {
             this.props.signer
           );
         } else {
-          console.log("topTime");
           result = await bidTopTime(
             asset,
             bidAmount,
@@ -116,22 +114,30 @@ class BidModal extends React.Component {
   async amountChange(e) {
     this.setState({
       bidAmount: e.target.value,
-      estimated: false,
-      estimating: true,
     });
-    const price = await coinPrice(this.state.asset);
-    const approval = await allowanceToken(
-      this.state.asset,
-      this.props.address,
-      this.props.type
-    );
-    if (!price.error && !approval.error) {
-      const estimate = parseFloat(e.target.value) / parseFloat(price.price);
-      this.setState({ estimate });
-      if (parseFloat(approval.approval) >= parseFloat(estimate)) {
-        this.setState({ approved: true, estimated: true, estimating: false });
-      } else {
-        this.setState({ approved: false, estimated: true, estimating: false });
+    if (parseFloat(e.target.value) > 0) {
+      this.setState({
+        estimated: false,
+        estimating: true,
+      });
+      const eAmount = await estimate(this.state.asset, e.target.value, 1);
+      const approval = await allowanceToken(
+        this.state.asset,
+        this.props.address,
+        this.props.type
+      );
+      console.log(approval);
+      if (!eAmount.error && !approval.error) {
+        this.setState({ estimate: eAmount.amount });
+        if (parseFloat(approval.approval) >= parseFloat(eAmount.amount)) {
+          this.setState({ approved: true, estimated: true, estimating: false });
+        } else {
+          this.setState({
+            approved: false,
+            estimated: true,
+            estimating: false,
+          });
+        }
       }
     }
   }
@@ -160,8 +166,8 @@ class BidModal extends React.Component {
         <h1>Bid Now: {auctionId}</h1>
         <div>
           <p>
-            Listing Price <br />
-            <span className="special-text">USD {price / 10 ** 8}</span>
+            Current Price <br />
+            <span className="special-text">BTC {price / 10 ** 8}</span>
           </p>
           <p>
             Pay With <br />
@@ -184,7 +190,7 @@ class BidModal extends React.Component {
           </Select>
           <input
             name="bidAmount"
-            placeholder="Bid Amount in USD"
+            placeholder="Bid Amount in BTC"
             onChange={(e) => this.amountChange(e)}
             value={bidAmount}
           />

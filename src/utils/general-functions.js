@@ -50,6 +50,16 @@ export const sharesBalance = async (address) => {
   return ethers.utils.formatUnits(balance, 18);
 };
 
+export const sharesSupply = async () => {
+  const contract = new ethers.Contract(
+    process.env.REACT_APP_ZNFT_SHARES,
+    znftSharesAbi,
+    provider
+  );
+  const supply = await contract.totalSupply();
+  return ethers.utils.formatUnits(supply, 18);
+};
+
 export const routeTo = (path) => {
   this.props.history.push(path);
 };

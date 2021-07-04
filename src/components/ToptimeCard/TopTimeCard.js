@@ -4,6 +4,7 @@ import { FiExternalLink, FiUser } from "react-icons/fi";
 import { Button } from "antd";
 import { uri } from "../../utils/nft-functions";
 import { getFromLink } from "../../utils/ipfs";
+import BTC from "../../assets/coin-icons/btc.png";
 
 class AuctionCard extends React.Component {
   constructor(props) {
@@ -30,14 +31,27 @@ class AuctionCard extends React.Component {
         )}
         <div>
           <p>
-            Current Price <br />
-            <span className="special-text">
-              USD {data.highestBid / 10 ** 8 || data.listingPrice / 10 ** 8}
+            <span
+              className="special-text"
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                marginTop: "0.3rem",
+              }}
+            >
+              <img src={BTC} style={{ width: "25px", marginRight: "0.3rem" }} />
+              {"  "}
+              {data.highestBid / 10 ** 8 || data.listingPrice / 10 ** 8}
             </span>
           </p>
           <p>
             Top Time <br />
-            <span className="special-text">{data.toptime} Secs</span>
+            <span
+              className="special-text"
+              style={{ color: "#28cd88", fontSize: "2rem" }}
+            >
+              {data.toptime} Secs
+            </span>
           </p>
         </div>
         <div

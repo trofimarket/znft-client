@@ -14,6 +14,7 @@ class NftCard extends React.Component {
     const { data } = this.props;
     const info = await getFromLink(data.hash);
     this.setState({ info });
+    console.log(info);
   }
 
   render() {
@@ -21,13 +22,16 @@ class NftCard extends React.Component {
     return info === null ? (
       <Skeleton.Button
         active
-        size={180}
-        style={{ width: 600, marginBottom: "2rem" }}
+        size={500}
+        style={{ width: 350, marginBottom: "2rem" }}
       />
     ) : (
       <div className="nft-card">
         {info.cover ? (
-          <img src={`https://ipfs.io/ipfs/${info.cover}`} alt={info.cover} />
+          <img
+            src={`https://gateway.ipfs.io/ipfs/${info.cover}`}
+            alt={info.cover}
+          />
         ) : null}
         <h1># {parseInt(this.props.data.id)}</h1>
         <h3>{info.title}</h3>

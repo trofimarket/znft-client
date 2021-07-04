@@ -7,15 +7,20 @@ import { auctionInfo, bids } from "../utils/queries/auction.query";
 import { FiExternalLink, FiUser, FiDollarSign } from "react-icons/fi";
 import Countdown from "react-countdown";
 import { notify } from "../utils/general-functions";
+import BTC from "../assets/coin-icons/btc.png";
 
 const renderer = ({ hours, minutes, seconds, completed }) => {
   if (completed) {
     // Render a completed state
-    return <h1 style={{ color: "#28cd88" }}>SALE ENDED</h1>;
+    return (
+      <h1 className="special-text" style={{ color: "#28cd88" }}>
+        SALE ENDED
+      </h1>
+    );
   } else {
     // Render a countdown
     return (
-      <span>
+      <span className="special-text" style={{ color: "#28cd88" }}>
         {hours}:{minutes}:{seconds}
       </span>
     );
@@ -84,7 +89,11 @@ class Auction extends React.Component {
             <p>
               Current Price <br />
               <span className="special-text">
-                USD {info.highestBid / 10 ** 8 || info.listingPrice / 10 ** 8}
+                <img
+                  src={BTC}
+                  style={{ width: "25px", marginRight: "0.3rem" }}
+                />
+                {info.highestBid / 10 ** 8 || info.listingPrice / 10 ** 8}
               </span>
             </p>
             <div
@@ -216,7 +225,7 @@ class Auction extends React.Component {
                         </a>
                       </td>
                       <td>{data.currency}</td>
-                      <td>$ {data.amount / 10 ** 8}</td>
+                      <td>{data.amount / 10 ** 8} BTC</td>
                       <td>
                         <a
                           href={`https://kovan.etherscan.io/tx/${data.id}`}

@@ -4,6 +4,7 @@ import { Button } from "antd";
 import { FiExternalLink, FiTwitter, FiLinkedin } from "react-icons/fi";
 import { vote } from "../../utils/dao-functions";
 import "./ProposalCard.css";
+import { sharesSupply } from "../../utils/general-functions";
 
 class ProposalCard extends React.Component {
   constructor(props) {
@@ -11,14 +12,19 @@ class ProposalCard extends React.Component {
     this.state = {
       loading: false,
       localVote: 0,
+      supply: 0,
     };
   }
+
+  componentDidMount = async () => {
+    const supply = await sharesSupply();
+    this.setState({ supply });
+  };
 
   vote = () => {
     const { signer, address } = this.props;
     this.setState({ loading: true }, async () => {
       const result = await vote(this.props.proposal.id, signer, address);
-      console.log(result);
       if (result.success) {
         this.setState({
           loading: false,
@@ -32,7 +38,7 @@ class ProposalCard extends React.Component {
 
   render() {
     const { proposal, connected, open } = this.props;
-    const { loading, localVote } = this.state;
+    const { loading, localVote, supply } = this.state;
     return (
       <div className="proposal-card">
         <div className="proposal-id">
@@ -75,8 +81,10 @@ class ProposalCard extends React.Component {
           </div>
         </div>
         <div className="vote-div">
-          <span>{parseFloat(proposal.totalVotes) + localVote}</span>
-          <p>Votes</p>
+          <span>
+            {((parseFloat(proposal.totalVotes) + localVote) / supply) * 100} %
+          </span>
+          <p>Vote Percentage</p>
           <div>
             {connected ? (
               proposal.status ? (

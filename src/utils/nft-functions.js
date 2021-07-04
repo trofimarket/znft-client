@@ -119,6 +119,7 @@ export const approveToptime = async (signer) => {
 export const checkApprovalAuction = async (address) => {
   console.log(address);
   try {
+    console.log(process.env.REACT_APP_AUCTION);
     const contract = new ethers.Contract(contractAddress, abi, provider);
     const status = await contract.isApprovedForAll(
       address,
