@@ -11,6 +11,7 @@ import Index from "./minting/index";
 import Marketplace from "./marketplace/list";
 import AuctionInfo from "./marketplace/auction";
 import TopTimeInfo from "./marketplace/toptime";
+import MerchantInfo from "./marketplace/merchantInfo";
 import Profile from "./profile/profile";
 import Home from "./static/Home";
 import "../src/App.css";
@@ -268,6 +269,11 @@ export default class App extends React.Component {
                   open={this.open}
                 />
               )}
+            />
+            <Route
+              exact
+              path="/merchant/:address"
+              render={() => <MerchantInfo />}
             />
             <Route
               exact

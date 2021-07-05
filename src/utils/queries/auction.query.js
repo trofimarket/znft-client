@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client";
 import { apolloClient } from "../general-functions";
+import { get } from "../ipfs";
 
 export const auctions = async () => {
   try {
@@ -23,7 +24,6 @@ export const auctions = async () => {
           }
         }`),
     });
-    console.log(data);
     return data.data.auctions;
   } catch (e) {
     console.log(e);
@@ -107,6 +107,28 @@ export const aClaims = async (address) => {
           }`),
     });
     return data.data.auctions;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const merchant = async (address) => {
+  try {
+    const data = await apolloClient.query({
+      query: gql(`{
+          merchants(where: {address: "${address}"}) {
+              ipfs
+              address
+              listingFee
+              platformFee
+            }
+          }`),
+    });
+    const result = await get(
+      data.data.merchants[data.data.merchants.length - 1].ipfs
+    );
+    return result;
   } catch (e) {
     console.log(e);
     return null;

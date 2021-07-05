@@ -110,9 +110,7 @@ class AuctionCard extends React.Component {
             <FiUser
               className="external-link"
               onClick={() => {
-                window.open(
-                  `https://kovan.etherscan.io/address/${data.creator}`
-                );
+                this.props.history.push(`/merchant/${data.creator}`);
               }}
               size={30}
             />
