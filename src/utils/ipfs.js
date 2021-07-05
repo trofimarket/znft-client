@@ -30,4 +30,15 @@ export const uploadImage = async (buffer) => {
   }
 };
 
+export const uploadBuffer = async (buffer) => {
+  try {
+    const result = await ipfs.files.add(buffer);
+    console.log(result);
+    return result[0].hash;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 export default ipfs;
