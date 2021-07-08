@@ -1,7 +1,7 @@
 const IPFS = require("ipfs-api");
 
 const ipfs = new IPFS({
-  host: "ipfs.infura.io",
+  host: "ipfs.trofi.one",
   port: 5001,
   protocol: "https",
   path: "api/v0/1ur96Dj1HCeew1lcTWFIV2fdLm5",
