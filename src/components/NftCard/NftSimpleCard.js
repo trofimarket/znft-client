@@ -29,7 +29,9 @@ class NftSimpleCard extends React.Component {
         {info.cover ? (
           <div
             className="supporting-file"
-            onClick={() => window.open(`https://ipfs.io/ipfs/${info.cover}`)}
+            onClick={() =>
+              window.open(`https://ipfs.trofi.one/ipfs/${info.cover}`)
+            }
           >
             {String(info.cover).substring(0, 10) +
               "**********" +
@@ -52,7 +54,7 @@ class NftSimpleCard extends React.Component {
             <div
               className="supporting-file"
               key={index}
-              onClick={() => window.open(`https://ipfs.io/ipfs/${data}`)}
+              onClick={() => window.open(`https://ipfs.trofi.one/ipfs/${data}`)}
             >
               {String(data).substring(0, 10) +
                 "**********" +

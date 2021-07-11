@@ -1,5 +1,5 @@
 import { notify, provider, sharesBalance } from "./general-functions";
-import ipfs, { get } from "./ipfs";
+import ipfs from "./ipfs";
 
 const ethers = require("ethers");
 const abi = require("./abi/DAO.json");
@@ -14,13 +14,24 @@ export const upload = async (data) => {
   }
 };
 
-export const create = async (hash, listingFee, platformTax, signer) => {
+export const create = async (
+  hash,
+  listingFee,
+  platformTax,
+  ethWallet,
+  bscWallet,
+  btcWallet,
+  signer
+) => {
   const contract = new ethers.Contract(process.env.REACT_APP_DAO, abi, signer);
   try {
     const tx = await contract.createMerchant(
       hash,
       ethers.utils.parseEther(listingFee),
-      platformTax
+      platformTax,
+      ethWallet,
+      bscWallet,
+      btcWallet
     );
     await tx.wait(2);
     notify(
@@ -41,58 +52,42 @@ export const create = async (hash, listingFee, platformTax, signer) => {
   }
 };
 
-export const list = async (start, end) => {
-  const count = await proposals();
-  const data = [];
-  if (end > count) {
-    for (let i = start; i <= count; i++) {
-      const info = await individual(i);
-      const ipfsData = await get(info.hash);
-      const concat = {
-        ...info,
-        ...ipfsData,
-      };
-      data.push(concat);
-    }
-    return data;
-  } else {
-    for (let i = start; i <= end; i++) {
-      const info = await individual(i);
-      const ipfsData = await get(info.hash);
-      const concat = {
-        ...info,
-        ...ipfsData,
-      };
-      data.push(concat);
-    }
-    return data;
+export const update = async (
+  id,
+  newListingFee,
+  newPlatformTax,
+  ethWallet,
+  bscWallet,
+  btcWallet,
+  signer
+) => {
+  const contract = new ethers.Contract(process.env.REACT_APP_DAO, abi, signer);
+  try {
+    const tx = await contract.updateParams(
+      id,
+      ethers.utils.parseEther(newListingFee),
+      newPlatformTax,
+      ethWallet,
+      bscWallet,
+      btcWallet
+    );
+    await tx.wait(2);
+    notify(
+      "success",
+      "Updated merchant proposal information",
+      "Your proposal will be again opened up for voting",
+      tx.hash
+    );
+    return true;
+  } catch (e) {
+    console.log(e);
+    notify(
+      "error",
+      "Error Updating Information",
+      e.message || "Please try after some time"
+    );
+    return false;
   }
-};
-
-export const individual = async (id) => {
-  const contract = new ethers.Contract(
-    process.env.REACT_APP_DAO,
-    abi,
-    provider
-  );
-  const data = await contract.proposal(id);
-  return {
-    hash: data[0],
-    address: data[1],
-    totalVotes: ethers.utils.formatUnits(data[2], 18),
-    status: data[3],
-    id: id,
-  };
-};
-
-export const proposals = async () => {
-  const contract = new ethers.Contract(
-    process.env.REACT_APP_DAO,
-    abi,
-    provider
-  );
-  const proposals = await contract.totalProposals();
-  return proposals.toNumber();
 };
 
 export const vote = async (id, signer, address) => {
@@ -135,7 +130,6 @@ export const vote = async (id, signer, address) => {
 };
 
 export const merchantStatus = async (address) => {
-  console.log("Checking Merchant Status");
   try {
     const contract = new ethers.Contract(
       process.env.REACT_APP_DAO,
@@ -146,6 +140,23 @@ export const merchantStatus = async (address) => {
     return {
       error: false,
       status: status,
+    };
+  } catch (e) {
+    return { error: true };
+  }
+};
+
+export const listingFee = async (address) => {
+  try {
+    const contract = new ethers.Contract(
+      process.env.REACT_APP_DAO,
+      abi,
+      provider
+    );
+    const fee = await contract.listingFee(address);
+    return {
+      error: false,
+      fee: ethers.utils.formatEther(fee),
     };
   } catch (e) {
     return { error: true };

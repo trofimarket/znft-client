@@ -1,7 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router";
 import AuctionCard from "../components/AuctionCard/AuctionCard";
-import TopTimeCard from "../components/ToptimeCard/TopTimeCard";
+// import TopTimeCard from "../components/ToptimeCard/TopTimeCard";
 import { auctions } from "../utils/queries/auction.query";
 import { toptimes } from "../utils/queries/toptime.query";
 
@@ -50,11 +50,11 @@ class List extends React.Component {
         {toptime === null ? null : (
           <div>
             <h1>TOP-TIME AUCTIONS 🔥</h1>
-            <div className="marketplace-grid mt-40">
+            {/* <div className="marketplace-grid mt-40">
               {toptime.map((data, index) => (
                 <TopTimeCard data={data} key={index} />
               ))}
-            </div>
+            </div> */}
           </div>
         )}
       </div>

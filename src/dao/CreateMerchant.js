@@ -24,6 +24,9 @@ class CreateMerchant extends Component {
       secret: "",
       registration: "",
       signedDoc: "",
+      ethWallet: "",
+      btcWallet: "",
+      bscWallet: "",
       loading: false,
       success: false,
       uploading: false,
@@ -146,8 +149,6 @@ class CreateMerchant extends Component {
       "Signed Letter": this.state.signedDoc,
       "Twitter URL": this.state.twitter,
       "LinkedIn URL": this.state.linkedIn,
-      "Listing Fee": this.state.listingFee,
-      "Platform Tax": this.state.platformTax,
       Address: this.props.address,
     });
     const result = await upload(data);
@@ -161,7 +162,16 @@ class CreateMerchant extends Component {
   }
 
   async createMerchant(hash, listingFee, platformTax) {
-    const tx = await create(hash, listingFee, platformTax, this.props.signer);
+    const { ethWallet, bscWallet, btcWallet } = this.state;
+    const tx = await create(
+      hash,
+      listingFee,
+      platformTax,
+      ethWallet,
+      bscWallet,
+      btcWallet,
+      this.props.signer
+    );
     if (tx) {
       this.setState({ loading: false, success: true });
     } else {
@@ -186,6 +196,9 @@ class CreateMerchant extends Component {
       uploading,
       error,
       errorMsg,
+      ethWallet,
+      btcWallet,
+      bscWallet,
     } = this.state;
     const { open } = this.props;
     const defaultOptions = {
@@ -294,6 +307,27 @@ class CreateMerchant extends Component {
                   accept=".png,.jpeg,.jpg,.pdf"
                   id="fileupload"
                   disabled={uploading}
+                />
+              </div>
+              <div className="pt-40">
+                <span className="form-label">Settlement Wallet Info</span>
+                <input
+                  name="ethWallet"
+                  placeholder="Ethereum Settlement Wallet"
+                  onChange={(e) => this.handleChange(e)}
+                  value={ethWallet}
+                />
+                <input
+                  name="bscWallet"
+                  placeholder="BSC Settlement Wallet"
+                  onChange={(e) => this.handleChange(e)}
+                  value={bscWallet}
+                />
+                <input
+                  name="btcWallet"
+                  placeholder="Bitcoin Settlement Wallet"
+                  onChange={(e) => this.handleChange(e)}
+                  value={btcWallet}
                 />
               </div>
               <div className="pt-40">

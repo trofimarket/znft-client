@@ -10,6 +10,8 @@ import { createAuction } from "../utils/auction-functions";
 import { createTopTime } from "../utils/toptime-functions";
 import NotConnected from "../components/States/NotConnected";
 import Approve from "./approve";
+import { listingFee, merchantStatus } from "../utils/dao-functions";
+import { notify } from "../utils/general-functions";
 
 class ListItem extends React.Component {
   constructor(props) {
@@ -26,6 +28,8 @@ class ListItem extends React.Component {
       ends: "",
       toptime: "",
       type: "auction",
+      validating: null,
+      fee: "",
     };
     this.propsCall = this.propsCall.bind(this);
     this.approve = this.approve.bind(this);
@@ -42,6 +46,7 @@ class ListItem extends React.Component {
           loading: false,
         });
         this.fetchBalance();
+        this.fetchFee();
       }
     }
   }
@@ -57,6 +62,7 @@ class ListItem extends React.Component {
           loading: false,
         });
         this.fetchBalance();
+        this.fetchFee();
       }
     }
   }
@@ -64,6 +70,11 @@ class ListItem extends React.Component {
   async fetchBalance() {
     const balance = await balances(this.props.address);
     this.setState({ balance });
+  }
+
+  async fetchFee() {
+    const fee = await listingFee(this.props.address);
+    this.setState({ fee: fee.fee });
   }
 
   approve(type) {
@@ -74,11 +85,28 @@ class ListItem extends React.Component {
     }
   }
 
-  propsCall(id) {
-    this.setState({
-      list: true,
-      tokenId: id,
-    });
+  async propsCall(id) {
+    this.setState({ validating: id });
+    const result = await merchantStatus(this.props.address);
+    if (!result.error) {
+      if (result.status) {
+        this.setState({
+          list: true,
+          tokenId: id,
+          validating: null,
+        });
+      } else {
+        notify(
+          "error",
+          "Merchant not approved to sell on platform",
+          "please list your company for sale",
+          null
+        );
+        this.setState({ validating: null });
+      }
+    } else {
+      this.setState({ validating: null });
+    }
   }
 
   handleChange(e) {
@@ -90,10 +118,16 @@ class ListItem extends React.Component {
 
   listToken() {
     this.setState({ buttonLoading: true }, async () => {
-      const { price, ends, tokenId, toptime, type } = this.state;
+      const { price, ends, tokenId, toptime, type, fee } = this.state;
       if (type === "auction") {
         console.log("auction");
-        const tx = await createAuction(tokenId, price, ends, this.props.signer);
+        const tx = await createAuction(
+          tokenId,
+          price,
+          ends,
+          fee,
+          this.props.signer
+        );
         if (tx) {
           this.setState({ buttonLoading: false });
         }
@@ -124,6 +158,8 @@ class ListItem extends React.Component {
       ends,
       toptime,
       type,
+      validating,
+      fee,
     } = this.state;
     const { connected } = this.props;
     return (
@@ -166,6 +202,13 @@ class ListItem extends React.Component {
                 # {parseInt(tokenId)}
                 <span style={{ fontSize: "1.2rem", marginLeft: "1rem" }}>
                   Token Id
+                </span>
+              </h1>
+              <span className="form-label">Listing Fee</span> <br />
+              <h1>
+                {fee}{" "}
+                <span style={{ fontSize: "1.2rem", marginLeft: "1rem" }}>
+                  ETH
                 </span>
               </h1>
               <span className="form-label">Auction Type</span> <br />
@@ -230,6 +273,7 @@ class ListItem extends React.Component {
                         data={data}
                         key={index}
                         propsCall={this.propsCall}
+                        validating={validating}
                       />
                     );
                   })}

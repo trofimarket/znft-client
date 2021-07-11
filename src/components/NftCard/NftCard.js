@@ -14,7 +14,6 @@ class NftCard extends React.Component {
     const { data } = this.props;
     const info = await getFromLink(data.hash);
     this.setState({ info });
-    console.log(info);
   }
 
   render() {
@@ -29,7 +28,7 @@ class NftCard extends React.Component {
       <div className="nft-card">
         {info.cover ? (
           <img
-            src={`https://gateway.ipfs.io/ipfs/${info.cover}`}
+            src={`https://ipfs.trofi.one/ipfs/${info.cover}`}
             alt={info.cover}
           />
         ) : null}
@@ -46,7 +45,7 @@ class NftCard extends React.Component {
             <div
               className="supporting-file"
               key={index}
-              onClick={() => window.open(`https://ipfs.io/ipfs/${data}`)}
+              onClick={() => window.open(`https://ipfs.trofi.one/ipfs/${data}`)}
             >
               {String(data).substring(0, 10) +
                 "**********" +
@@ -58,6 +57,7 @@ class NftCard extends React.Component {
         <br />
         <Button
           className="primary-button"
+          loading={this.props.validating === this.props.data.id}
           onClick={() => {
             this.props.propsCall(this.props.data.id);
           }}

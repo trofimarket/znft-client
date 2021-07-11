@@ -126,6 +126,15 @@ hr {
   margin-top: 10px;
 }
 
+.mb-20 {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+}
+
+.ml-20 {
+  margin-left: 20px;
+}
+
 /*
  * General Container Layouts & responsiveness.
  */

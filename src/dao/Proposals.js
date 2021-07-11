@@ -1,8 +1,9 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import { list, proposals } from "../utils/dao-functions";
+// import { list, proposals } from "../utils/dao-functions";
 import ProposalCard from "../components/ProposalCard/ProposalCard";
-import { Skeleton, Pagination } from "antd";
+import { Skeleton } from "antd";
+import { proposals } from "../utils/queries/dao.query";
 
 class Proposals extends React.Component {
   constructor(props) {
@@ -10,40 +11,26 @@ class Proposals extends React.Component {
     this.state = {
       proposals: [],
       loading: true,
-      total: 0,
-      start: 1,
-      end: 5,
-      current: 1,
     };
+    this.refresh = this.refresh.bind(this);
   }
 
   componentDidMount = () => {
     this.fetch();
   };
 
-  handlePageChange = (pageNumber) => {
-    this.setState(
-      {
-        start: (pageNumber - 1) * 5 + 1,
-        end: pageNumber * 5,
-        current: pageNumber,
-        loading: true,
-      },
-      () => {
-        this.fetch();
-      }
-    );
+  fetch = async () => {
+    const result = await proposals();
+    this.setState({ loading: false, proposals: result });
   };
 
-  fetch = async () => {
-    const { start, end } = this.state;
-    const count = await proposals();
-    const proposal = await list(start, end);
-    this.setState({ proposals: proposal, loading: false, total: count });
+  refresh = () => {
+    this.setState({ loading: true });
+    this.fetch();
   };
 
   render() {
-    const { proposals, loading, total, current } = this.state;
+    const { proposals, loading } = this.state;
     return (
       <div className="create-merchant-wrapper">
         <div>
@@ -73,16 +60,13 @@ class Proposals extends React.Component {
           ) : (
             <div className="proposals-list">
               {proposals.map((data, index) => (
-                <ProposalCard {...this.props} proposal={data} key={index} />
+                <ProposalCard
+                  {...this.props}
+                  proposal={data}
+                  key={index}
+                  refresh={this.refresh}
+                />
               ))}
-              <Pagination
-                current={current}
-                pageSize={5}
-                total={total}
-                onChange={(e) => {
-                  this.handlePageChange(e);
-                }}
-              />
             </div>
           )}
         </div>

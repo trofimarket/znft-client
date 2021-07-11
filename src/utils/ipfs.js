@@ -4,7 +4,6 @@ const ipfs = new IPFS({
   host: "ipfs.trofi.one",
   port: 5001,
   protocol: "https",
-  path: "api/v0/1ur96Dj1HCeew1lcTWFIV2fdLm5",
 });
 
 export const get = async (hash) => {
