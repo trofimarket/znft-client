@@ -1,56 +1,59 @@
 import React from "react";
-import AuctionClaimCard from "../components/ClaimCard/AuctionClaimCard";
 import TopTimeClaimCard from "../components/ClaimCard/TopTimeClaimCard";
+import TopTimeSettlementCard from "../components/SettlementCard/ToptimeSettlement";
 import NotConnected from "../components/States/NotConnected";
-import { aClaims } from "../utils/queries/auction.query";
-import { tClaims } from "../utils/queries/toptime.query";
+import { tClaims, tSettles } from "../utils/queries/toptime.query";
 
 class TopTime extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       info: null,
+      settles: null,
       loading: true,
-      toptimeclaims: null,
     };
   }
 
   async componentDidMount() {
     if (this.props.connected) {
-      const info = await aClaims(this.props.address);
-      const toptimeclaims = await tClaims(this.props.address);
-      this.setState({ info, loading: false, toptimeclaims });
+      const info = await tClaims(this.props.address);
+      const settles = await tSettles(this.props.address);
+      this.setState({ info, settles, loading: false });
     }
   }
 
   async componentDidUpdate() {
     if (this.props.connected && this.state.loading) {
-      const info = await aClaims(this.props.address);
-      const toptimeclaims = await tClaims(this.props.address);
-      this.setState({ info, loading: false, toptimeclaims });
+      const info = await tClaims(this.props.address);
+      const settles = await tSettles(this.props.address);
+      this.setState({ info, settles, loading: false });
     }
   }
 
   render() {
-    const { info, toptimeclaims } = this.state;
+    const { info, settles } = this.state;
     const { connected } = this.props;
     return (
-      <div className="create-merchant-wrapper">
+      <div>
         {connected ? (
           <div>
-            {info === null ? null : <h1>YOUR AUCTION BIDS</h1>}
+            {info === null ? null : <h1>YOUR TOPTIME BIDS</h1>}
             {info === null ? null : (
               <div className="balances-grid">
                 {info.map((data, index) => (
-                  <AuctionClaimCard data={data} key={index} {...this.props} />
+                  <TopTimeClaimCard data={data} key={index} {...this.props} />
                 ))}
               </div>
             )}
-            {toptimeclaims === null ? null : <h1>YOUR TOPTIME BIDS</h1>}
-            {toptimeclaims === null ? null : (
+            {settles === null ? null : <h1>TOPTIME CREATED</h1>}
+            {settles === null ? null : (
               <div className="balances-grid">
-                {toptimeclaims.map((data, index) => (
-                  <TopTimeClaimCard data={data} key={index} {...this.props} />
+                {settles.map((data, index) => (
+                  <TopTimeSettlementCard
+                    data={data}
+                    key={index}
+                    {...this.props}
+                  />
                 ))}
               </div>
             )}

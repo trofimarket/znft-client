@@ -22,6 +22,9 @@ class AuctionCard extends React.Component {
   render() {
     const { data } = this.props;
     const { info } = this.state;
+    const time =
+      parseFloat(data.toptime) -
+      (Date.now() / 1000 - parseFloat(data.highestBidAt));
     return (
       <div className="auction-card">
         {info && info.cover ? (
@@ -51,6 +54,15 @@ class AuctionCard extends React.Component {
               style={{ color: "#28cd88", fontSize: "2rem" }}
             >
               {data.toptime} Secs
+            </span>
+          </p>
+          <p>
+            Time Left <br />
+            <span
+              className="special-text"
+              style={{ color: "#28cd88", fontSize: "2rem" }}
+            >
+              {time > 0 ? time : 0} Secs
             </span>
           </p>
         </div>

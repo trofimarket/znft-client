@@ -13,6 +13,7 @@ export const toptimes = async () => {
             createdAt
             highestBid
             highestBidder
+            highestBidAt
             toptime
             creator
             creationHash
@@ -42,6 +43,7 @@ export const toptimeInfo = async (auctionId) => {
                 createdAt
                 highestBid
                 highestBidder
+                highestBidAt
                 toptime
                 creator
                 creationHash
@@ -73,6 +75,7 @@ export const bids = async (auctionId) => {
               tokenId
               currency
               amount
+              paid
             }
           }`),
     });
@@ -98,6 +101,38 @@ export const tClaims = async (address) => {
               highestBidAt
               toptime
               creator
+              paymentHash
+              creationHash
+              settlementHash
+              isSettled
+              createdAt
+              settledAt
+            }
+          }`),
+    });
+    return data.data.topTimes;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const tSettles = async (address) => {
+  try {
+    const data = await apolloClient.query({
+      query: gql(`{
+        topTimes(where: {creator: "${address}"}) {
+              id
+              tokenId
+              starts
+              listingPrice
+              createdAt
+              highestBid
+              highestBidder
+              highestBidAt
+              toptime
+              creator
+              paymentHash
               creationHash
               settlementHash
               isSettled

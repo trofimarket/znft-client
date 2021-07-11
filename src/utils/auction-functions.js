@@ -70,11 +70,11 @@ export const claim = async (auctionId, hash, signer) => {
   try {
     const contract = new ethers.Contract(contractAddress, abi, signer);
     const tx = await contract.claimAuctionToken(parseInt(auctionId), hash);
-    await tx.wait(2);
+    await tx.wait(1);
     notify(
       "success",
-      "Token claimed successfully",
-      "Your NFT has been claimed and the funds are settled to the seller",
+      "Transaction Successful",
+      "Submission of Hash Successful, Your merchant would review it shortly.",
       tx.hash
     );
     return {

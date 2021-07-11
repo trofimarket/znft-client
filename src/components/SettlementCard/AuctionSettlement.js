@@ -15,7 +15,7 @@ class AuctionSettlementCard extends React.Component {
     this.setState({ buttonLoading: true }, async () => {
       const tx = await settle(this.props.data.id, this.props.signer);
       if (!tx.error) {
-        this.setState({ buttonLoading: false, claimed: true });
+        this.setState({ buttonLoading: false, settled: true });
       } else {
         this.setState({ buttonLoading: false });
       }

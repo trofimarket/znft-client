@@ -120,7 +120,6 @@ class ListItem extends React.Component {
     this.setState({ buttonLoading: true }, async () => {
       const { price, ends, tokenId, toptime, type, fee } = this.state;
       if (type === "auction") {
-        console.log("auction");
         const tx = await createAuction(
           tokenId,
           price,
@@ -136,6 +135,7 @@ class ListItem extends React.Component {
           tokenId,
           price,
           toptime,
+          fee,
           this.props.signer
         );
         if (tx) {

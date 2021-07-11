@@ -79,6 +79,12 @@ class TopTime extends React.Component {
                 {info.toptime} Secs
               </span>
             </p>
+            <p>
+              Time till win <br />
+              <span className="special-text" style={{ color: "#28cd88" }}>
+                {time > 0 ? time : 0} Secs
+              </span>
+            </p>
             <div
               style={{
                 display: "flex",
@@ -145,9 +151,7 @@ class TopTime extends React.Component {
                 <FiUser
                   className="external-link"
                   onClick={() => {
-                    window.open(
-                      `https://kovan.etherscan.io/address/${info.creator}`
-                    );
+                    window.open(`/merchant/${info.creator}`);
                   }}
                   size={30}
                 />
@@ -190,7 +194,8 @@ class TopTime extends React.Component {
               <tr>
                 <td>Bidder</td>
                 <td>Currency</td>
-                <td>Amount</td>
+                <td>Amount Paid</td>
+                <td>Bid Value</td>
                 <td>Hash</td>
               </tr>
             </thead>
@@ -208,6 +213,7 @@ class TopTime extends React.Component {
                         </a>
                       </td>
                       <td>{data.currency}</td>
+                      <td>{data.paid / 10 ** 8} BTC</td>
                       <td>{data.amount / 10 ** 8} BTC</td>
                       <td>
                         <a
@@ -228,6 +234,7 @@ class TopTime extends React.Component {
           visible={visible}
           toggleModal={this.toggleModal}
           auctionId={info.id}
+          creator={info.creator}
           price={info.highestBid || info.listingPrice}
           fetchBids={this.fetchBids}
           fetchInfo={this.fetchInfo}

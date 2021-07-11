@@ -3,13 +3,16 @@ const ethers = require("ethers");
 const abi = require("./abi/TOPTIME.json");
 const contractAddress = process.env.REACT_APP_TOPTIME;
 
-export const createTopTime = async (tokenId, price, toptime, signer) => {
+export const createTopTime = async (tokenId, price, toptime, fee, signer) => {
   try {
     const contract = new ethers.Contract(contractAddress, abi, signer);
     const tx = await contract.createAuction(
       tokenId,
       toptime,
-      ethers.utils.parseUnits(price, 8)
+      ethers.utils.parseUnits(price, 8),
+      {
+        value: ethers.utils.parseEther(fee),
+      }
     );
     await tx.wait(2);
     notify(
@@ -61,15 +64,36 @@ export const bidTopTime = async (ticker, amount, auctionId, signer) => {
   }
 };
 
-export const claim = async (auctionId, signer) => {
+export const claim = async (auctionId, hash, signer) => {
   try {
     const contract = new ethers.Contract(contractAddress, abi, signer);
-    const tx = await contract.claimAuctionToken(parseInt(auctionId));
-    await tx.wait(2);
+    const tx = await contract.claimAuctionToken(parseInt(auctionId), hash);
+    await tx.wait(1);
     notify(
       "success",
-      "Token claimed successfully",
-      "Your NFT has been claimed and the funds are settled to the seller",
+      "Transaction Successful",
+      "Submission of Hash Successful, Your merchant would review it shortly.",
+      tx.hash
+    );
+    return {
+      error: false,
+    };
+  } catch (e) {
+    return {
+      error: true,
+    };
+  }
+};
+
+export const settle = async (auctionId, signer) => {
+  try {
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+    const tx = await contract.releaseAuctionToken(parseInt(auctionId));
+    await tx.wait(1);
+    notify(
+      "success",
+      "Transaction Successful",
+      "Tokens sent to the buyer. Thanks for using trofi",
       tx.hash
     );
     return {
