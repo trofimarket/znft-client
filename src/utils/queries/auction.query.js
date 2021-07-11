@@ -73,6 +73,7 @@ export const bids = async (auctionId) => {
               tokenId
               currency
               amount
+              paid
             }
           }`),
     });
@@ -98,6 +99,38 @@ export const aClaims = async (address) => {
               highestBidAt
               ends
               creator
+              paymentHash
+              creationHash
+              settlementHash
+              isSettled
+              createdAt
+              settledAt
+            }
+          }`),
+    });
+    return data.data.auctions;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const aSettles = async (address) => {
+  try {
+    const data = await apolloClient.query({
+      query: gql(`{
+            auctions(where: {creator: "${address}"}) {
+              id
+              tokenId
+              starts
+              listingPrice
+              createdAt
+              highestBid
+              highestBidder
+              highestBidAt
+              ends
+              creator
+              paymentHash
               creationHash
               settlementHash
               isSettled

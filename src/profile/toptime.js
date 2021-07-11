@@ -5,7 +5,7 @@ import NotConnected from "../components/States/NotConnected";
 import { aClaims } from "../utils/queries/auction.query";
 import { tClaims } from "../utils/queries/toptime.query";
 
-class Profile extends React.Component {
+class TopTime extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -63,4 +63,4 @@ class Profile extends React.Component {
   }
 }
 
-export default Profile;
+export default TopTime;

@@ -5,7 +5,6 @@ const abi = require("./abi/NFT.json");
 const contractAddress = process.env.REACT_APP_ZNFT;
 
 export const create = async (hash, signer) => {
-  console.log(signer);
   try {
     const contract = new ethers.Contract(contractAddress, abi, signer);
     let supply = await contract.totalSupply();
@@ -35,7 +34,6 @@ export const uri = async (tokenId) => {
   try {
     const contract = new ethers.Contract(contractAddress, abi, provider);
     const uri = await contract.tokenURI(tokenId);
-    console.log(uri, "URL");
     return {
       uri: uri,
       error: false,
@@ -117,15 +115,12 @@ export const approveToptime = async (signer) => {
 };
 
 export const checkApprovalAuction = async (address) => {
-  console.log(address);
   try {
-    console.log(process.env.REACT_APP_AUCTION);
     const contract = new ethers.Contract(contractAddress, abi, provider);
     const status = await contract.isApprovedForAll(
       address,
       process.env.REACT_APP_AUCTION
     );
-    console.log(status);
     return {
       error: false,
       status: status,
@@ -139,14 +134,12 @@ export const checkApprovalAuction = async (address) => {
 };
 
 export const checkApprovalTopTime = async (address) => {
-  console.log(address);
   try {
     const contract = new ethers.Contract(contractAddress, abi, provider);
     const status = await contract.isApprovedForAll(
       address,
       process.env.REACT_APP_TOPTIME
     );
-    console.log(status);
     return {
       error: false,
       status: status,

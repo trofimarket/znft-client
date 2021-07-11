@@ -10,6 +10,7 @@ import { notify } from "../../utils/general-functions";
 import { auctionInfo } from "../../utils/queries/auction.query";
 import { bidTopTime } from "../../utils/toptime-functions";
 import { toptimeInfo } from "../../utils/queries/toptime.query";
+import { platformTax } from "../../utils/dao-functions";
 
 const { Option } = Select;
 
@@ -34,8 +35,14 @@ class BidModal extends React.Component {
       estimated: false,
       estimating: false,
       biddingLoading: false,
+      platformTax: 0,
     };
   }
+
+  componentDidMount = async () => {
+    const tax = await platformTax(this.props.creator);
+    this.setState({ platformTax: tax.tax });
+  };
 
   approve() {
     this.setState({ approveLoading: true }, async () => {
@@ -57,7 +64,7 @@ class BidModal extends React.Component {
   bid() {
     this.setState({ biddingLoading: true }, async () => {
       const { auctionId } = this.props;
-      const { asset, bidAmount, estimate } = this.state;
+      const { asset, bidAmount, estimate, platformTax } = this.state;
       let info;
       if (this.props.type === "auction") {
         info = await auctionInfo(auctionId);
@@ -65,7 +72,10 @@ class BidModal extends React.Component {
         info = await toptimeInfo(auctionId);
       }
       const balance = await balanceToken(this.state.asset, this.props.address);
-      if (parseFloat(info[0].highestBid) > parseFloat(bidAmount * 10 ** 8)) {
+      if (
+        parseFloat(info[0].highestBid) >
+        parseFloat(bidAmount * 10 ** 10) / platformTax
+      ) {
         notify(
           "warning",
           "Bid higher amount",
@@ -126,7 +136,6 @@ class BidModal extends React.Component {
         this.props.address,
         this.props.type
       );
-      console.log(approval);
       if (!eAmount.error && !approval.error) {
         this.setState({ estimate: eAmount.amount });
         if (parseFloat(approval.approval) >= parseFloat(eAmount.amount)) {
@@ -153,6 +162,7 @@ class BidModal extends React.Component {
       estimated,
       estimating,
       biddingLoading,
+      platformTax,
     } = this.state;
     return (
       <Modal
@@ -190,7 +200,7 @@ class BidModal extends React.Component {
           </Select>
           <input
             name="bidAmount"
-            placeholder="Bid Amount in BTC"
+            placeholder="Lock-In Amount in BTC"
             onChange={(e) => this.amountChange(e)}
             value={bidAmount}
           />
@@ -200,6 +210,30 @@ class BidModal extends React.Component {
           <br />
           <p>
             {estimate ? parseFloat(estimate).toFixed(8) : 0.0} {asset}
+          </p>
+        </div>
+        <div className="mt-20 ">
+          <span className="form-label">Final Settlement </span>
+          <br />
+          <p>
+            {estimate
+              ? parseFloat(
+                  (parseFloat(estimate) * 100) / parseFloat(platformTax)
+                ).toFixed(8)
+              : 0.0}{" "}
+            {asset}
+          </p>
+        </div>
+        <div className="mt-20 ">
+          <span className="form-label">Total Bid Value </span>
+          <br />
+          <p>
+            {bidAmount
+              ? parseFloat(
+                  (parseFloat(bidAmount) * 100) / parseFloat(platformTax)
+                ).toFixed(8)
+              : 0.0}{" "}
+            BTC
           </p>
         </div>
         <div className="mt-20">

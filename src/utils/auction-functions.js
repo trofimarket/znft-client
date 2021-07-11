@@ -66,15 +66,36 @@ export const bidAuction = async (ticker, amount, auctionId, signer) => {
   }
 };
 
-export const claim = async (auctionId, signer) => {
+export const claim = async (auctionId, hash, signer) => {
   try {
     const contract = new ethers.Contract(contractAddress, abi, signer);
-    const tx = await contract.claimAuctionToken(parseInt(auctionId));
+    const tx = await contract.claimAuctionToken(parseInt(auctionId), hash);
     await tx.wait(2);
     notify(
       "success",
       "Token claimed successfully",
       "Your NFT has been claimed and the funds are settled to the seller",
+      tx.hash
+    );
+    return {
+      error: false,
+    };
+  } catch (e) {
+    return {
+      error: true,
+    };
+  }
+};
+
+export const settle = async (auctionId, signer) => {
+  try {
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+    const tx = await contract.releaseAuctionToken(parseInt(auctionId));
+    await tx.wait();
+    notify(
+      "success",
+      "Token released successfully",
+      "Your NFT has been released to the buyer. Thanks for using trofi.",
       tx.hash
     );
     return {

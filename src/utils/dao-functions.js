@@ -162,3 +162,20 @@ export const listingFee = async (address) => {
     return { error: true };
   }
 };
+
+export const platformTax = async (address) => {
+  try {
+    const contract = new ethers.Contract(
+      process.env.REACT_APP_DAO,
+      abi,
+      provider
+    );
+    const tax = await contract.platformTax(address);
+    return {
+      error: false,
+      tax: tax,
+    };
+  } catch (e) {
+    return { error: true };
+  }
+};

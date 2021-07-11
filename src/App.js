@@ -12,7 +12,7 @@ import Marketplace from "./marketplace/list";
 import AuctionInfo from "./marketplace/auction";
 import TopTimeInfo from "./marketplace/toptime";
 import MerchantInfo from "./marketplace/merchantInfo";
-import Profile from "./profile/profile";
+import Profile from "./profile/index";
 import Home from "./static/Home";
 import "../src/App.css";
 import { notify } from "./utils/general-functions";

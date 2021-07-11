@@ -68,7 +68,6 @@ class Auction extends React.Component {
 
   render() {
     const { info, visible, bids } = this.state;
-    console.log(info);
     return info !== null ? (
       <div>
         <div className="auction-grid">
@@ -162,9 +161,7 @@ class Auction extends React.Component {
                 <FiUser
                   className="external-link"
                   onClick={() => {
-                    window.open(
-                      `https://kovan.etherscan.io/address/${info.creator}`
-                    );
+                    window.open(`/merchant/${info.creator}`);
                   }}
                   size={30}
                 />
@@ -207,7 +204,8 @@ class Auction extends React.Component {
               <tr>
                 <td>Bidder</td>
                 <td>Currency</td>
-                <td>Amount</td>
+                <td>Paid</td>
+                <td>Total Bid</td>
                 <td>Hash</td>
               </tr>
             </thead>
@@ -225,6 +223,7 @@ class Auction extends React.Component {
                         </a>
                       </td>
                       <td>{data.currency}</td>
+                      <td>{data.paid / 10 ** 8} BTC</td>
                       <td>{data.amount / 10 ** 8} BTC</td>
                       <td>
                         <a
@@ -245,6 +244,7 @@ class Auction extends React.Component {
           visible={visible}
           toggleModal={this.toggleModal}
           auctionId={info.id}
+          creator={info.creator}
           price={info.highestBid || info.listingPrice}
           fetchBids={this.fetchBids}
           fetchInfo={this.fetchInfo}

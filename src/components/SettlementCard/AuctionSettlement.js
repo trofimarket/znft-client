@@ -1,24 +1,19 @@
 import { Button } from "antd";
 import React from "react";
-import { claim } from "../../utils/auction-functions";
+import { settle } from "../../utils/auction-functions";
 
-class AuctionClaimCard extends React.Component {
+class AuctionSettlementCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       buttonLoading: false,
-      claimed: false,
-      hash: "",
+      settled: false,
     };
   }
 
-  claim = () => {
+  settle = () => {
     this.setState({ buttonLoading: true }, async () => {
-      const tx = await claim(
-        this.props.data.id,
-        this.state.hash,
-        this.props.signer
-      );
+      const tx = await settle(this.props.data.id, this.props.signer);
       if (!tx.error) {
         this.setState({ buttonLoading: false, claimed: true });
       } else {
@@ -29,7 +24,7 @@ class AuctionClaimCard extends React.Component {
 
   render() {
     const { data } = this.props;
-    const { buttonLoading, claimed, hash } = this.state;
+    const { buttonLoading, settled } = this.state;
     return (
       <div className="nft-card">
         <h1>
@@ -43,28 +38,31 @@ class AuctionClaimCard extends React.Component {
               USD {data.highestBid / 10 ** 8}
             </span>
           </p>
+          <p>
+            Settlement Hash
+            <br />
+            {data.paymentHash ? (
+              <a href={data.paymentHash} target="_blank" rel="noreferrer">
+                Click Here
+              </a>
+            ) : (
+              <p>USER PAYMENT NOT MADE</p>
+            )}
+          </p>
         </div>
-        {data.isSettled ? (
+        {data.isSettled || settled ? (
           <h1 style={{ color: "#28cd88" }}>SETTLED PRODUCT</h1>
-        ) : data.paymentHash || claimed ? (
-          <h1 style={{ color: "#28cd88" }}>UNDER VERIFICATION</h1>
         ) : Date.now() / 1000 > data.ends ? (
           <>
-            <input
-              value={hash}
-              placeholder="Your Payment Hash With Explorer Link"
-              onChange={(e) => {
-                this.setState({ hash: e.target.value });
-              }}
-            />
             <Button
               className="primary-button mt-20"
               onClick={() => {
-                this.claim();
+                this.settle();
               }}
               loading={buttonLoading}
+              disabled={!data.paymentHash}
             >
-              SUBMIT VERIFICATION
+              SETTLE SALE
             </Button>
           </>
         ) : (
@@ -75,4 +73,4 @@ class AuctionClaimCard extends React.Component {
   }
 }
 
-export default AuctionClaimCard;
+export default AuctionSettlementCard;
