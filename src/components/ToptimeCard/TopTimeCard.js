@@ -33,7 +33,8 @@ class AuctionCard extends React.Component {
           <h1># TOKEN ID {data.tokenId}</h1>
         )}
         <div>
-          <p>
+          <p className="mt-20">
+            Current Price
             <span
               className="special-text"
               style={{
@@ -47,24 +48,36 @@ class AuctionCard extends React.Component {
               {data.highestBid / 10 ** 8 || data.listingPrice / 10 ** 8}
             </span>
           </p>
-          <p>
-            Top Time <br />
-            <span
-              className="special-text"
-              style={{ color: "#28cd88", fontSize: "2rem" }}
-            >
-              {data.toptime} Secs
-            </span>
-          </p>
-          <p>
-            Time Left <br />
-            <span
-              className="special-text"
-              style={{ color: "#28cd88", fontSize: "2rem" }}
-            >
-              {time > 0 ? time : 0} Secs
-            </span>
-          </p>
+          {data.highestBid ? (
+            time > 0 ? (
+              <p>
+                Time Left <br />
+                <span
+                  className="special-text"
+                  style={{ color: "#28cd88", fontSize: "2rem" }}
+                >
+                  {time > 0 ? time : 0} Secs
+                </span>
+              </p>
+            ) : (
+              <h1
+                className="special-text"
+                style={{ color: "#28cd88", fontSize: "2rem" }}
+              >
+                SALE ENDED
+              </h1>
+            )
+          ) : (
+            <p>
+              Top Time <br />
+              <span
+                className="special-text"
+                style={{ color: "#28cd88", fontSize: "2rem" }}
+              >
+                {data.toptime} Secs
+              </span>
+            </p>
+          )}
         </div>
         <div
           style={{
