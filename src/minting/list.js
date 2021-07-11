@@ -4,6 +4,7 @@ import NftCard from "../components/NftCard/NftCard";
 import {
   checkApprovalAuction,
   checkApprovalTopTime,
+  checkFixedTimeApproval,
 } from "../utils/nft-functions";
 import { balances } from "../utils/queries/nft.query";
 import { createAuction } from "../utils/auction-functions";
@@ -12,6 +13,7 @@ import NotConnected from "../components/States/NotConnected";
 import Approve from "./approve";
 import { listingFee, merchantStatus } from "../utils/dao-functions";
 import { notify } from "../utils/general-functions";
+import { createFixedPriceSale } from "../utils/fixedprice-functions";
 
 class ListItem extends React.Component {
   constructor(props) {
@@ -20,6 +22,7 @@ class ListItem extends React.Component {
       balance: null,
       status: false,
       status1: false,
+      status2: false,
       loading: true,
       buttonLoading: false,
       list: false,
@@ -39,10 +42,12 @@ class ListItem extends React.Component {
     if (this.props.connected) {
       const approval = await checkApprovalAuction(this.props.address);
       const approval2 = await checkApprovalTopTime(this.props.address);
-      if (!approval.error && !approval2.error) {
+      const approval3 = await checkFixedTimeApproval(this.props.address);
+      if (!approval.error && !approval2.error && !approval3.error) {
         this.setState({
           status: approval.status,
           status1: approval2.status,
+          status2: approval3.status,
           loading: false,
         });
         this.fetchBalance();
@@ -55,10 +60,12 @@ class ListItem extends React.Component {
     if (this.props.address && this.state.loading) {
       const approval = await checkApprovalAuction(this.props.address);
       const approval2 = await checkApprovalTopTime(this.props.address);
-      if (!approval.error && !approval2.error) {
+      const approval3 = await checkFixedTimeApproval(this.props.address);
+      if (!approval.error && !approval2.error && !approval3.error) {
         this.setState({
           status: approval.status,
           status1: approval2.status,
+          status2: approval3.status,
           loading: false,
         });
         this.fetchBalance();
@@ -80,8 +87,10 @@ class ListItem extends React.Component {
   approve(type) {
     if (type === "auction") {
       this.setState({ status: true });
-    } else {
+    } else if (type === "toptime") {
       this.setState({ status1: true });
+    } else {
+      this.setState({ status2: true });
     }
   }
 
@@ -130,12 +139,21 @@ class ListItem extends React.Component {
         if (tx) {
           this.setState({ buttonLoading: false });
         }
-      } else {
+      } else if (type === "toptime") {
         const tx = await createTopTime(
           tokenId,
           price,
           toptime,
           fee,
+          this.props.signer
+        );
+        if (tx) {
+          this.setState({ buttonLoading: false });
+        }
+      } else {
+        const tx = await createFixedPriceSale(
+          tokenId,
+          price,
           this.props.signer
         );
         if (tx) {
@@ -151,6 +169,7 @@ class ListItem extends React.Component {
       loading,
       status,
       status1,
+      status2,
       buttonLoading,
       list,
       tokenId,
@@ -189,12 +208,13 @@ class ListItem extends React.Component {
             <div className="spinner-container">
               <Spin size="large" />
             </div>
-          ) : !status || !status1 ? (
+          ) : !status || !status1 || !status2 ? (
             <Approve
               {...this.props}
               approve={this.approve}
               status={status}
               status1={status1}
+              status2={status2}
             />
           ) : list ? (
             <div>
@@ -222,23 +242,27 @@ class ListItem extends React.Component {
               >
                 <Radio.Button value="auction">Auction</Radio.Button>
                 <Radio.Button value="toptime">TopTime</Radio.Button>
+                <Radio.Button value="fixedprice">Fixed Price</Radio.Button>
               </Radio.Group>
               <br />
               <br />
-              <span className="form-label">Auction Info</span>
+              <span className="form-label">
+                {type === "fixedprice" ? "Sale Info" : "Auction Info"}
+              </span>
               <input
                 name="price"
-                placeholder="Floor Price of Item (In USD)"
+                placeholder="Price of Item (In BTC)"
                 onChange={(e) => this.handleChange(e)}
                 value={price}
               />
               <p className="form-helper">
                 {" "}
-                Optional to add floor price. Bidders cannot bid below this price
-                if specified. Default Value is 0 BTC and auction starts at 0
-                BTC. <br />
+                {type === "fixedprice"
+                  ? "Price of your token for sale."
+                  : "Optional to add floor price. Bidders cannot bid below this price if specified. Default Value is 0 BTC and auction starts at 0 BTC."}{" "}
+                <br />
               </p>
-              {type === "auction" ? (
+              {type === "fixedprice" ? null : type === "auction" ? (
                 <input
                   name="ends"
                   placeholder="Ending Time in Unix TimeStamp"

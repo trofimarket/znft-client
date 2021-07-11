@@ -4,6 +4,7 @@ import { notify, provider } from "./general-functions";
 const ethers = require("ethers");
 const auctionAddress = process.env.REACT_APP_AUCTION;
 const toptimeAddress = process.env.REACT_APP_TOPTIME;
+const fixedPriceAddress = process.env.REACT_APP_FIXEDPRICE;
 
 const tokens = {
   ETH: {
@@ -25,6 +26,8 @@ export const approveToken = async (ticker, amount, type, signer) => {
   let aAddress;
   if (type === "auction") {
     aAddress = process.env.REACT_APP_AUCTION;
+  } else if (type === "fixedprice") {
+    aAddress = fixedPriceAddress;
   } else {
     aAddress = process.env.REACT_APP_TOPTIME;
   }
@@ -54,6 +57,8 @@ export const allowanceToken = async (ticker, address, type) => {
   let qAddress;
   if (type === "auction") {
     qAddress = auctionAddress;
+  } else if (type === "fixedprice") {
+    qAddress = fixedPriceAddress;
   } else {
     qAddress = toptimeAddress;
   }

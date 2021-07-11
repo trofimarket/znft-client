@@ -114,6 +114,31 @@ export const approveToptime = async (signer) => {
   }
 };
 
+export const approveFixedPrice = async (signer) => {
+  try {
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+    const tx = await contract.setApprovalForAll(
+      process.env.REACT_APP_FIXEDPRICE,
+      true
+    );
+    await tx.wait(2);
+    notify(
+      "success",
+      "Approved fixed price smart contract for using tokens",
+      "Now you can list your tokens for fixed price sales",
+      tx.hash
+    );
+    return {
+      error: false,
+    };
+  } catch (e) {
+    return {
+      error: true,
+      message: e,
+    };
+  }
+};
+
 export const checkApprovalAuction = async (address) => {
   try {
     const contract = new ethers.Contract(contractAddress, abi, provider);
@@ -139,6 +164,25 @@ export const checkApprovalTopTime = async (address) => {
     const status = await contract.isApprovedForAll(
       address,
       process.env.REACT_APP_TOPTIME
+    );
+    return {
+      error: false,
+      status: status,
+    };
+  } catch (e) {
+    console.log(e);
+    return {
+      error: true,
+    };
+  }
+};
+
+export const checkFixedTimeApproval = async (address) => {
+  try {
+    const contract = new ethers.Contract(contractAddress, abi, provider);
+    const status = await contract.isApprovedForAll(
+      address,
+      process.env.REACT_APP_FIXEDPRICE
     );
     return {
       error: false,

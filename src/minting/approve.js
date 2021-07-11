@@ -1,12 +1,20 @@
 import { Button } from "antd";
 import React from "react";
 import { withRouter } from "react-router";
-import { approveAuction, approveToptime } from "../utils/nft-functions";
+import {
+  approveAuction,
+  approveFixedPrice,
+  approveToptime,
+} from "../utils/nft-functions";
 
 class Approve extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { buttonLoading: false, buttonLoading1: false };
+    this.state = {
+      buttonLoading: false,
+      buttonLoading1: false,
+      buttonLoading2: false,
+    };
   }
 
   approve(type) {
@@ -14,6 +22,7 @@ class Approve extends React.Component {
       {
         buttonLoading: type === "auction",
         buttonLoading1: type === "toptime",
+        buttonLoading2: type === "fixedprice",
       },
       async () => {
         if (type === "auction") {
@@ -24,7 +33,7 @@ class Approve extends React.Component {
           } else {
             this.setState({ buttonLoading: false });
           }
-        } else {
+        } else if (type === "toptime") {
           const tx = await approveToptime(this.props.signer);
           if (!tx.error) {
             this.setState({ buttonLoading1: false });
@@ -32,14 +41,22 @@ class Approve extends React.Component {
           } else {
             this.setState({ buttonLoading1: false });
           }
+        } else {
+          const tx = await approveFixedPrice(this.props.signer);
+          if (!tx.error) {
+            this.setState({ buttonLoading2: false });
+            this.props.approve(type);
+          } else {
+            this.setState({ buttonLoading2: false });
+          }
         }
       }
     );
   }
 
   render() {
-    const { buttonLoading, buttonLoading1 } = this.state;
-    const { status, status1 } = this.props;
+    const { buttonLoading, buttonLoading1, buttonLoading2 } = this.state;
+    const { status, status1, status2 } = this.props;
     return (
       <div
         style={{
@@ -76,6 +93,19 @@ class Approve extends React.Component {
             onClick={() => this.approve("toptime")}
           >
             Approve TopTime
+          </Button>
+        )}
+        {status2 ? (
+          <h1 style={{ color: "#28cd88" }} className="mt-20">
+            FIXEDPRICE APPROVED
+          </h1>
+        ) : (
+          <Button
+            className="primary-button mt-20"
+            loading={buttonLoading2}
+            onClick={() => this.approve("fixedprice")}
+          >
+            Approve Fixed Price
           </Button>
         )}
       </div>
