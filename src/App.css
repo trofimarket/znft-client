@@ -138,27 +138,27 @@ hr {
 /*
  * General Container Layouts & responsiveness.
  */
-.container {
-  width: 60vw;
-  margin-left: 20vw;
-}
+/*.container {*/
+/*  width: 60vw;*/
+/*  margin-left: 20vw;*/
+/*}*/
 
 .page-div {
   min-height: 80vh;
 }
 
 @media only screen and (max-width: 2200px) {
-  .container {
-    width: 80vw;
-    margin-left: 10vw;
-  }
+  /*.container {*/
+  /*  width: 80vw;*/
+  /*  margin-left: 10vw;*/
+  /*}*/
 }
 
 @media only screen and (max-width: 1800px) {
-  .container {
-    width: 90vw;
-    margin-left: 5vw;
-  }
+  /*.container {*/
+  /*  width: 90vw;*/
+  /*  margin-left: 5vw;*/
+  /*}*/
 }
 
 @media only screen and (max-width: 1440px) {

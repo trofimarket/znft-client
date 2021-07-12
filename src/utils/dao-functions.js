@@ -120,10 +120,7 @@ export const vote = async (id, signer, address) => {
       return false;
     }
   } else {
-    notify(
-      "error",
-      "You must own TroFi shares to vote."
-    );
+    notify("error", "You must own TroFi shares to vote.");
     return false;
   }
 };

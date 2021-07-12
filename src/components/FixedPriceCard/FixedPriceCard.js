@@ -31,7 +31,10 @@ class FixedPriceCard extends React.Component {
     return (
       <div className="auction-card">
         {info && info.cover ? (
-          <img src={`https://ipfs.trofi.one/ipfs/${info.cover}`} alt={info.cover} />
+          <img
+            src={`https://ipfs.trofi.one/ipfs/${info.cover}`}
+            alt={info.cover}
+          />
         ) : (
           <h1># TOKEN ID {data.tokenId}</h1>
         )}

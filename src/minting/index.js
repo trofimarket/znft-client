@@ -17,8 +17,8 @@ class Index extends React.Component {
   render() {
     const { current } = this.state;
     return (
-      <div className="create-merchant-wrapper">
-        <div className="container-sm pt-20">
+      <div className="max-w-4xl mx-auto divide-y-2 divide-gray-200">
+        <div className="container-sm pt-20 mx-auto">
           <Tabs
             defaultActiveKey={current}
             onChange={(e) => this.setState({ current: e })}

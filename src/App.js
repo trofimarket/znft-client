@@ -173,7 +173,7 @@ export default class App extends React.Component {
   render() {
     const { modal, signer, connecting, connected, address } = this.state;
     return (
-      <div className="container">
+      <div className="container mx-auto">
         <Navbar open={this.open} connected={connected} address={address} />
         <ConnectModal
           modal={modal}
