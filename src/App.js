@@ -20,7 +20,7 @@ import { notify } from "./utils/general-functions";
 const ethers = require("ethers");
 
 const walletLink = new WalletLink({
-  appName: "ZNFT Marketplace",
+  appName: "TroFi Marketplace",
   darkMode: false,
 });
 

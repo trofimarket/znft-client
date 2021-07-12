@@ -36,8 +36,8 @@ class Proposals extends React.Component {
         <div>
           <h1>Proposals. </h1>
           <p>
-            Approve (or) Deny companies willing to list. You should own znft
-            shares for voting.
+            Approve (or) Deny companies willing to list. You must own TroFi
+            shares to vote.
           </p>
           {loading ? (
             <div className="proposals-list">

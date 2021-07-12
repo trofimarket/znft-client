@@ -36,8 +36,8 @@ export const create = async (
     await tx.wait(2);
     notify(
       "success",
-      "Now ZNFT share holders can vote.",
-      "Only approved merchants are able to sell NFTs in our marketplace.",
+      "TroFi shareholders can now vote on your application.",
+      "Only approved merchants are able to create listings.",
       tx.hash
     );
     return true;
@@ -122,8 +122,7 @@ export const vote = async (id, signer, address) => {
   } else {
     notify(
       "error",
-      "You should own ZNFT Shares to cast your vote.",
-      "Buy ZNFT shares on secondary markets now."
+      "You must own TroFi shares to vote."
     );
     return false;
   }
