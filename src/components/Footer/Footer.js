@@ -7,7 +7,7 @@ class Footer extends React.Component {
     return (
       <div className="footer-wrapper">
         <div className="footer-container">
-          <p>Copyright © 2021 ZNFT. All rights reserved.</p>
+          <p>Copyright © 2021 TroFi</p>
           <div>
             <ul>
               <li>Terms of Service</li>

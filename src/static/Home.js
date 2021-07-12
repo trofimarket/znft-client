@@ -46,7 +46,7 @@ class Home extends React.PureComponent {
             <h2>Create and sell your NFT</h2>
             <div className="inner-section-content">
               <p>
-                Once you’ve set up your wallet of choice, connect it to ZNFT by
+                Once you’ve set up your wallet of choice, connect it to TroFi by
                 clicking the wallet icon in the top right corner. Learn about
                 the wallets we support.
               </p>

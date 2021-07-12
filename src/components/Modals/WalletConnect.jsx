@@ -54,7 +54,7 @@ export default class ConnectModal extends React.PureComponent {
         ) : !connecting ? (
           <div className="modal-container">
             <h2>Connect Wallet</h2>
-            <p>To start using ZNFT Marketplace</p>
+            <p>To start using the TroFi Marketplace</p>
             <div className="connect-container">
               <div
                 role="button"

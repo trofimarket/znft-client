@@ -215,7 +215,7 @@ class CreateMerchant extends Component {
           <div>
             <h1>Merchant Creation Successful</h1>
             <p>
-              Now your company will be available for the ZNFT share holders for
+              Now your company will be available for the TroFi shareholders for
               the voting process. The decision is taken by the community and is
               not influenced by external resources.
             </p>
@@ -242,9 +242,7 @@ class CreateMerchant extends Component {
           <div className="pt-20">
             <h1>Join Us. List Your Company</h1>
             <p>
-              Every seller in ZNFT should be approved by the ZNFT Share Holders.
-              The approval mechanism is completely decentralized and supported
-              by the DAO of ZNFT markteplace.
+              Merchants must be approved by the TroFi Shareholders.
             </p>
             <div className="pt-20">
               <div>
@@ -336,7 +334,7 @@ class CreateMerchant extends Component {
                   To connect validate social media accounts, please post the
                   following <br />
                   <b>
-                    We are registering to ZNFT Market, our unique code is{" "}
+                    We are registering on the TroFi Market! Our unique code is{" "}
                     {secret}.
                   </b>
                   <br />

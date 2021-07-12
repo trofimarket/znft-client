@@ -33,7 +33,7 @@ class Navbar extends React.PureComponent {
               this.props.history.push("/");
             }}
           >
-            <h1>ZNFT</h1>
+            <h1>TroFi</h1>
           </div>
           <div className="secondary-div">
             <div className="mobile">
