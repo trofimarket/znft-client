@@ -40,7 +40,7 @@ class AuctionClaimCard extends React.Component {
             Bid Amount
             <br />
             <span className="special-text">
-              USD {data.highestBid / 10 ** 8}
+              BTC {data.highestBid / 10 ** 8}
             </span>
           </p>
         </div>
