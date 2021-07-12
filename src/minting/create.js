@@ -160,7 +160,7 @@ class CreateItem extends Component {
             {cover ? (
               <div
                 className="supporting-file"
-                onClick={() => window.open(`https://ipfs.io/ipfs/${cover}`)}
+                onClick={() => window.open(`https://ipfs.trofi.one/ipfs/${cover}`)}
               >
                 {String(cover).substring(0, 10) +
                   "**********" +
@@ -195,7 +195,7 @@ class CreateItem extends Component {
                       className="supporting-file"
                       key={index}
                       onClick={() =>
-                        window.open(`https://ipfs.io/ipfs/${data}`)
+                        window.open(`https://ipfs.trofi.one/ipfs/${data}`)
                       }
                     >
                       {String(data).substring(0, 10) +
