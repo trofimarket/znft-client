@@ -4,12 +4,15 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.3.20",
+    "@craco/craco": "^6.2.0",
+    "@heroicons/react": "^1.0.2",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "@toast-ui/react-editor": "^3.0.1",
     "@walletconnect/web3-provider": "^1.4.1",
     "antd": "^4.16.0",
-    "ethers": "^5.2.0",
+    "ethers": "^5.4.1",
     "graphql": "^15.5.1",
     "ipfs-api": "^26.1.2",
     "react": "^17.0.2",
@@ -23,9 +26,9 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "browserslist": {
@@ -41,6 +44,10 @@
     ]
   },
   "devDependencies": {
-    "bl": "^2.2.1"
+    "autoprefixer": "^9.8.6",
+    "bl": "^2.2.1",
+    "postcss": "^8.3.5",
+    "prettier": "2.3.2",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.4"
   }
 }

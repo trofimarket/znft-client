@@ -241,9 +241,7 @@ class CreateMerchant extends Component {
         ) : (
           <div className="pt-20">
             <h1>Join Us. List Your Company</h1>
-            <p>
-              Merchants must be approved by the TroFi Shareholders.
-            </p>
+            <p>Merchants must be approved by the TroFi Shareholders.</p>
             <div className="pt-20">
               <div>
                 <span className="form-label">General Info</span>

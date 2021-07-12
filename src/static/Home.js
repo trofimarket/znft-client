@@ -37,14 +37,14 @@ class Home extends React.PureComponent {
           <div className="section-contents">
             <div className="inner-section-content">
               <p>
-                Merchants must be approved by TroFi shareholders before they
-                are able to list items for sale. Shareholders only approve
-                solid merchants with an impeccable history and reputation.
+                Merchants must be approved by TroFi shareholders before they are
+                able to list items for sale. Shareholders only approve solid
+                merchants with an impeccable history and reputation.
               </p>
               <p>
-                Auction winners can request delivery of the physical asset,
-                or can leave the physical asset in the custody of the merchant
-                so that it can be re-auctioned at a later date.
+                Auction winners can request delivery of the physical asset, or
+                can leave the physical asset in the custody of the merchant so
+                that it can be re-auctioned at a later date.
               </p>
             </div>
             <div className="inner-section-div reverse">
@@ -55,19 +55,20 @@ class Home extends React.PureComponent {
                 </p>
                 <h3>Validated Merchants</h3>
                 <p>
-                  TroFi Merchants must apply and be validated by shareholders
-                  to ensure that only the best of the best may participate.
+                  TroFi Merchants must apply and be validated by shareholders to
+                  ensure that only the best of the best may participate.
                 </p>
                 <h3>Anyone can bid</h3>
                 <p>
                   Anyone can bid on listed assets. Simple connect your Metamask
                   wallet, as easy as any other DeFi application.
                 </p>
-                  <h3>Become a shareholder</h3>
-                   <p>
-                   All profit from TroFi goes directly to the shareholders.
-                   Shares are released periodically. Join the <a href="#">waitlist</a> to purchase shares.
-                  </p>
+                <h3>Become a shareholder</h3>
+                <p>
+                  All profit from TroFi goes directly to the shareholders.
+                  Shares are released periodically. Join the{" "}
+                  <a href="#">waitlist</a> to purchase shares.
+                </p>
               </div>
               <img alt="section2" src={Section2} />
             </div>
