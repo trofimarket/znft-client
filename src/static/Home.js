@@ -51,18 +51,23 @@ class Home extends React.PureComponent {
               <div>
                 <h3>Trophy Assets Only</h3>
                 <p>
-                  All listings on TroFi are rare, valuable trophy assets.
+                  All listings on TroFi are rare and valuable trophy assets.
                 </p>
                 <h3>Validated Merchants</h3>
                 <p>
-                  TroFi Merchants must be validated by shareholders to ensure
-                  that only the best of the best may participate.
+                  TroFi Merchants must apply and be validated by shareholders
+                  to ensure that only the best of the best may participate.
                 </p>
                 <h3>Anyone can bid</h3>
                 <p>
                   Anyone can bid on listed assets. Simple connect your Metamask
                   wallet, as easy as any other DeFi application.
                 </p>
+                  <h3>Become a shareholder</h3>
+                   <p>
+                   All profit from TroFi goes directly to the shareholders.
+                   Shares are released periodically. Join the <a href="#">waitlist</a> to purchase shares.
+                  </p>
               </div>
               <img alt="section2" src={Section2} />
             </div>
