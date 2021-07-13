@@ -35,12 +35,14 @@ class AuctionCard extends React.Component {
     const { data } = this.props;
     const hash = await uri(data.tokenId);
     const info = await getFromLink(hash.uri);
+
     this.setState({ info });
   }
 
   render() {
     const { data } = this.props;
     const { info } = this.state;
+
     return (
       <div className="auction-card">
         {info && info.cover ? (
