@@ -21,8 +21,7 @@ const tokens = {
 
 export const approveToken = async (ticker, amount, type, signer) => {
   const token = tokens[ticker];
-  const total = parseFloat(amount).toFixed(6) * 2;
-  const approveAmount = parseUnits(String(total), token.decimals);
+  const approveAmount = parseUnits(String(amount), token.decimals);
   let aAddress;
   if (type === "auction") {
     aAddress = process.env.REACT_APP_AUCTION;
