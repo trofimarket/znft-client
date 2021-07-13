@@ -46,3 +46,22 @@ export const votes = async (id) => {
     };
   }
 };
+
+export const merchantStatus = async (address) => {
+  try {
+    const data = await apolloClient.query({
+      query: gql(`{
+        merchants(where: {address: "${address}"})
+      }`)
+    });
+      return {
+        error: false,
+        status: data.data.merchants.length > 0
+      };
+  } catch(e) {
+    console.log(e);
+    return {
+      error: true
+    };
+  }
+}

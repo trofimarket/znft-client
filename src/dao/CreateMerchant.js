@@ -6,6 +6,7 @@ import animationData from "../assets/lottie-files/success-state.json";
 import "./styles/CreateMerchant.css";
 import { withRouter } from "react-router";
 import { uploadBuffer } from "../utils/ipfs";
+import { merchantStatus } from "../utils/queries/dao.query";
 
 class CreateMerchant extends Component {
   constructor(props) {
@@ -32,13 +33,18 @@ class CreateMerchant extends Component {
       uploading: false,
       error: true,
       errorMsg: "",
+      isMerchant: false,
     };
     this.captureFile = this.captureFile.bind(this);
   }
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
     if (this.props.connected) {
       const array = new Uint32Array(1);
+      const status = await merchantStatus(this.props.address);
+      if(!status.error) {
+        this.setState({isMerchant: status.status});
+      }
       this.setState({
         secret:
           window.crypto.getRandomValues(array) +
@@ -199,6 +205,7 @@ class CreateMerchant extends Component {
       ethWallet,
       btcWallet,
       bscWallet,
+      isMerchant
     } = this.state;
     const { open } = this.props;
     const defaultOptions = {
@@ -380,12 +387,13 @@ class CreateMerchant extends Component {
               {this.props.connected ? (
                 <Button
                   loading={loading || uploading}
+                  disabled={isMerchant}
                   onClick={() => {
                     this.validate();
                   }}
                   className="primary-button"
                 >
-                  {uploading ? "Uploading To IPFS" : "Create Now"}
+                  {uploading ? "Uploading To IPFS" : isMerchant ? "Merhant Already Registered" : "Create Now"}
                 </Button>
               ) : (
                 <Button
