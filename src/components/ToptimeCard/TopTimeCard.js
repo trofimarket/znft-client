@@ -59,7 +59,7 @@ class AuctionCard extends React.Component {
                   className="special-text"
                   style={{ color: "#28cd88", fontSize: "2rem" }}
                 >
-                  {time > 0 ? time : 0} Secs
+
                 </span>
               </p>
             ) : (
