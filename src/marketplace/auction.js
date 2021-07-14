@@ -140,11 +140,11 @@ class Auction extends React.Component {
                         ? this.toggleModal()
                         : this.props.open()
                       : notify(
-                          "warning",
-                          "Sale Ended",
-                          "The auction has already been closed",
-                          null
-                        );
+                        "warning",
+                        "Sale Ended",
+                        "The auction has already been closed",
+                        null
+                      );
                   }}
                   size={30}
                 />
@@ -180,14 +180,14 @@ class Auction extends React.Component {
                   onClick={() => {
                     info.isSettled
                       ? window.open(
-                          `https://kovan.etherscan.io/tx/${info.settlementHash}`
-                        )
+                        `https://kovan.etherscan.io/tx/${info.settlementHash}`
+                      )
                       : notify(
-                          "warning",
-                          "Not Yet Settled",
-                          "You can settle bids in your profile page",
-                          null
-                        );
+                        "warning",
+                        "Not Yet Settled",
+                        "You can settle bids in your profile page",
+                        null
+                      );
                   }}
                   size={30}
                 />
@@ -212,30 +212,30 @@ class Auction extends React.Component {
             <tbody>
               {bids !== null
                 ? bids.map((data, index) => (
-                    <tr key={index}>
-                      <td>
-                        <a
-                          href={`https://kovan.etherscan.io/address/${data.bidder}`}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {data.bidder}
-                        </a>
-                      </td>
-                      <td>{data.currency}</td>
-                      <td>{data.paid / 10 ** 8} BTC</td>
-                      <td>{data.amount / 10 ** 8} BTC</td>
-                      <td>
-                        <a
-                          href={`https://kovan.etherscan.io/tx/${data.id}`}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {data.id}
-                        </a>
-                      </td>
-                    </tr>
-                  ))
+                  <tr key={index}>
+                    <td>
+                      <a
+                        href={`https://kovan.etherscan.io/address/${data.bidder}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {data.bidder}
+                      </a>
+                    </td>
+                    <td>{data.currency}</td>
+                    <td>{data.paid / 10 ** 8} BTC</td>
+                    <td>{data.amount / 10 ** 8} BTC</td>
+                    <td>
+                      <a
+                        href={`https://kovan.etherscan.io/tx/${data.id}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {data.id}
+                      </a>
+                    </td>
+                  </tr>
+                ))
                 : null}
             </tbody>
           </table>
