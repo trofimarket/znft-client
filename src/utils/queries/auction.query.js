@@ -97,6 +97,7 @@ export const aClaims = async (address) => {
               highestBid
               highestBidder
               highestBidAt
+              amountPaid
               ends
               creator
               paymentHash

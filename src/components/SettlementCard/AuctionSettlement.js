@@ -32,10 +32,10 @@ class AuctionSettlementCard extends React.Component {
         </h1>
         <div>
           <p>
-            Bid Amount
+            Sale Value
             <br />
             <span className="special-text">
-              USD {data.highestBid / 10 ** 8}
+              BTC {data.highestBid / 10 ** 8}
             </span>
           </p>
           <p>

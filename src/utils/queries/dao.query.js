@@ -65,3 +65,25 @@ export const merchantStatus = async (address) => {
     };
   }
 }
+
+export const merchantWallets = async (address) => {
+  try {
+    const data = await apolloClient.query({
+      query: gql(`{
+        merchants(where: {address: "${address}"}){
+          ethWallet
+          bscWallet
+          btcWallet
+      }           
+      }`)
+    });
+      return {
+        error: false,
+        wallets: data.data.merchants[0]
+      };
+  } catch(e) {
+    return {
+      error: true
+    }
+  }
+}

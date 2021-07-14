@@ -1,6 +1,7 @@
 import { Button } from "antd";
 import React from "react";
 import { claim } from "../../utils/auction-functions";
+import { merchantWallets } from "../../utils/queries/dao.query";
 
 class AuctionClaimCard extends React.Component {
   constructor(props) {
@@ -9,7 +10,17 @@ class AuctionClaimCard extends React.Component {
       buttonLoading: false,
       claimed: false,
       hash: "",
+      wallets:null
     };
+  }
+
+  componentDidMount = () => {
+    this.fetchInfo();
+  }
+
+  fetchInfo = async () => {
+    const result = await merchantWallets(this.props.data.creator);
+    this.setState({wallets: result.wallets});
   }
 
   claim = () => {
@@ -29,7 +40,7 @@ class AuctionClaimCard extends React.Component {
 
   render() {
     const { data } = this.props;
-    const { buttonLoading, claimed, hash } = this.state;
+    const { buttonLoading, claimed, hash, wallets} = this.state;
     return (
       <div className="nft-card">
         <h1>
@@ -42,6 +53,22 @@ class AuctionClaimCard extends React.Component {
             <span className="special-text">
               BTC {data.highestBid / 10 ** 8}
             </span>
+          </p>
+          <p>
+            OutStanding Amount
+            <br />
+            <span className="special-text">
+              BTC {(data.highestBid - data.amountPaid) / 10 ** 8}
+            </span>
+          </p>
+          <p>
+            Settlement Wallets
+            <br />
+            <span>BTC: {wallets && wallets.btcWallet}</span>
+            <br />
+            <span>ETH: {wallets && wallets.ethWallet}</span>
+            <br />
+            <span>BNB: {wallets && wallets.bscWallet}</span>
           </p>
         </div>
         {data.isSettled ? (
