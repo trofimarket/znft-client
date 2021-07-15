@@ -10,9 +10,9 @@ class Home extends React.PureComponent {
       <div>
         <div className="jumbotron">
           <h1>
-            Trade rare physical assets
+           where crypto meets
             <br />
-            <span>as easily as crypto</span>
+            <span>rare trophy assets</span>
           </h1>
           <div className="button-container">
             <button
