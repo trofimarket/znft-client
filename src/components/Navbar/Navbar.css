@@ -66,22 +66,22 @@
   font-weight: 500;
 }
 
-button {
-  border: 1px solid var(--green);
-  background-color: var(--black);
-  color: var(--green) !important;
-  padding: 0.5rem 2rem;
-  border-radius: 3px;
-  font-weight: 600;
-  outline: none;
-  transition: all 0.5s;
-}
+/*button {*/
+/*  border: 1px solid var(--green);*/
+/*  background-color: var(--black);*/
+/*  color: var(--green) !important;*/
+/*  padding: 0.5rem 2rem;*/
+/*  border-radius: 3px;*/
+/*  font-weight: 600;*/
+/*  outline: none;*/
+/*  transition: all 0.5s;*/
+/*}*/
 
-button:hover {
-  cursor: pointer;
-  background-color: var(--green);
-  color: var(--white) !important;
-}
+/*button:hover {*/
+/*  cursor: pointer;*/
+/*  background-color: var(--green);*/
+/*  color: var(--white) !important;*/
+/*}*/
 
 .burger {
   border: none;
