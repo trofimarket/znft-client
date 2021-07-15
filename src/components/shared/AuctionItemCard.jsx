@@ -45,6 +45,21 @@ const AuctionItemCard = ({data, auctionType, ...props}) => {
         }
     };
 
+    const openMoreInfo = (auctionType, data) => {
+        let moreInfoURL = `/auction/${data.id}`
+
+        switch (auctionType) {
+            case 'TOP-TIME':
+                moreInfoURL = `/toptime/${data.id}`
+                break
+            case 'FIXED-PRICE':
+                moreInfoURL = `/fixedprice/${data.id}`
+                break
+        }
+
+        props.history.push(moreInfoURL)
+    }
+
     // Fetch Hash in useEffect hook
     useEffect(() => {
         let isMounted = true
@@ -204,7 +219,7 @@ const AuctionItemCard = ({data, auctionType, ...props}) => {
                     <div className="flex mt-5">
                         <button
                             type="button"
-                            onClick={() => props.history.push(`/auction/${data.id}`)}
+                            onClick={() => openMoreInfo(auctionType, data)}
                             className="flex-1 w-full py-3 px-4 border border-transparent rounded-md shadow-sm bg-black  hover:bg-transparent text-sm font-medium text-white hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black hover:border-black"
                         >
                             More info
