@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react"
+import { withRouter } from "react-router";
 import Breadcrumbs from "../components/shared/Breadcrumbs";
 import {auctions} from "../utils/queries/auction.query";
 import {toptimes} from "../utils/queries/toptime.query";
@@ -46,7 +47,12 @@ const MarketPlace = ({history, ...props}) => {
 
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                             {timeBasedAuctions.map(auction => (
-                                <AuctionItemCard data={auction} key={auction.id} history={history} auctionType={"TIME-BASED"} />
+                                <AuctionItemCard
+                                    data={auction}
+                                    key={auction.id}
+                                    history={history}
+                                    auctionType={"TIME-BASED"}
+                                />
                             ))}
                         </div>
                     </div>
@@ -58,7 +64,12 @@ const MarketPlace = ({history, ...props}) => {
 
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                             {topTimeAuctions.map(auction => (
-                                <AuctionItemCard data={auction} key={auction.id} history={history} auctionType={"TOP-TIME"} />
+                                <AuctionItemCard
+                                    data={auction}
+                                    key={auction.id}
+                                    history={history}
+                                    auctionType={"TOP-TIME"}
+                                />
                             ))}
                         </div>
                     </div>
@@ -89,4 +100,4 @@ const MarketPlace = ({history, ...props}) => {
     )
 }
 
-export default MarketPlace
+export default withRouter(MarketPlace)
