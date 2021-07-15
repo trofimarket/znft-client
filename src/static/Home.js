@@ -70,7 +70,7 @@ class Home extends React.PureComponent {
                   <a href="#">waitlist</a> to purchase shares.
                 </p>
               </div>
-              <img alt="section2" src={Section2} />
+              <img alt="section2" src={Section2} style="width:100%;height:auto;" />
             </div>
           </div>
         </div>
