@@ -135,11 +135,7 @@ class Auction extends React.Component {
                 <FiDollarSign
                   className="external-link"
                   onClick={() => {
-                    info.ends * 1000 > Date.now()
-                      ? this.props.connected
-                        ? this.toggleModal()
-                        : this.props.open()
-                      : notify(
+                    info.ends * 1000 > Date.now() ? (this.props.connected ? this.toggleModal() : this.props.open()) : notify(
                         "warning",
                         "Sale Ended",
                         "The auction has already been closed",

@@ -25,7 +25,7 @@ class Navbar extends React.PureComponent {
     const { sidebarVisible } = this.state;
     const { open, connected, address } = this.props;
     return (
-      <div className="navbar-wrapper">
+      <div className="navbar-wrapper border-b-2 border-gray-300 py-12 px-4">
         <div className="navbar-container">
           <div
             className="navbar-logo"

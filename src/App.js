@@ -16,6 +16,7 @@ import Profile from "./profile/index";
 import Home from "./static/Home";
 import "../src/App.css";
 import {notify} from "./utils/general-functions";
+import AuctionDetail from "./marketplace/AuctionDetail";
 
 const ethers = require("ethers");
 
@@ -259,11 +260,23 @@ export default class App extends React.Component {
                                 />
                             )}
                         />
+                        {/*<Route*/}
+                        {/*    exact*/}
+                        {/*    path="/auction/:auctionId"*/}
+                        {/*    render={() => (*/}
+                        {/*        <AuctionInfo*/}
+                        {/*            signer={signer}*/}
+                        {/*            address={address}*/}
+                        {/*            connected={connected}*/}
+                        {/*            open={this.open}*/}
+                        {/*        />*/}
+                        {/*    )}*/}
+                        {/*/>*/}
                         <Route
                             exact
                             path="/auction/:auctionId"
                             render={() => (
-                                <AuctionInfo
+                                <AuctionDetail
                                     signer={signer}
                                     address={address}
                                     connected={connected}

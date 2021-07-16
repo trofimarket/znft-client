@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react"
 import BTC from "../../assets/coin-icons/btc.png";
 import {uri} from "../../utils/nft-functions";
 import {getFromLink} from "../../utils/ipfs";
+import {countDownRenderer, fetchCurrentPrice} from "../../utils/helpers";
 import {ExternalLinkIcon} from "@heroicons/react/solid";
 import {PhotographIcon, UserIcon} from "@heroicons/react/outline";
 import Countdown from "react-countdown";
@@ -17,33 +18,6 @@ const AuctionItemCard = ({data, auctionType, ...props}) => {
     const toggleModalVisible = () => {
         setModalVisible(!modalVisible)
     }
-
-    const fetchCurrentPrice = (auctionData) => {
-        if (auctionData['highestBid']) {
-            return auctionData['highestBid'] / 10 ** 8
-        }
-
-        if (auctionData['price']) {
-            return auctionData['price'] / 10 ** 8
-        }
-
-        return auctionData['listingPrice'] / 10 ** 8
-    }
-
-    const renderer = ({hours, minutes, seconds, completed}) => {
-        if (completed) {
-            // Render a completed state
-            return (
-                <span className="px-3 py-2 text-red-800 text-xs font-medium bg-red-100 rounded-full">SALE ENDED</span>);
-        } else {
-            // Render a countdown
-            return (
-                <span className="px-2 py-1 text-green-800 text-xs font-medium bg-green-100 rounded-full">
-                    {hours} Hours {minutes} Mins {seconds} Seconds
-                </span>
-            );
-        }
-    };
 
     const openMoreInfo = (auctionType, data) => {
         let moreInfoURL = `/auction/${data.id}`
@@ -175,7 +149,7 @@ const AuctionItemCard = ({data, auctionType, ...props}) => {
                         )}
 
                         {auctionType === 'TIME-BASED' && (
-                            <Countdown date={new Date(data.ends * 1000)} renderer={renderer}/>
+                            <Countdown date={new Date(data.ends * 1000)} renderer={countDownRenderer}/>
                         )}
                     </div>
 

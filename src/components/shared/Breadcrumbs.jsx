@@ -8,7 +8,7 @@ const pages = [
 
 const Breadcrumbs = ({path}) => {
     return (
-        <nav className="flex" aria-label="Breadcrumb">
+        <nav className="flex px-4" aria-label="Breadcrumb">
             <ol className="flex items-center space-x-4">
                 <li>
                     <div>
