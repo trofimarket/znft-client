@@ -2,7 +2,8 @@ import { ethers } from "ethers";
 import { notify } from "./general-functions";
 const abi = require("./abi/FIXEDPRICE.json");
 
-export const createFixedPriceSale = async (tokenId, price, signer) => {
+export const createFixedPriceSale = async (tokenId, price, fee, signer) => {
+  console.log(fee);
   try {
     const contract = new ethers.Contract(
       process.env.REACT_APP_FIXEDPRICE,
@@ -11,7 +12,10 @@ export const createFixedPriceSale = async (tokenId, price, signer) => {
     );
     const tx = await contract.createSale(
       tokenId,
-      ethers.utils.parseUnits(price, 8)
+      ethers.utils.parseUnits(price, 8),
+      {
+        value: ethers.utils.parseEther(fee),
+      }
     );
     await tx.wait();
     notify(
