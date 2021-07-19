@@ -27,6 +27,60 @@ export const proposals = async () => {
   }
 };
 
+export const distributions = async () => {
+  try {
+    const data = await apolloClient.query({
+      query: gql(`{
+      distributions {
+        id
+        earners
+        percentages
+        Approved
+        Settled
+        Rejected
+        SettlementHash
+        voteFor
+        voteAgainst
+        proposalHash
+      } 
+    }`),
+    });
+    return data.data.distributions;
+  } catch (e) {
+    return {
+      error: true,
+      message: e.message,
+    };
+  }
+};
+
+export const distribution = async (id) => {
+  try {
+    const data = await apolloClient.query({
+      query: gql(`{
+      distributions(where: {id: "${id}"}) {
+        id
+        earners
+        percentages
+        Approved
+        Settled
+        Rejected
+        SettlementHash
+        voteFor
+        voteAgainst
+        proposalHash
+      } 
+    }`),
+    });
+    return data.data.distributions[0];
+  } catch (e) {
+    return {
+      error: true,
+      message: e.message,
+    };
+  }
+};
+
 export const votes = async (id) => {
   try {
     const data = await apolloClient.query({
@@ -47,24 +101,46 @@ export const votes = async (id) => {
   }
 };
 
+export const distributionVotes = async (id) => {
+  try {
+    const data = await apolloClient.query({
+      query: gql(`{
+        distributionVotes(where: {distributionId: "${parseInt(id)}"}) {
+          id
+          votes
+          voter
+          support
+          distributionId
+        }
+    }`),
+    });
+    return data.data.distributionVotes;
+  } catch (e) {
+    return {
+      error: true,
+      message: e.message,
+    };
+  }
+};
+
 export const merchantStatus = async (address) => {
   try {
     const data = await apolloClient.query({
       query: gql(`{
         merchants(where: {address: "${address}"})
-      }`)
+      }`),
     });
-      return {
-        error: false,
-        status: data.data.merchants.length > 0
-      };
-  } catch(e) {
+    return {
+      error: false,
+      status: data.data.merchants.length > 0,
+    };
+  } catch (e) {
     console.log(e);
     return {
-      error: true
+      error: true,
     };
   }
-}
+};
 
 export const merchantWallets = async (address) => {
   try {
@@ -75,15 +151,15 @@ export const merchantWallets = async (address) => {
           bscWallet
           btcWallet
       }           
-      }`)
+      }`),
     });
-      return {
-        error: false,
-        wallets: data.data.merchants[0]
-      };
-  } catch(e) {
     return {
-      error: true
-    }
+      error: false,
+      wallets: data.data.merchants[0],
+    };
+  } catch (e) {
+    return {
+      error: true,
+    };
   }
-}
+};

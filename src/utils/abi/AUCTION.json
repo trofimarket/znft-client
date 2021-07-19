@@ -353,6 +353,15 @@
   },
   {
     "inputs": [
+      { "internalType": "address", "name": "_newAddress", "type": "address" }
+    ],
+    "name": "replaceSettlementAddress",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "uint256", "name": "_auctionId", "type": "uint256" },
       { "internalType": "uint256", "name": "_newEndTime", "type": "uint256" }
     ],
@@ -423,6 +432,13 @@
     "name": "setOracle",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "settlement",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
     "type": "function"
   },
   {

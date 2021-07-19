@@ -30,7 +30,8 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prepare": "husky install"
   },
   "browserslist": {
     "production": [
@@ -47,8 +48,10 @@
   "devDependencies": {
     "autoprefixer": "^9.8.6",
     "bl": "^2.2.1",
+    "husky": "^7.0.0",
     "postcss": "^7.0.36",
     "prettier": "2.3.2",
+    "pretty-quick": "^3.1.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.4"
   }
 }

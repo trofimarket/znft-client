@@ -11,6 +11,31 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "distributionId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address[]",
+        "name": "earners",
+        "type": "address[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256[]",
+        "name": "percentages",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "CreateDistribution",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "bytes",
         "name": "hash",
         "type": "bytes"
@@ -49,6 +74,19 @@
       {
         "indexed": false,
         "internalType": "uint256",
+        "name": "distributionId",
+        "type": "uint256"
+      }
+    ],
+    "name": "Distribute",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "proposalId",
         "type": "uint256"
       },
@@ -69,6 +107,31 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "distributionId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "votes",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "support",
+        "type": "bool"
+      }
+    ],
+    "name": "VoteDistribution",
+    "type": "event"
+  },
+  {
     "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "name": "bscWallet",
     "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
@@ -84,6 +147,20 @@
   },
   {
     "inputs": [
+      { "internalType": "address[]", "name": "_earners", "type": "address[]" },
+      {
+        "internalType": "uint256[]",
+        "name": "_percentages",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "createDistribution",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "string", "name": "hash", "type": "string" },
       { "internalType": "uint256", "name": "_listingFee", "type": "uint256" },
       { "internalType": "uint8", "name": "_platformTax", "type": "uint8" },
@@ -94,6 +171,60 @@
     "name": "createMerchant",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_distributionId",
+        "type": "uint256"
+      }
+    ],
+    "name": "distribute",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_distributionId",
+        "type": "uint256"
+      }
+    ],
+    "name": "distribution",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address[]",
+            "name": "earners",
+            "type": "address[]"
+          },
+          { "internalType": "bool", "name": "approved", "type": "bool" },
+          { "internalType": "bool", "name": "rejected", "type": "bool" },
+          { "internalType": "bool", "name": "settled", "type": "bool" },
+          {
+            "internalType": "uint256[]",
+            "name": "percentages",
+            "type": "uint256[]"
+          },
+          { "internalType": "uint256", "name": "voteFor", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "voteAgainst",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "createdAt", "type": "uint256" }
+        ],
+        "internalType": "struct DAO.Distribution",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -146,6 +277,13 @@
   },
   {
     "inputs": [],
+    "name": "totalDistributions",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "totalMerchants",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
@@ -193,5 +331,20 @@
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "nonpayable",
     "type": "function"
-  }
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_distributionId",
+        "type": "uint256"
+      },
+      { "internalType": "bool", "name": "_support", "type": "bool" }
+    ],
+    "name": "voteDistribution",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  { "stateMutability": "payable", "type": "receive" }
 ]

@@ -52,6 +52,75 @@ export const create = async (
   }
 };
 
+export const cDistribution = async (addresses, percentages, signer) => {
+  const contract = new ethers.Contract(process.env.REACT_APP_DAO, abi, signer);
+  try {
+    console.log(addresses, percentages);
+    const tx = await contract.createDistribution(addresses, percentages);
+    await tx.wait();
+    notify(
+      "success",
+      "Trofi shareholder can now vote on your proposal",
+      "Once approved you'll get your share",
+      tx.hash
+    );
+    return true;
+  } catch (e) {
+    console.log(e);
+    notify(
+      "error",
+      "Error creating distribution",
+      e.message || "Try after some time"
+    );
+    return false;
+  }
+};
+
+export const vDistribution = async (distributionId, support, signer) => {
+  const contract = new ethers.Contract(process.env.REACT_APP_DAO, abi, signer);
+  try {
+    const tx = await contract.voteDistribution(distributionId, support);
+    await tx.wait();
+    notify(
+      "success",
+      "Your vote casted successfully",
+      "After 24H, the distribution will be ready to be distributed",
+      tx.hash
+    );
+    return true;
+  } catch (e) {
+    console.log(e);
+    notify(
+      "error",
+      "Error creating distribution",
+      e.message || "Try after some time"
+    );
+  }
+};
+
+export const eDistribution = async (distributionId, signer) => {
+  const contract = new ethers.Contract(process.env.REACT_APP_DAO, abi, signer);
+  try {
+    const tx = await contract.distribute(distributionId);
+    await tx.wait();
+    notify(
+      "success",
+      "Distribution ended successfully",
+      "You would've recieved your share of income",
+      tx.hash
+    );
+    return true;
+  } catch (e) {
+    console.log(e);
+    notify(
+      "error",
+      "Error creating distribution",
+      e.message || "Try after some time"
+    );
+    return false;
+  }
+};
+
 export const update = async (
   id,
   newListingFee,
