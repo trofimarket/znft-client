@@ -1,0 +1,7 @@
+const walletTypes = {
+  CONNECT_WALLET: "CONNECT_WALLET",
+  CONNECT_WALLET_FAIL: "CONNECT_WALLET_FAIL",
+  DISCONNECT_WALLET: "DISCONNECT_WALLET",
+};
+
+export default walletTypes;
