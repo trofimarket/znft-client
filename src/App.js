@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import WalletConnectProvider from "@walletconnect/web3-provider";
+import { connect } from "react-redux";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 import ConnectModal from "./components/Modals/WalletConnect";
@@ -9,7 +10,6 @@ import CreateMerchant from "./dao/CreateMerchant";
 import Proposals from "./dao/Proposals";
 import Index from "./minting/index";
 import MarketPlace from "./marketplace/MarketPlace";
-import AuctionInfo from "./marketplace/auction";
 import TopTimeInfo from "./marketplace/toptime";
 import MerchantInfo from "./marketplace/merchantInfo";
 import Profile from "./profile/index";
@@ -19,6 +19,7 @@ import { notify } from "./utils/general-functions";
 import AuctionDetail from "./marketplace/AuctionDetail";
 import Distribution from "./dao/Distribution";
 import CreateDistribution from "./dao/CreateDistribution";
+import { walletActions } from "./store/actions";
 
 const ethers = require("ethers");
 
@@ -27,7 +28,7 @@ const walletLink = new WalletLink({
   darkMode: false,
 });
 
-export default class App extends React.Component {
+class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -65,12 +66,27 @@ export default class App extends React.Component {
     this.setState({
       connecting: true,
     });
-    if (type === "metamask") {
-      this.metamask();
-    } else if (type === "walletconnect") {
-      this.walletconnect();
-    } else if (type === "coinbase") {
-      this.coinbase();
+
+    // Call to connect wallet action
+    this.props.connectWallet(type);
+
+    // TODO: Deprecate calls to this.setState when fully migrated to react redux
+    if (this.props.userWallet.isConnected) {
+      this.setState({
+        address: this.props.userWallet.address,
+        signer: this.props.userWallet.signer,
+        connected: this.props.userWallet.isConnected,
+        connecting: false,
+        modal: false,
+      });
+    } else {
+      notify(
+        "error",
+        "Error connecting wallet",
+        this.props.userWallet.failMessage,
+        null
+      );
+      this.setState({ connecting: false });
     }
   };
 
@@ -345,3 +361,13 @@ export default class App extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    userWallet: state.wallet,
+  };
+};
+
+export default connect(mapStateToProps, {
+  connectWallet: walletActions.connectWallet,
+})(App);
