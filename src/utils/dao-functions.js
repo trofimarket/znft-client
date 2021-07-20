@@ -23,6 +23,7 @@ export const create = async (
   btcWallet,
   signer
 ) => {
+  // console.log({signer})
   const contract = new ethers.Contract(process.env.REACT_APP_DAO, abi, signer);
   try {
     const tx = await contract.createMerchant(

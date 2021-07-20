@@ -289,21 +289,10 @@ class App extends React.Component {
                 />
               )}
             />
-            {/*<Route*/}
-            {/*    exact*/}
-            {/*    path="/auction/:auctionId"*/}
-            {/*    render={() => (*/}
-            {/*        <AuctionInfo*/}
-            {/*            signer={signer}*/}
-            {/*            address={address}*/}
-            {/*            connected={connected}*/}
-            {/*            open={this.open}*/}
-            {/*        />*/}
-            {/*    )}*/}
-            {/*/>*/}
+
             <Route
               exact
-              path="/auction/:auctionId"
+              path="/market/:auctionType/:auctionId"
               render={() => (
                 <AuctionDetail
                   signer={signer}
@@ -313,18 +302,7 @@ class App extends React.Component {
                 />
               )}
             />
-            <Route
-              exact
-              path="/toptime/:toptimeId"
-              render={() => (
-                <TopTimeInfo
-                  signer={signer}
-                  address={address}
-                  connected={connected}
-                  open={this.open}
-                />
-              )}
-            />
+
             <Route
               exact
               path="/merchant/:address"

@@ -42,8 +42,8 @@ class CreateMerchant extends Component {
     if (this.props.connected) {
       const array = new Uint32Array(1);
       const status = await merchantStatus(this.props.address);
-      if(!status.error) {
-        this.setState({isMerchant: status.status});
+      if (!status.error) {
+        this.setState({ isMerchant: status.status });
       }
       this.setState({
         secret:
@@ -205,7 +205,7 @@ class CreateMerchant extends Component {
       ethWallet,
       btcWallet,
       bscWallet,
-      isMerchant
+      isMerchant,
     } = this.state;
     const { open } = this.props;
     const defaultOptions = {
@@ -393,7 +393,11 @@ class CreateMerchant extends Component {
                   }}
                   className="primary-button"
                 >
-                  {uploading ? "Uploading To IPFS" : isMerchant ? "Merhant Already Registered" : "Create Now"}
+                  {uploading
+                    ? "Uploading To IPFS"
+                    : isMerchant
+                    ? "Merhant Already Registered"
+                    : "Create Now"}
                 </Button>
               ) : (
                 <Button

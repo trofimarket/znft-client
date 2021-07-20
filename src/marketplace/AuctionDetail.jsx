@@ -17,14 +17,19 @@ import { ExternalLinkIcon } from "@heroicons/react/solid";
 import MarkdownViewer from "../components/shared/MarkdownViewer";
 import PlaceBid from "./PlaceBid";
 import { auctionActions } from "../store/actions";
+import constants from "../constants";
+import { toptimeInfo } from "../utils/queries/toptime.query";
 
 const AuctionDetail = ({ match, startNewBid, ...props }) => {
-  const { auctionId } = match.params;
+  const { auctionId, auctionType } = match.params;
   const [auctionDetail, setAuctionDetail] = useState({});
   const [selectedAuctionDetail, selectAuctionDetail] = useState(null);
   const [auctionBids, setAuctionBids] = useState([]);
   const [auctionHash, setAuctionHash] = useState(null);
   const [itemInfo, setItemInfo] = useState(null);
+  const [auctionTime, setAuctionTime] = useState(0);
+
+  console.log({ auctionType });
 
   const onPlaceBid = (auctionItem) => {
     selectAuctionDetail(auctionItem);
@@ -35,37 +40,41 @@ const AuctionDetail = ({ match, startNewBid, ...props }) => {
   useEffect(() => {
     let isMounted = true;
 
-    const fetchAuctionInfo = async () => {
-      auctionInfo(auctionId).then((result) => {
-        if (isMounted) {
-          setAuctionDetail(result[0]);
-        }
-      });
-    };
+    switch (auctionType) {
+      case constants.AUCTION_TYPES.TOP_TIME.name:
+        toptimeInfo(auctionId).then((results) => {
+          if (isMounted) {
+            const result = results[0];
+            const time =
+              parseFloat(result.toptime) -
+              (Date.now() / 1000 - parseFloat(result["highestBidAt"]));
+            setAuctionDetail(result);
+            setAuctionTime(time);
+          }
+        });
 
-    fetchAuctionInfo().then(() => {
-      console.log("We have the auction detail ", { auctionDetail });
-    });
+        break;
+      default:
+        auctionInfo(auctionId).then((result) => {
+          if (isMounted) {
+            setAuctionDetail(result[0]);
+          }
+        });
+    }
 
     return () => {
       isMounted = false;
     };
-  }, [auctionId]);
+  }, [auctionId, auctionType]);
 
   // Fetch Bids in useEffect hook
   useEffect(() => {
     let isMounted = true;
 
-    const fetchAuctionBids = async () => {
-      bids(auctionId).then((result) => {
-        if (isMounted) {
-          setAuctionBids(result);
-        }
-      });
-    };
-
-    fetchAuctionBids().then(() => {
-      console.log("We have the auction bids ", { auctionBids });
+    bids(auctionId).then((result) => {
+      if (isMounted) {
+        setAuctionBids(result);
+      }
     });
 
     return () => {
@@ -77,17 +86,11 @@ const AuctionDetail = ({ match, startNewBid, ...props }) => {
   useEffect(() => {
     let isMounted = true;
 
-    const fetchHash = async (tokenId) => {
-      uri(tokenId).then((result) => {
+    if (auctionDetail?.tokenId) {
+      uri(auctionDetail?.tokenId).then((result) => {
         if (isMounted) {
           setAuctionHash(result);
         }
-      });
-    };
-
-    if (auctionDetail?.tokenId) {
-      fetchHash(auctionDetail?.tokenId).then(() => {
-        console.log("We have the hash ", { auctionHash });
       });
     }
 
@@ -100,17 +103,11 @@ const AuctionDetail = ({ match, startNewBid, ...props }) => {
   useEffect(() => {
     let isMounted = true;
 
-    const fetchInfo = async (hashURI) => {
-      getFromLink(hashURI).then((result) => {
+    if (auctionHash?.uri) {
+      getFromLink(auctionHash?.uri).then((result) => {
         if (isMounted) {
           setItemInfo(result);
         }
-      });
-    };
-
-    if (auctionHash?.uri) {
-      fetchInfo(auctionHash?.uri).then(() => {
-        console.log("We have the info ", { itemInfo });
       });
     }
 
@@ -148,11 +145,27 @@ const AuctionDetail = ({ match, startNewBid, ...props }) => {
             </div>
           </div>
           <div className="mt-6 flex flex-col-reverse justify-stretch space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-x-reverse sm:space-y-0 sm:space-x-3 md:mt-0 md:flex-row md:space-x-3">
-            <Countdown
-              date={new Date(auctionDetail.ends * 1000)}
-              renderer={countDownRenderer}
-              className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500"
-            />
+            {auctionType === constants.AUCTION_TYPES.TOP_TIME.name && (
+              <>
+                <span className="px-3 py-3 text-green-800 text-xs font-medium bg-white rounded-full">
+                  <span className="text-gray-500 font-semibold">Top Time</span>{" "}
+                  {auctionDetail?.toptime} Secs
+                </span>
+
+                <span className="px-3 py-3 text-green-800 text-xs font-medium bg-green-100 rounded-full">
+                  {auctionTime > 0 ? auctionTime : 0} Seconds Left
+                </span>
+              </>
+            )}
+
+            {auctionType === constants.AUCTION_TYPES.TIME_BASED.name && (
+              <Countdown
+                date={new Date(auctionDetail.ends * 1000)}
+                renderer={countDownRenderer}
+                className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500"
+              />
+            )}
+
             <button
               onClick={() => onPlaceBid(auctionDetail)}
               type="button"
@@ -318,7 +331,7 @@ const AuctionDetail = ({ match, startNewBid, ...props }) => {
               </div>
             </section>
             <section>
-              <div className="bg-white shadow sm:rounded-lg">
+              <div className="bg-white shadow sm:rounded-lg mb-5">
                 <div className="divide-y divide-gray-200">
                   <div className="px-4 py-5 sm:px-6">
                     <h2
